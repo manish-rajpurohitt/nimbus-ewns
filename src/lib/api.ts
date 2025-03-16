@@ -850,6 +850,13 @@ export const api = {
     async getCategories(page = 1, limit = 100) {
       return get(`/website/fetchCategories?pageNumber=${page}&limit=${limit}`);
     }
+  },
+  metaTags: {
+    async getMetaTagsOfPage(path: any) {
+      return get(
+        path
+      );
+    },
   }
 };
 

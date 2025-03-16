@@ -31,10 +31,10 @@ export const metadata: Metadata = {
   description: "Welcome to our business website"
 };
 
-async function getInitialData(hostname: any) {
+async function getInitialData() {
   try {
     const [businessRes, addressRes] : any = await Promise.all([
-      fetchBusinessData(hostname),
+      fetchBusinessData(),
       fetchBusinessAddress()
     ]);
 

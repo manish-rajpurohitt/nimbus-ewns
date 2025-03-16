@@ -2,6 +2,9 @@ import { get } from "@/lib/api";
 import ProductDetails from "@/components/Products/ProductDetails";
 import { notFound } from "next/navigation";
 import { api } from "@/lib/api";
+import { Metadata } from "next";
+import { headers } from "next/headers";
+import { getPageMEtadata } from "@/utils/common.util";
 
 export default async function ProductPage({
   params
@@ -22,22 +25,6 @@ export default async function ProductPage({
   }
 }
 
-// Generate metadata for the page
-export async function generateMetadata({
-  params
-}:any) {
-  try {
-    const response = await api.products.getProductDetails(params.sku);
-    const product = response.data?.product;
-
-    return {
-      title: product?.name || "Product Details",
-      description: product?.description || "Product description"
-    };
-  } catch {
-    return {
-      title: "Product Details",
-      description: "View product details"
-    };
-  }
+export async function generateMetadata({ params }: any): Promise<Metadata> {
+  return getPageMEtadata(["about"]);
 }

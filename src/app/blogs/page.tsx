@@ -2,6 +2,8 @@ import { api } from "@/lib/api";
 import { fetchBusinessData } from "@/utils/api.utils";
 import BlogList from "@/components/Blog/BlogList";
 import PageBanner from "@/components/PageBanner";
+import { Metadata } from "next";
+import { getPageMEtadata } from "@/utils/common.util";
 
 // Add metadata export
 export const metadata = {
@@ -110,4 +112,9 @@ export default async function BlogsPage({
       </div>
     );
   }
+}
+
+
+export async function generateMetadata({ params }: any): Promise<Metadata> {
+  return getPageMEtadata(["blogs"]);
 }

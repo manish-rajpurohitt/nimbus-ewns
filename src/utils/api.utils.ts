@@ -17,7 +17,7 @@ export interface AddressResponse {
   };
 }
 
-export async function fetchBusinessData(hostname: any) {
+export async function fetchBusinessData() {
   try {
     // console.log("Fetching business data...");
     const response: any = await get<BusinessResponse>(

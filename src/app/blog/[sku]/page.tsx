@@ -2,6 +2,8 @@ import { api } from "@/lib/api";
 import { fetchBusinessData } from "@/utils/api.utils";
 import BlogDetails from "@/components/Blog/BlogDetails";
 import { notFound } from "next/navigation";
+import { Metadata } from "next";
+import { getPageMEtadata } from "@/utils/common.util";
 
 export default async function BlogPage({
   params
@@ -32,4 +34,8 @@ export default async function BlogPage({
     console.error("Error in BlogPage:", error);
     notFound();
   }
+}
+
+export async function generateMetadata(sku: string): Promise<Metadata> {
+  return getPageMEtadata([`blog/${sku}`]);
 }

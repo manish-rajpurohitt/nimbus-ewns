@@ -1,6 +1,8 @@
 import ServiceDetails from "@/components/ServiceDetails";
 import { fetchBusinessData } from "@/utils/api.utils";
 import { api } from "@/lib/api";
+import { getPageMEtadata } from "@/utils/common.util";
+import { Metadata } from "next";
 
 async function getServiceDetails(id: string) {
   try {
@@ -46,4 +48,9 @@ export default async function ServicePage({
       </div>
     );
   }
+}
+
+
+export async function generateMetadata(id: string) {
+  return getPageMEtadata([`service/${id}`]);
 }

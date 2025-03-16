@@ -2,6 +2,8 @@ import Services from "@/components/Services";
 import { fetchBusinessData } from "@/utils/api.utils";
 import { api } from "@/lib/api";
 import PageBanner from "@/components/PageBanner";
+import { getPageMEtadata } from "@/utils/common.util";
+import { Metadata } from "next";
 
 async function getServices(pageNumber = 1, limit = 3) {
   try {
@@ -66,4 +68,8 @@ export default async function ServicesPage({
     console.error("ServicesPage", error);
     return <div>Error loading services</div>;
   }
+}
+
+export async function generateMetadata({ params }: any): Promise<Metadata> {
+  return getPageMEtadata(["services"]);
 }

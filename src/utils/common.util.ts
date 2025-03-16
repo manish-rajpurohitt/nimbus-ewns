@@ -1,5 +1,6 @@
+import { api } from "@/lib/api";
 import type { Business, BusinessAddress } from "@/types/business.types";
-
+import { headers } from "next/headers";
 // Format business address
 export const getBusinessAdd = (businessAddress: BusinessAddress): string => {
   if (!businessAddress) return "";
@@ -194,3 +195,52 @@ export const businessQuotes = [
   "Business opportunities are like buses, there's always another one coming. – Richard Branson",
   "Success usually comes to those who are too busy to be looking for it. – Henry David Thoreau"
 ];
+
+export const getPageMEtadata = async (slug: string[]): Promise<any> => {
+  try {
+    const headerList = await headers();
+    const protocol = headerList.get("x-forwarded-proto") || "https";
+    const host = headerList.get("host");
+    const pagePath = slug ? `/${slug.join("/")}` : "/";
+    const fullUrl = `${protocol}://${host}${pagePath}`;
+
+    const response = await api.metaTags.getMetaTagsOfPage(fullUrl);
+    const metaTags: any = response.data;
+
+    const title = metaTags?.title || "Default Title";
+    const description = metaTags?.description || "Default Description";
+    const canonical = metaTags?.canonical || metaTags?.pageUrl || fullUrl;
+    const ogImage = metaTags?.ogImage || metaTags?.imageUrl || "/default-og-image.jpg";
+
+    return {
+      title,
+      description,
+      keywords: metaTags?.keywords?.map((k: any) => k.keyword).join(", ") || undefined,
+      alternates: { canonical },
+      openGraph: {
+        title,
+        description,
+        url: canonical,
+        images: ogImage,
+        type: "website",
+      },
+      twitter: {
+        card: metaTags?.twitterCard || "summary_large_image",
+        title,
+        description,
+        images: [ogImage],
+      },
+      robots: "index, follow",
+      authors: [{ name: metaTags?.author || "EWNS" }],
+      viewport: "width=device-width, initial-scale=1",
+      themeColor: "#ffffff",
+    };
+  } catch (error) {
+    console.error("Error generating metadata:", error);
+    return {
+      title: "Default Title",
+      description: "Default Description",
+      robots: "index, follow",
+    };
+  }
+}
