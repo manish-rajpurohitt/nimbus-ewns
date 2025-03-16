@@ -5,12 +5,6 @@ import PageBanner from "@/components/PageBanner";
 import { Metadata } from "next";
 import { getPageMEtadata } from "@/utils/common.util";
 
-// Add metadata export
-export const metadata = {
-  title: "Blogs",
-  description: "Read our latest blogs"
-};
-
 // Make page dynamic
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
