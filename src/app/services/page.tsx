@@ -1,23 +1,31 @@
 import Services from "@/components/Services";
 import { fetchBusinessData } from "@/utils/api.utils";
-import { api } from "@/lib/api";
+import { api, getMetaTagsOfPage } from "@/lib/api";
 import PageBanner from "@/components/PageBanner";
 import { getPageMEtadata } from "@/utils/common.util";
 import { Metadata } from "next";
+import { headers } from "next/headers";
 
-async function getServices(pageNumber = 1, limit = 3) {
+
+
+export async function generateMetadata({ params }: { params: any; }): Promise<Metadata> {
+  console.log("🚀 Running generateMetadata for:", params);
+
   try {
-    const response = await api.business.getServices(pageNumber, limit);
-    if (!response.isSuccess) {
-      throw new Error("Failed to fetch services");
-    }
-    return {
-      services: response.data.services,
-      totalPages: response.data.pagination.totalPages
-    };
+
+    const headerList = await headers();
+    const protocol = headerList.get("x-forwarded-proto") || "https";
+    const host = headerList.get("host") || "example.com";
+    // const fullUrl = `${protocol}://${host}/services/`;
+    const fullUrl = `https://icontechpro.com/services`;
+
+    return await getPageMEtadata(fullUrl);
   } catch (error) {
-    console.error("Error in getServices:", error);
-    return { services: [], totalPages: 1 };
+    console.error("⚠️ Metadata Error:", error);
+    return {
+      title: "Default Title",
+      description: "Default Description",
+    };
   }
 }
 
@@ -25,7 +33,23 @@ export default async function ServicesPage({
   searchParams
 }:any) {
   try {
-    const pageNumber = searchParams?.page ?? "1";
+    const srchPArams = await searchParams;
+    async function getServices(pageNumber = 1, limit = 3) {
+      try {
+        const response = await api.business.getServices(pageNumber, limit);
+        if (!response.isSuccess) {
+          throw new Error("Failed to fetch services");
+        }
+        return {
+          services: response.data.services,
+          totalPages: response.data.pagination.totalPages
+        };
+      } catch (error) {
+        console.error("Error in getServices:", error);
+        return { services: [], totalPages: 1 };
+      }
+    }
+    const pageNumber = srchPArams?.page ?? "1";
     const page = Math.max(1, parseInt(pageNumber));
     const limit = 3; // Increased limit for better pagination
 
@@ -70,6 +94,3 @@ export default async function ServicesPage({
   }
 }
 
-export async function generateMetadata({ params }: any): Promise<Metadata> {
-  return getPageMEtadata(["services"]);
-}

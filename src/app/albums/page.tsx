@@ -3,6 +3,9 @@ import { fetchBusinessData } from "@/utils/api.utils";
 import AlbumGrid from "@/components/Albums/AlbumGrid";
 import { notFound } from "next/navigation";
 import PageBanner from "@/components/PageBanner";
+import { headers } from "next/headers";
+import { getPageMEtadata } from "@/utils/common.util";
+import { Metadata } from "next";
 
 export default async function AlbumsPage({
   searchParams
@@ -35,5 +38,26 @@ export default async function AlbumsPage({
   } catch (error) {
     console.error("Error in AlbumsPage:", error);
     notFound();
+  }
+}
+
+export async function generateMetadata({ params }: { params: any; }): Promise<Metadata> {
+  console.log("🚀 Running generateMetadata for:", params);
+
+  try {
+
+    const headerList = await headers();
+    const protocol = headerList.get("x-forwarded-proto") || "https";
+    const host = headerList.get("host") || "example.com";
+    // const fullUrl = `${protocol}://${host}/services/`;
+    const fullUrl = `https://icontechpro.com/albums`;
+
+    return await getPageMEtadata(fullUrl);
+  } catch (error) {
+    console.error("⚠️ Metadata Error:", error);
+    return {
+      title: "Default Title",
+      description: "Default Description",
+    };
   }
 }

@@ -20,9 +20,10 @@ async function getVisitorToken(domainName: any) {
 }
 
 const getServerHostname = async () => {
-  const headersList = await headers();
-  const host = headersList.get("host"); // This returns hostname with optional port
-  return host;
+  // const headersList = await headers();
+  // const host = headersList.get("host"); // This returns hostname with optional port
+  // return host;
+  return "icontechpro.ewns.in";
 };
 
 // Add custom error type
@@ -46,6 +47,8 @@ async function fetchApi<T>(
   retryCount = 0
 ): Promise<any> {
   try {
+    // console.log(method, url, data, config);
+    // return;
     const client = await createApiClient();
 
     const headers: any = {
@@ -53,12 +56,12 @@ async function fetchApi<T>(
       ...(config?.headers || {})
     };
 
-    console.log(`Making ${method} request to:`, {
-      url,
-      method,
-      data,
-      headers
-    });
+    // console.log(`Making ${method} request to:`, {
+    //   url,
+    //   method,
+    //   data,
+    //   headers
+    // });
 
     let response;
     switch (method) {
@@ -71,11 +74,6 @@ async function fetchApi<T>(
       default:
         response = await client.post(url, data, { ...config, headers });
     }
-
-    console.log(`${method} response:`, {
-      status: response.status,
-      data: response.data
-    });
 
     return response.data;
   } catch (error) {
@@ -162,6 +160,7 @@ async function createApiClient(): Promise<AxiosInstance> {
         ? window.location.hostname
         : await getServerHostname();
     token = await getVisitorToken(hostname);
+    console.log(hostname);
 
     if (token && typeof window !== "undefined") {
       localStorage.setItem("_t", token);
@@ -441,6 +440,25 @@ interface CategoriesResponse {
       description?: string;
     }>;
   };
+}
+
+export async function getMetaTagsOfPage(path: any) {
+  let apiClient = await createApiClient();
+
+  let response = await fetchWithCache(path)
+  console.log("---------------------------------------------------------------------------------------------");
+  console.log(response);
+  return response.data;
+};
+
+
+export async function fetchWithCache(path: string, cacheTime: number = 3600) {
+
+  console.log("🚀 Fetching fresh metadata:", path);
+  const apiClient = await createApiClient();
+  const response = await apiClient.get(`/website/getMetaTagsOfPage?pageUrl=${path}`);
+  console.log(path, response);
+  return response.data;
 }
 
 export const api = {
@@ -851,13 +869,6 @@ export const api = {
       return get(`/website/fetchCategories?pageNumber=${page}&limit=${limit}`);
     }
   },
-  metaTags: {
-    async getMetaTagsOfPage(path: any) {
-      return get(
-        path
-      );
-    },
-  }
 };
 
 export default getClientApiInstance;

@@ -4,6 +4,7 @@ import BlogList from "@/components/Blog/BlogList";
 import PageBanner from "@/components/PageBanner";
 import { Metadata } from "next";
 import { getPageMEtadata } from "@/utils/common.util";
+import { headers } from "next/headers";
 
 // Make page dynamic
 export const dynamic = "force-dynamic";
@@ -109,6 +110,24 @@ export default async function BlogsPage({
 }
 
 
-export async function generateMetadata({ params }: any): Promise<Metadata> {
-  return getPageMEtadata(["blogs"]);
+export async function generateMetadata({ params}: { params: any; }): Promise<Metadata> {
+  console.log("🚀 Running generateMetadata for:", params);
+
+  try {
+
+    const headerList = await headers();
+    const protocol = headerList.get("x-forwarded-proto") || "https";
+    const host = headerList.get("host") || "example.com";
+    // const fullUrl = `${protocol}://${host}/services/`;
+    console.log(params)
+    const fullUrl = `https://icontechpro.com/blogs`;
+
+    return await getPageMEtadata(fullUrl);
+  } catch (error) {
+    console.error("⚠️ Metadata Error:", error);
+    return {
+      title: "Default Title",
+      description: "Default Description",
+    };
+  }
 }

@@ -7,6 +7,9 @@ import { debugLog } from "@/utils/debug.util";
 import Appointment from "@/components/Appointment";
 import Testimonials from "@/components/Testimonials";
 import BlogList from "@/components/Blog/BlogList";
+import { headers } from "next/headers";
+import { Metadata } from "next";
+import { getPageMEtadata } from "@/utils/common.util";
 
 export default async function Page() {
   try {
@@ -95,5 +98,26 @@ export default async function Page() {
         <p className="text-gray-600">Failed to load content</p>
       </div>
     );
+  }
+}
+
+export async function generateMetadata({ params }: { params: any; }): Promise<Metadata> {
+  console.log("🚀 Running generateMetadata for:", params);
+
+  try {
+
+    const headerList = await headers();
+    const protocol = headerList.get("x-forwarded-proto") || "https";
+    const host = headerList.get("host") || "example.com";
+    // const fullUrl = `${protocol}://${host}/services/`;
+    const fullUrl = `https://icontechpro.com/`;
+
+    return await getPageMEtadata(fullUrl);
+  } catch (error) {
+    console.error("⚠️ Metadata Error:", error);
+    return {
+      title: "Default Title",
+      description: "Default Description",
+    };
   }
 }

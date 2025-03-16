@@ -3,6 +3,9 @@ import ContactForm from "@/components/Contact/ContactForm";
 import ContactDetails from "@/components/Contact/ContactDetails";
 import PageBanner from "@/components/PageBanner";
 import { notFound } from "next/navigation";
+import { headers } from "next/headers";
+import { getPageMEtadata } from "@/utils/common.util";
+import { Metadata } from "next";
 
 const DEFAULT_BANNER =
   "https://whiteklay.com/wp-content/uploads/2020/12/Contact-us-Main-Banner-1.jpg";
@@ -74,5 +77,26 @@ export default async function ContactPage() {
   } catch (error) {
     console.error("Error in ContactPage:", error);
     notFound();
+  }
+}
+
+export async function generateMetadata({ params }: { params: any; }): Promise<Metadata> {
+  console.log("🚀 Running generateMetadata for:", params);
+
+  try {
+
+    const headerList = await headers();
+    const protocol = headerList.get("x-forwarded-proto") || "https";
+    const host = headerList.get("host") || "example.com";
+    // const fullUrl = `${protocol}://${host}/services/`;
+    const fullUrl = `https://icontechpro.com/contact`;
+
+    return await getPageMEtadata(fullUrl);
+  } catch (error) {
+    console.error("⚠️ Metadata Error:", error);
+    return {
+      title: "Default Title",
+      description: "Default Description",
+    };
   }
 }

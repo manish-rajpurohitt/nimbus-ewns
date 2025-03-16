@@ -70,7 +70,7 @@ export default async function RootLayout({
   });
 
   const hideHeaderFooter = pathname.includes("/media/");
-  const data :any = await getInitialData(host);
+  const data :any = await getInitialData();
   const cart :any = await getCart();
   const cartCount = cart?.items?.length || 0;
 

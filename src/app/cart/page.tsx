@@ -6,10 +6,11 @@ import { headers } from "next/headers";
 export default async function CartPage() {
   try {
     // Get all async data in parallel
-    const [cart, user, headersList] = await Promise.all([
+    const headersList =  headers();
+
+    const [cart, user] = await Promise.all([
       getCart(),
       validateAuth(),
-      headers()
     ]);
 
     const pathname = headersList.get("x-invoke-path") || "/cart";

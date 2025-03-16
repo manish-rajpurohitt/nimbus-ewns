@@ -3,6 +3,7 @@ import { fetchBusinessData } from "@/utils/api.utils";
 import { api } from "@/lib/api";
 import { getPageMEtadata } from "@/utils/common.util";
 import { Metadata } from "next";
+import { headers } from "next/headers";
 
 async function getServiceDetails(id: string) {
   try {
@@ -51,6 +52,24 @@ export default async function ServicePage({
 }
 
 
-export async function generateMetadata(id: string) {
-  return getPageMEtadata([`service/${id}`]);
+export async function generateMetadata({ params, id }: { params: any; id: string; }): Promise<Metadata> {
+  console.log("🚀 Running generateMetadata for:", params);
+
+  try {
+
+    const headerList = await headers();
+    const protocol = headerList.get("x-forwarded-proto") || "https";
+    const host = headerList.get("host") || "example.com";
+    // const fullUrl = `${protocol}://${host}/services/`;
+    console.log(params)
+    const fullUrl = `https://icontechpro.com/service/${params.id}`;
+
+    return await getPageMEtadata(fullUrl);
+  } catch (error) {
+    console.error("⚠️ Metadata Error:", error);
+    return {
+      title: "Default Title",
+      description: "Default Description",
+    };
+  }
 }

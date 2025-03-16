@@ -4,6 +4,7 @@ import BlogDetails from "@/components/Blog/BlogDetails";
 import { notFound } from "next/navigation";
 import { Metadata } from "next";
 import { getPageMEtadata } from "@/utils/common.util";
+import { headers } from "next/headers";
 
 export default async function BlogPage({
   params
@@ -36,6 +37,24 @@ export default async function BlogPage({
   }
 }
 
-export async function generateMetadata(sku: string): Promise<Metadata> {
-  return getPageMEtadata([`blog/${sku}`]);
+export async function generateMetadata({ params, sku }: { params: any; sku: string; }): Promise<Metadata> {
+  console.log("🚀 Running generateMetadata for:", params);
+
+  try {
+
+    const headerList = await headers();
+    const protocol = headerList.get("x-forwarded-proto") || "https";
+    const host = headerList.get("host") || "example.com";
+    // const fullUrl = `${protocol}://${host}/services/`;
+    console.log(params)
+    const fullUrl = `https://icontechpro.com/blog/${sku}`;
+
+    return await getPageMEtadata(fullUrl);
+  } catch (error) {
+    console.error("⚠️ Metadata Error:", error);
+    return {
+      title: "Default Title",
+      description: "Default Description",
+    };
+  }
 }

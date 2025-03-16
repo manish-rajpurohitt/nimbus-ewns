@@ -67,7 +67,7 @@ export async function validateAuth() {
       "/website/user/validate"
     );
     if (!response.isSuccess) {
-      (await cookies()).delete("_et");
+      cookies().delete("_et");
       return null;
     }
 
