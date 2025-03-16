@@ -1,0 +1,643 @@
+/* Professional Order Tracking Styles */
+.order-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+    Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+}
+
+/* Navigation Tabs */
+.navigation-tabs {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 32px;
+  border-bottom: 1px solid #e0e0e0;
+  padding-bottom: 2px;
+}
+
+.tab-button {
+  padding: 12px 24px;
+  border: none;
+  background: none;
+  font-size: 15px;
+  font-weight: 500;
+  color: #666;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+.tab-button:hover {
+  color: #2196f3;
+}
+
+.tab-button.active {
+  color: #2196f3;
+}
+
+.tab-button.active::after {
+  content: "";
+  position: absolute;
+  bottom: -3px;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background-color: #2196f3;
+  border-radius: 3px 3px 0 0;
+}
+
+/* Tracking Card */
+.tracking-card {
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+}
+
+.order-header {
+  padding: 24px;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.header-content h2 {
+  margin: 0 0 16px 0;
+  color: #212121;
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.order-meta {
+  display: flex;
+  gap: 32px;
+}
+
+.meta-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.meta-label {
+  font-size: 13px;
+  color: #757575;
+}
+
+.meta-value {
+  font-size: 15px;
+  color: #212121;
+  font-weight: 500;
+}
+
+/* Timeline */
+.timeline-container {
+  padding: 32px 24px;
+}
+
+.timeline-item {
+  display: flex;
+  gap: 24px;
+  position: relative;
+  padding-bottom: 40px;
+}
+
+.timeline-item-last {
+  padding-bottom: 0;
+}
+
+.timeline-connector {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 24px;
+}
+
+.connector-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  z-index: 2;
+}
+
+.connector-line {
+  width: 2px;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 11px;
+}
+
+.timeline-item-last .connector-line {
+  display: none;
+}
+
+.timeline-content {
+  flex-grow: 1;
+  padding-top: 2px;
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+
+.timestamp {
+  margin: 0;
+  font-size: 14px;
+  color: #757575;
+}
+
+/* Shipping Card */
+.shipping-card {
+  margin-top: 32px;
+  padding: 24px;
+  border-top: 1px solid #e0e0e0;
+}
+
+.shipping-card h3 {
+  margin: 0 0 24px 0;
+  color: #212121;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.shipping-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 24px;
+}
+
+.info-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.info-label {
+  font-size: 13px;
+  color: #757575;
+}
+
+.info-value {
+  font-size: 15px;
+  color: #212121;
+}
+
+/* Order Details */
+.order-details-card {
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+}
+
+.order-product-card {
+  display: grid;
+  grid-template-columns: 120px 1fr auto;
+  gap: 24px;
+  padding: 24px;
+  border-bottom: 1px solid #e0e0e0;
+  transition: background-color 0.2s ease;
+}
+
+.order-product-card:hover {
+  background-color: #f5f5f5;
+}
+
+.product-image img {
+  width: 100%;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.product-info h3 {
+  margin: 0 0 16px 0;
+  color: #212121;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.product-meta {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 16px;
+}
+
+.meta-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.product-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  justify-content: center;
+}
+
+.action-button {
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 1px solid transparent;
+}
+
+.action-button.return {
+  background-color: #e3f2fd;
+  color: #2196f3;
+  border-color: #90caf9;
+}
+
+.action-button.return:hover {
+  background-color: #bbdefb;
+}
+
+.action-button.cancel {
+  background-color: #ffebee;
+  color: #f44336;
+  border-color: #ef9a9a;
+}
+
+.action-button.cancel:hover {
+  background-color: #ffcdd2;
+}
+
+/* Order Summary */
+.order-summary-card {
+  padding: 24px;
+  margin-top: 24px;
+}
+
+.order-summary-card h3 {
+  margin: 0 0 24px 0;
+  color: #212121;
+  font-size: 18px;
+  font-weight: 600;
+}
+/* Order Summary Continued */
+.summary-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  font-size: 15px;
+}
+
+.summary-row:last-child {
+  margin-top: 8px;
+  padding-top: 16px;
+  border-top: 1px solid #e0e0e0;
+}
+
+.payment-badge {
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.payment-badge.completed {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+}
+
+.payment-badge.pending {
+  background-color: #fff3e0;
+  color: #f57c00;
+}
+
+.payment-badge.failed {
+  background-color: #ffebee;
+  color: #c62828;
+}
+
+/* Responsive Styles */
+@media (max-width: 992px) {
+  .order-container {
+    padding: 16px;
+  }
+
+  .order-product-card {
+    grid-template-columns: 100px 1fr;
+  }
+
+  .product-actions {
+    grid-column: 1 / -1;
+    flex-direction: row;
+    justify-content: flex-start;
+    padding-top: 16px;
+  }
+
+  .shipping-grid {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .order-meta {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .navigation-tabs {
+    gap: 8px;
+  }
+
+  .tab-button {
+    padding: 10px 16px;
+    font-size: 14px;
+  }
+
+  .product-meta {
+    grid-template-columns: 1fr;
+  }
+
+  .timeline-container {
+    padding: 24px 16px;
+  }
+
+  .shipping-card,
+  .order-summary-card {
+    padding: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .order-container {
+    padding: 12px;
+  }
+
+  .order-product-card {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    padding: 16px;
+  }
+
+  .product-image {
+    width: 100%;
+    max-width: 200px;
+    margin: 0 auto;
+  }
+
+  .product-image img {
+    height: 160px;
+  }
+
+  /* .product-info h3 {
+    text-align: center;
+  } */
+
+  /* .product-meta {
+    text-align: center;
+  } */
+
+  .product-actions {
+    justify-content: center;
+  }
+
+  .header-content h2 {
+    font-size: 20px;
+  }
+
+  .timeline-connector {
+    width: 20px;
+  }
+
+  .connector-dot {
+    width: 10px;
+    height: 10px;
+  }
+
+  .connector-line {
+    left: 9px;
+  }
+}
+
+/* Print Styles */
+@media print {
+  .navigation-tabs {
+    display: none;
+  }
+
+  .order-container {
+    padding: 0;
+  }
+
+  .tracking-card,
+  .order-details-card {
+    box-shadow: none;
+    border: 1px solid #e0e0e0;
+  }
+
+  .product-actions {
+    display: none;
+  }
+
+  .timeline-connector .connector-dot,
+  .timeline-connector .connector-line {
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+
+  .status-badge,
+  .payment-badge {
+    border: 1px solid #e0e0e0;
+  }
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.tracking-card,
+.order-details-card {
+  animation: fadeIn 0.3s ease-out;
+}
+
+.timeline-item {
+  animation: slideIn 0.3s ease-out;
+  animation-fill-mode: both;
+}
+
+.timeline-item:nth-child(1) {
+  animation-delay: 0.1s;
+}
+.timeline-item:nth-child(2) {
+  animation-delay: 0.2s;
+}
+.timeline-item:nth-child(3) {
+  animation-delay: 0.3s;
+}
+.timeline-item:nth-child(4) {
+  animation-delay: 0.4s;
+}
+
+/* Loading States */
+.skeleton-loading {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: loading 1.5s infinite;
+}
+
+@keyframes loading {
+  from {
+    background-position: 200% 0;
+  }
+  to {
+    background-position: -200% 0;
+  }
+}
+
+/* Accessibility Focus States */
+
+/* Error States */
+.error-message {
+  text-align: center;
+  padding: 48px 24px;
+  color: #f44336;
+  background-color: #ffebee;
+  border-radius: 12px;
+  margin: 24px 0;
+}
+
+.error-message h3 {
+  margin: 0 0 12px 0;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.error-message p {
+  margin: 0;
+  color: #616161;
+  font-size: 15px;
+}
+
+/* Active Status Blinking Animation */
+@keyframes statusPulse {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(33, 150, 243, 0.4);
+  }
+
+  50% {
+    transform: scale(1.1);
+    box-shadow: 0 0 0 10px rgba(33, 150, 243, 0);
+  }
+
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(33, 150, 243, 0);
+  }
+}
+
+@keyframes dotGlow {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.6;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+/* Add this class to your existing connector-dot styles */
+.connector-dot.active {
+  animation:
+    statusPulse 2s infinite cubic-bezier(0.66, 0, 0, 1),
+    dotGlow 2s infinite ease-in-out;
+}
+
+/* Status-specific active dots */
+.connector-dot.active.delivered {
+  box-shadow: 0 0 0 4px rgba(0, 200, 83, 0.2);
+}
+
+.connector-dot.active.shipped {
+  box-shadow: 0 0 0 4px rgba(33, 150, 243, 0.2);
+}
+
+.connector-dot.active.processing {
+  box-shadow: 0 0 0 4px rgba(255, 193, 7, 0.2);
+}
+
+/* Enhanced timeline content for active status */
+.timeline-content.active .status-badge {
+  animation: fadeInOut 2s infinite;
+}
+
+@keyframes fadeInOut {
+  0% {
+    opacity: 0.8;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.8;
+  }
+}
+
+/* Add subtle highlight to active timeline item */
+.timeline-item.active {
+  background: linear-gradient(to right, rgba(33, 150, 243, 0.05), transparent);
+  border-radius: 8px;
+}
+
+/* Active status line animation */
+.connector-line.active {
+  background: linear-gradient(
+    180deg,
+    rgba(33, 150, 243, 1) 0%,
+    rgba(33, 150, 243, 0.6) 100%
+  );
+  animation: lineGlow 2s infinite ease-in-out;
+}
+
+@keyframes lineGlow {
+  0% {
+    opacity: 0.8;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.8;
+  }
+}

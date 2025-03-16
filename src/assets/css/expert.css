@@ -1,0 +1,332 @@
+/* Common Styles */
+.section-subtitle-doctors {
+  font-size: clamp(0.8rem, 1.6vw, 1.1rem);
+  padding: clamp(0.1rem, 0.8vw, 0.5rem) clamp(0.3rem, 1.8vw, 0.9rem);
+  border: 0.5px solid #cecece;
+  text-transform: uppercase;
+  font-weight: 500;
+  letter-spacing: 1.2px;
+  color: #fff;
+  margin-bottom: 0.2rem;
+  display: inline-block;
+}
+
+.section-title-doctors {
+  font-size: 1.8rem;
+  color: #fff;
+  margin-bottom: 1.2rem;
+  text-align: center;
+}
+
+/* Container Styles */
+.doctors-section {
+  position: relative;
+}
+
+.section-container {
+  width: 100%;
+  max-width: 1250px;
+  margin: 0 auto;
+  padding: 0 0.6rem;
+}
+
+.section-header {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+/* Doctor Card */
+.doctor-card {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  padding: 0.8rem;
+
+  margin: 0 auto;
+  max-width: 220px;
+  text-align: center;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.doctor-card:hover {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Image Container */
+.doctor-image-container {
+  width: 180px;
+  height: 180px;
+  margin: 0 auto 0.4rem;
+  overflow: hidden;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+}
+
+.doctor-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Text Content */
+.doctor-card h3 {
+  color: #ffffff;
+  font-size: 1.2rem;
+  margin-bottom: 0.1rem;
+}
+
+.doctor-card p {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.9rem;
+  margin-bottom: 0.3rem;
+}
+
+.social-link {
+  padding: 5px;
+  margin: 0 3px;
+  border-radius: 50%;
+  transition: all 0.25s ease;
+}
+
+.social-link:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px) rotate(8deg);
+}
+
+/* Button */
+.doctor-card button {
+  background: rgba(255, 255, 255, 0.15);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  padding: 0.4rem 1rem;
+  border-radius: 25px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.doctor-card button:hover {
+  background: rgba(255, 255, 255, 0.25);
+  border-color: rgba(255, 255, 255, 0.5);
+  transform: scale(1.05);
+}
+
+/* Slider Customization */
+.slider-container {
+  width: 100%;
+  padding: 0 8px;
+}
+
+/*------------------------------------------ Expert Details----------------------------------------------------- */
+.expert-details {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 60px;
+  background: linear-gradient(to bottom, #dcedfe 60%, transparent 40%);
+}
+
+.expert-card {
+  display: flex;
+  max-width: 900px;
+  background: var(--testimonial-card-bg);
+  border-radius: 4px;
+  box-shadow: var(--card-shadow);
+  overflow: hidden;
+  transition: transform var(--transition-speed);
+  margin-top: var(--gap-medium);
+  min-height: 350px;
+}
+
+.expert-card:hover {
+  transform: translateY(-5px);
+}
+
+.expert-image {
+  width: 40%;
+  object-fit: cover;
+}
+
+.expert-info {
+  padding: var(--padding-large) var(--padding-medium);
+  flex: 1;
+}
+
+.expert-name {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: var(--gap-small);
+}
+
+.expert-role {
+  font-size: 18px;
+  color: #00a99d;
+  margin-bottom: var(--gap-medium);
+}
+
+.expert-description,
+.expert-readmore {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--text-color);
+  margin-bottom: var(--gap-large);
+}
+
+.expert-social-links {
+  display: flex;
+  gap: var(--gap-medium);
+}
+
+.social-icon {
+  font-size: 24px;
+  color: #9ca3af;
+  transition: color var(--transition-speed), transform var(--transition-speed);
+}
+
+.social-icon:hover {
+  color: #2563eb;
+  transform: scale(1.1);
+}
+
+.social-icon.disabled {
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+.loading {
+  font-size: 18px;
+  color: var(--text-color);
+  text-align: center;
+  padding: 50px;
+}
+
+/* Responsive Design for Expert Details */
+@media (max-width: 1024px) {
+  .expert-details {
+    padding: 40px 20px;
+  }
+
+  .expert-card {
+    max-width: 700px;
+  }
+
+  .expert-name {
+    font-size: 20px;
+  }
+
+  .expert-role {
+    font-size: 16px;
+  }
+
+  .expert-description,
+  .expert-readmore {
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 768px) {
+  .expert-details {
+    padding: 30px 15px;
+  }
+
+  .expert-card {
+    flex-direction: column;
+    max-width: 100%;
+  }
+
+  .expert-image {
+    width: 100%;
+    height: auto;
+  }
+
+  .expert-info {
+    padding: 20px;
+  }
+}
+
+.experts-details-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--gap-medium);
+  max-width: var(--max-width-large);
+  margin: 0 auto;
+  padding: var(--padding-medium);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+}
+
+.appointment-form-experts,
+.working-hours {
+  width: 100%;
+  max-width: 600px;
+  box-sizing: border-box;
+  padding: var(--padding-medium);
+  margin: var(--gap-medium) 0;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+}
+
+@media (max-width: 768px) {
+  .appointment-form-experts,
+  .working-hours {
+    width: 100%;
+    padding: var(--padding-small);
+    border: none;
+  }
+}
+
+/* correct carousel styles */
+/* correct carousel styles */
+
+/* Hide navigation arrows on mobile */
+@media (max-width: 900px) {
+  .slick-prev,
+  .slick-next {
+    display: none !important;
+  }
+}
+
+/* Enhance touch area for mobile swipe */
+.mobile-swipe-enabled .slick-list {
+  touch-action: pan-y pinch-zoom;
+  cursor: grab;
+}
+
+.mobile-swipe-enabled .slick-list:active {
+  cursor: grabbing;
+}
+
+/* Optional: Add swipe hint animation on mobile */
+@media (max-width: 800px) {
+  .mobile-swipe-enabled .slick-list::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 40px;
+    height: 40px;
+    background-image: linear-gradient(
+      to right,
+      rgba(255, 255, 255, 0.2),
+      rgba(255, 255, 255, 0)
+    );
+    animation: swipeHint 1.5s ease-in-out infinite;
+    pointer-events: none;
+    opacity: 0;
+  }
+}
+
+@keyframes swipeHint {
+  0%,
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) translateX(-20px);
+  }
+  50% {
+    opacity: 1;
+    transform: translate(-50%, -50%) translateX(20px);
+  }
+}

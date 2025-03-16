@@ -1,0 +1,584 @@
+/* Base Section Styles */
+.about-section-main {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.8s ease-out;
+  position: relative;
+}
+
+.about-section-main.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Container Layout */
+.about-main-container {
+  max-width: min(1200px, 90%);
+  margin: 0 auto;
+  gap: clamp(40px, 5vw, 80px);
+  align-items: center;
+  display: flex;
+}
+.about-content {
+  width: 50%;
+}
+/* About Text Styles */
+.about-text {
+  display: flex;
+  flex-direction: column;
+  /* gap: clamp(16px, 2vw, 24px); */
+}
+
+.about-text h4 {
+  font-size: clamp(
+    var(--font-size-header-min),
+    2vw,
+    var(--font-size-header-max)
+  );
+  width: fit-content;
+  padding: clamp(8px, 1.5vw, var(--padding-small))
+    clamp(16px, 2vw, var(--padding-large));
+  border: 0.5px solid var(--border-color);
+  opacity: 0;
+  animation: fadeIn 0.5s ease 0.3s forwards;
+  text-transform: uppercase;
+  background: var(--gradient-light);
+  border-radius: 4px;
+}
+
+.about-text h2 {
+  font-size: clamp(28px, 4vw, var(--font-size-large));
+  color: var(--text-color);
+  opacity: 0;
+  animation: fadeIn 0.5s ease 0.5s forwards;
+  line-height: 1.2;
+  margin: 0;
+}
+
+.about-text-p {
+  font-size: clamp(var(--font-size-small), 2vw, var(--font-size-medium));
+  line-height: 1.8;
+  color: var(--text-color-light);
+  opacity: 0;
+  animation: fadeIn 0.5s ease 0.5s forwards;
+  padding: clamp(0.1rem, 0.8vw, 0.5rem) 0 0 0;
+  transition: all 0.3s ease-in-out;
+  /* margin-bottom: 1.5rem; */
+}
+/* Icon Styles */
+.icon {
+  display: inline-flex;
+  width: clamp(20px, 4vw, 24px);
+  height: clamp(20px, 4vw, 24px);
+  color: #b0fbf6;
+  border-radius: 50%;
+  justify-content: center;
+  align-items: center;
+  font-size: clamp(12px, 2vw, 14px);
+  margin-right: var(--gap-small);
+  transition: all var(--transition-speed);
+}
+
+.icon:hover {
+  transform: scale(1.1);
+  background: var(--gradient-secondary);
+  color: var(--text-white-color);
+}
+
+/* Button Styles */
+.know-more-btn {
+  display: inline-block;
+  padding: clamp(8px, 1.5vw, 12px) clamp(10px, 2vw, 15px);
+  font-size: clamp(var(--font-size-small), 2vw, var(--font-size-medium));
+  color: var(--text-white-color);
+  background: var(--gradient-primary);
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all var(--transition-speed);
+  opacity: 0;
+  animation: fadeIn 0.5s ease 0.7s forwards;
+  box-shadow: var(--card-shadow);
+  text-align: center;
+  min-width: max-content;
+  margin-top: clamp(0.5rem, 1vw, 0.8rem);
+  margin-bottom: clamp(0.5rem, 1vw, 0.8rem);
+  width: fit-content;
+}
+
+.know-more-btn:hover {
+  background: linear-gradient(135deg, #2554cc, #3366ff);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(51, 102, 255, 0.3);
+}
+
+/* Read More Styles */
+.read-more-aboutus-container {
+  position: relative;
+  margin-top: clamp(12px, 2vw, 20px);
+}
+
+.read-more-aboutus {
+  background: none;
+  border: none;
+  color: var(--primary-color);
+  font-weight: 600;
+  font-size: clamp(14px, 1.5vw, 16px);
+  padding: 8px 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all var(--transition-speed);
+}
+
+.read-more-aboutus-icon {
+  transition: transform var(--transition-speed);
+  font-size: 1.2em;
+}
+
+.read-more-aboutus.expanded .read-more-aboutus-icon {
+  transform: rotate(180deg);
+}
+
+/* Features Section */
+.features-container {
+  overflow: hidden;
+  transition: max-height var(--transition-speed);
+}
+
+.features-container.expanded {
+  max-height: clamp(300px, 60vh, 800px);
+  overflow-y: auto;
+  padding-right: 10px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--primary-color) var(--secondary-color);
+}
+
+.features-grid-about {
+  display: flex;
+  flex-direction: row;
+  padding: clamp(0.2rem, 2vw, 1rem);
+  gap: 15px; /* Added spacing between items */
+}
+
+.feature-item {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Increased gap for better spacing */
+}
+
+.feature-icon-about {
+  color: #00c2b3;
+  font-size: clamp(18px, 2vw, 24px); /* Responsive icon size */
+}
+
+.feature-text {
+  font-size: clamp(14px, 1.5vw, 18px); /* Responsive text size */
+  font-weight: 600; /* Makes text more attractive */
+  color: #333; /* Darker text for better contrast */
+}
+
+@media (max-width: 768px) {
+  .features-grid-about {
+    padding: 8px;
+  }
+  .feature-item {
+    gap: 8px;
+  }
+  .feature-text {
+    font-size: clamp(12px, 2vw, 16px);
+  }
+}
+
+/* Animation Keyframes */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Image Styles */
+.about-image {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+  width: 50%;
+  height: clamp(350px, 45vh, 450px);
+  transition: all 0.4s ease;
+}
+
+.main-image {
+  position: absolute !important;
+  inset: 0;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover;
+  transition: all 0.5s ease;
+}
+
+.about-image:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+}
+
+.about-image:hover .main-image {
+  transform: scale(1.05);
+  filter: brightness(1.05);
+}
+
+/* Specialist Info Overlay */
+.specialist-info {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+  padding: clamp(24px, 4vw, 30px) clamp(20px, 3vw, 24px);
+  color: var(--text-white-color);
+  transform: translateY(100%);
+  transition: transform var(--transition-speed);
+}
+
+.about-image:hover .specialist-info {
+  transform: translateY(0);
+}
+
+.specialist-info h4 {
+  margin: 0 0 clamp(6px, 1vw, 8px);
+  font-size: clamp(18px, 2.5vw, 22px);
+  font-weight: 600;
+}
+
+.specialist-info p {
+  margin: 0;
+  font-size: clamp(14px, 1.5vw, 16px);
+  opacity: 0.9;
+  line-height: 1.6;
+}
+/* Responsive Design */
+@media (max-width: 992px) {
+  .about-image:hover {
+    transform: translateY(-10px);
+  }
+
+  .specialist-info {
+    transform: translateY(0);
+    opacity: 0.9;
+  }
+}
+
+@media (max-width: 868px) {
+  .about-text h4 {
+    margin: 0 auto;
+  }
+  .about-text-p {
+    padding: clamp(1rem, 3vw, 3rem) 0 0 0;
+    padding-bottom: clamp(1rem, 3vw, 3rem) !important;
+  }
+  /* .read-more-aboutus {
+    margin: 0 auto;
+  } */
+
+  .know-more-btn {
+    margin: 0 auto;
+    display: block;
+    width: fit-content;
+  }
+  .about-text {
+    text-align: center;
+    order: 2;
+  }
+
+  .about-content {
+    width: 100%;
+  }
+
+  .about-container {
+    gap: 40px;
+  }
+
+  .features-container.expanded {
+    max-height: 500px;
+  }
+  .about-image {
+    width: 100%;
+    height: clamp(300px, 40vh, 400px);
+    margin-bottom: 2rem;
+    display: block;
+  }
+
+  .specialist-info {
+    padding: 20px;
+  }
+
+  .specialist-info h4 {
+    font-size: 20px;
+  }
+
+  .specialist-info p {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  :root {
+    --font-size-header-max: 20px;
+    --padding-large: 20px;
+  }
+
+  .about-text h4 {
+    width: auto;
+    text-align: center;
+  }
+
+  .know-more-btn {
+    width: 100%;
+    min-width: auto;
+  }
+
+  .features-container.expanded {
+    max-height: 400px;
+  }
+
+  .about-image {
+    height: clamp(250px, 35vh, 300px);
+    border-radius: 8px;
+    display: block;
+  }
+
+  .specialist-info {
+    position: relative;
+    background: var(--gradient-primary);
+    transform: none;
+    padding: 16px;
+  }
+
+  .about-image:hover {
+    transform: none;
+  }
+
+  .about-image:hover .main-image {
+    transform: scale(1.02);
+  }
+}
+
+/* Utility Classes */
+.text-center {
+  text-align: center;
+}
+
+.w-full {
+  width: 100%;
+}
+
+.mx-auto {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/*  */
+/* Add these styles to your CSS */
+.read-more-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: transparent;
+  border: none;
+  color: #2563eb; /* Adjust color to match your theme */
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border-radius: 4px;
+  margin-top: clamp(0.5rem, 1vw, 0.8rem);
+  margin-bottom: clamp(0.5rem, 1vw, 0.8rem);
+  font-size: clamp(0.8rem, 1.2vw, 1rem);
+}
+
+.read-more-btn:hover {
+  transform: translateY(-1px);
+}
+
+.read-more-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon-transition {
+  transition: transform 0.3s ease;
+  font-size: 0.8rem;
+}
+
+/* Optional: Add a subtle animation when expanding/collapsing */
+.about-text-p {
+  transition: all 0.3s ease-in-out;
+}
+
+/* If you want to add a fade effect to the truncated text */
+.about-text-p::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 100%;
+  height: 40px;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    white
+  ); /* Adjust the white color to match your background */
+  pointer-events: none;
+  opacity: 0.8;
+}
+
+/* Optional: Add responsive styles */
+@media (max-width: 640px) {
+  .read-more-button {
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+
+  .icon-read {
+    width: 14px;
+    height: 14px;
+  }
+}
+
+/* Text Clamping and Progressive Enhancement */
+.line-clamp {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  position: relative;
+}
+
+.text-expander {
+  margin-top: 1rem;
+}
+
+.text-expander[open] .read-more-icon {
+  transform: rotate(180deg);
+}
+
+.text-expander[open] + .line-clamp {
+  -webkit-line-clamp: unset;
+}
+
+.expanded-content {
+  margin-top: 1rem;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.features-expander {
+  margin-top: 1rem;
+}
+
+.features-expander[open] .expanded-features {
+  animation: slideDown 0.3s ease-in-out;
+}
+
+.features-container {
+  margin-top: 2rem;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Text Content Expansion */
+.text-content-wrapper {
+  position: relative;
+}
+
+.read-more-toggle {
+  display: none;
+}
+
+.text-content {
+  max-height: 6.8em; /* Approximately 3 lines */
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+}
+
+.read-more-toggle:checked ~ .about-text-p .text-content {
+  max-height: 1000px;
+}
+
+.read-more-toggle:checked ~ .about-text-p .read-more-btn .read-more-text {
+  content: "Read Less";
+}
+
+.read-more-toggle:checked ~ .about-text-p .read-more-btn .read-more-icon {
+  transform: rotate(180deg);
+}
+
+/* Features Toggle */
+.features-wrapper {
+  position: relative;
+}
+
+.features-toggle {
+  display: none;
+}
+
+.features-container .features-grid-about {
+  max-height: 100px;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+}
+
+.features-toggle:checked ~ .features-container .features-grid-about {
+  max-height: 1000px;
+}
+
+.features-toggle:checked ~ .features-container .view-more-btn {
+  content: "Show Less";
+}
+
+.view-more-btn {
+  color: var(--primary-color);
+  cursor: pointer;
+  display: inline-block;
+  margin-top: 1rem;
+  font-weight: 500;
+}
+
+/* Ensure proper spacing */
+/* .about-text-p {
+  margin-bottom: 1.5rem;
+} */
+
+/* Mobile view modifications */
+@media (max-width: 768px) {
+  .text-content {
+    max-height: none !important; /* Remove height restriction */
+    overflow: visible !important; /* Show all content */
+  }
+
+  .read-more-btn {
+    display: none !important; /* Hide read more button */
+  }
+
+  .about-text-p::after {
+    display: none; /* Remove gradient fade effect */
+  }
+
+  .text-content-wrapper {
+    margin-bottom: 1.5rem; /* Add some spacing after the text */
+  }
+}

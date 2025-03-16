@@ -1,0 +1,785 @@
+/* Header */
+.header {
+  background-color: var(--primary-color);
+  color: var(--secondary-color);
+  padding-left: var(--padding-large);
+  padding-right: var(--padding-large);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  animation: slideDown var(--animation-duration) ease-out;
+}
+
+.header-text {
+  font-size: clamp(
+    var(--font-size-header-min),
+    2vw,
+    var(--font-size-header-max)
+  );
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  line-height: var(--line-height-header);
+  max-width: 100%;
+}
+
+.header-contact {
+  display: flex;
+  align-items: center;
+  gap: clamp(var(--gap-small), 2vw, var(--gap-large));
+  transition: all var(--transition-speed) ease;
+}
+
+.header-contact a {
+  white-space: nowrap;
+  transition: opacity 0.2s ease;
+}
+
+.header-contact a:hover {
+  opacity: 0.8;
+}
+
+/* Navbar */
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-left: var(--padding-large);
+  padding-right: var(--padding-large);
+  background-color: var(--secondary-color);
+  border-bottom: 1px solid #ddd;
+  animation: fadeIn var(--animation-duration) ease-out;
+  min-height: 8vh;
+}
+
+.navbar-left,
+.navbar-right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.logo {
+  width: 100%; /* Adjusts to the parent container's width */
+  max-width: 40px; /* Maximum width for the logo */
+  max-height: 100px; /* Maximum height for the logo */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden; /* Ensures no overflow outside the container */
+}
+
+.logo-image {
+  width: 100%; /* Ensures the image scales with the container width */
+  height: 100%; /* Ensures the image scales with the container height */
+  object-fit: contain; /* Ensures the image fits entirely within the container */
+  transition: transform var(--transition-speed, 0.3s); /* Smooth animation for scaling */
+}
+
+.hamburger {
+  display: none;
+  font-size: 2rem;
+  cursor: pointer;
+  padding: var(--padding-small);
+  color: var(--primary-color);
+  transition: transform var(--transition-speed);
+  margin-top: 0.5rem;
+}
+
+.hamburger:hover {
+  transform: rotate(90deg);
+}
+
+.nav-links {
+  display: flex;
+  gap: var(--gap-large);
+  list-style-type: none;
+  font-weight: 500;
+  font-size: var(--font-size-navbar);
+  color: var(--text-color);
+}
+
+.nav-item {
+  cursor: pointer;
+  transition: all var(--transition-speed) ease;
+  position: relative;
+  padding: var(--padding-small) 0;
+}
+
+.nav-item::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background-color: var(--primary-color);
+  transition: width var(--transition-speed) ease;
+}
+
+.nav-item.active::after,
+.nav-item:hover::after {
+  width: 100%;
+}
+
+.nav-item.active,
+.nav-item:hover {
+  color: var(--primary-color);
+  transform: translateY(-2px);
+}
+
+/* Submenu */
+.submenu-container {
+  position: relative;
+}
+
+.pages-menu {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-small);
+  border-radius: 4px;
+  transition: background-color var(--transition-speed);
+}
+
+.pages-menu:hover {
+  background-color: var(--hover-color);
+}
+
+.dropdown-icon {
+  transition: transform var(--transition-speed);
+}
+
+.dropdown-icon.rotate {
+  transform: rotate(180deg);
+}
+
+.submenu {
+  position: absolute;
+  background-color: var(--submenu-bg);
+  padding: var(--padding-small) 0;
+  border-radius: 4px;
+  box-shadow: var(--card-shadow);
+  list-style: none;
+  border: 1px solid var(--submenu-border);
+  min-width: 150px;
+  transition: all var(--transition-speed) ease;
+  z-index: 10000;
+  margin: auto;
+}
+
+.submenu-container:hover .submenu {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(5px);
+}
+
+.submenu li {
+  padding: var(--padding-medium) var(--padding-large);
+  cursor: pointer;
+  color: var(--text-color);
+  transition: background-color var(--transition-speed),
+    color var(--transition-speed);
+  font-size: var(--font-size-medium);
+  font-weight: 600;
+}
+
+.submenu li:hover {
+  background-color: var(--primary-color);
+  color: var(--secondary-color);
+  padding-left: calc(var(--padding-large) * 1.5);
+  transform: scale(1.05);
+}
+
+/* Media Queries */
+@media (max-width: 1024px) {
+  .header-contact {
+    gap: var(--gap-medium);
+  }
+  .nav-links {
+    gap: var(--gap-medium);
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .pages-menu {
+    display: block; /* Changed from flex to block for mobile */
+    gap: 0; /* Removed gap for block display */
+    border-radius: var(--border-radius-small);
+    transition: background-color var(--transition-speed);
+  }
+
+  .header {
+    flex-direction: column;
+    align-items: center;
+  }
+  .hamburger {
+    display: block;
+  }
+  .nav-links {
+    display: none;
+    flex-direction: column;
+    position: absolute;
+    left: 0;
+    width: 100%;
+    background-color: var(--secondary-color);
+    text-align: center;
+    padding: var(--padding-small);
+    z-index: 10000;
+  }
+  .nav-links.active {
+    display: flex;
+  }
+  .nav-item {
+    justify-content: center;
+  }
+  .submenu {
+    position: relative;
+    background-color: var(--secondary-color);
+  }
+}
+
+@media (max-width: 576px) {
+  .logo-image {
+    width: 50px;
+  }
+  .submenu {
+    min-width: 100%;
+    padding: var(--padding-small);
+  }
+  .submenu li {
+    padding: var(--padding-small) 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .logo-image {
+    width: 60%;
+  }
+  .hamburger {
+    font-size: 1.8rem;
+  }
+}
+
+/* updated code of the css */
+
+/* Add/modify these CSS rules in your existing styles */
+
+.nav-links {
+  /* ... existing styles ... */
+  top: 100%; /* Position it right below the navbar */
+}
+
+.nav-links.active {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1rem 0;
+}
+
+/* Ensure submenu is properly positioned and styled on mobile */
+@media (max-width: 768px) {
+  .submenu-container {
+    width: 100%;
+  }
+
+  .submenu {
+    position: static;
+    width: 100%;
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    box-shadow: none;
+    border: none;
+    background-color: rgba(0, 0, 0, 0.02);
+    margin-top: 0.5rem;
+  }
+
+  .nav-item {
+    width: 100%;
+    padding: 0.75rem 1rem;
+  }
+
+  .nav-item span {
+    display: block;
+    width: 100%;
+  }
+
+  .pages-menu {
+    width: 100%;
+    display: flex !important;
+    justify-content: center;
+    align-items: center;
+    padding: 0 1rem;
+    gap: 2px;
+  }
+
+  .dropdown-icon {
+    transition: transform 0.3s ease;
+  }
+
+  .dropdown-icon.active {
+    transform: rotate(180deg);
+  }
+}
+
+/*  */
+
+/* Base Sign-In Button */
+.sign-in-btn {
+  background-color: #0152a8; /* Primary color */
+  color: #ffffff; /* Secondary color */
+  padding: clamp(4px, 2vw + 4px, 8px); /* Reduce padding more for compactness */
+  border-radius: clamp(4px, 2vw, 6px); /* Smaller border-radius */
+  font-size: clamp(
+    10px,
+    2.5vw + 4px,
+    14px
+  ); /* Adjust font size for smaller screens */
+  font-weight: 500; /* Medium font weight */
+  cursor: pointer;
+  transition: all 0.3s ease; /* Smooth transition effect */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Light box shadow */
+  border: none; /* Remove border */
+  display: inline-flex;
+  align-items: center; /* Aligns icon and text in a row */
+  justify-content: center; /* Center content */
+  gap: 6px; /* Gap between the icon and text */
+  max-width: 200px; /* Limit max-width for better control */
+  text-align: center; /* Center the text */
+}
+
+/* Hide the icon on mobile */
+@media (max-width: 480px) {
+  .sign-in-btn {
+    font-size: clamp(10px, 4vw + 4px, 12px); /* Smaller font size on mobile */
+    padding: clamp(4px, 3vw + 3px, 8px); /* Reduced padding on mobile */
+    border-radius: clamp(3px, 2vw, 5px); /* Smaller border-radius on mobile */
+    max-width: 180px; /* Reduce max-width on small screens */
+    gap: 4px; /* Reduce gap for smaller screen */
+  }
+
+  .sign-in-btn svg {
+    display: none; /* Hide the icon on mobile */
+  }
+}
+
+/* Tablet (Medium screens) */
+@media (max-width: 768px) {
+  .sign-in-btn {
+    font-size: clamp(12px, 3vw + 8px, 14px); /* Adjust font size on tablets */
+    padding: clamp(6px, 2vw + 4px, 10px); /* Adjust padding for tablet */
+    max-width: 200px; /* Maintain compact size for tablet */
+    gap: 8px; /* Add some gap between icon and text on tablet */
+  }
+}
+
+/* Large screens (Desktop) */
+@media (min-width: 1024px) {
+  .sign-in-btn {
+    font-size: clamp(
+      12px,
+      1.5vw + 8px,
+      14px
+    ); /* Slightly larger font size for desktop */
+    padding: clamp(
+      6px,
+      2vw + 4px,
+      10px
+    ); /* Slightly smaller padding on desktop */
+    max-width: 200px; /* Prevent button from growing too large */
+    gap: 8px; /* Consistent gap on larger screens */
+  }
+}
+
+/* Header */
+.header {
+  background-color: var(--primary-color);
+  color: var(--secondary-color);
+  padding-left: var(--padding-large);
+  padding-right: var(--padding-large);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  animation: slideDown var(--animation-duration) ease-out;
+}
+
+.header-text {
+  font-size: clamp(
+    var(--font-size-header-min),
+    2vw,
+    var(--font-size-header-max)
+  );
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  line-height: var(--line-height-header);
+  max-width: 100%;
+}
+
+.header-contact {
+  display: flex;
+  align-items: center;
+  gap: clamp(var(--gap-small), 2vw, var(--gap-large));
+  transition: all var(--transition-speed) ease;
+}
+
+.header-contact a {
+  white-space: nowrap;
+  transition: opacity 0.2s ease;
+}
+
+.header-contact a:hover {
+  opacity: 0.8;
+}
+
+/* Navbar */
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-left: var(--padding-large);
+  padding-right: var(--padding-large);
+  background-color: var(--secondary-color);
+  border-bottom: 1px solid #ddd;
+  animation: fadeIn var(--animation-duration) ease-out;
+  min-height: 8vh;
+}
+
+.navbar-left,
+.navbar-right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.logo {
+  width: 100%; /* Adjusts to the parent container's width */
+  max-width: 40px; /* Maximum width for the logo */
+  max-height: 100px; /* Maximum height for the logo */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden; /* Ensures no overflow outside the container */
+}
+
+.logo-image {
+  width: 100%; /* Ensures the image scales with the container width */
+  height: 100%; /* Ensures the image scales with the container height */
+  object-fit: contain; /* Ensures the image fits entirely within the container */
+  transition: transform var(--transition-speed, 0.3s); /* Smooth animation for scaling */
+}
+
+.hamburger {
+  display: none;
+  font-size: 2rem;
+  cursor: pointer;
+  padding: var(--padding-small);
+  color: var(--primary-color);
+  transition: transform var(--transition-speed);
+  margin-top: 0.5rem;
+}
+
+.hamburger:hover {
+  transform: rotate(90deg);
+}
+
+.nav-links {
+  display: flex;
+  gap: var(--gap-large);
+  list-style-type: none;
+  font-weight: 500;
+  font-size: var(--font-size-navbar);
+  color: var(--text-color);
+}
+
+.nav-item {
+  cursor: pointer;
+  transition: all var(--transition-speed) ease;
+  position: relative;
+  padding: var(--padding-small) 0;
+}
+
+.nav-item::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background-color: var(--primary-color);
+  transition: width var(--transition-speed) ease;
+}
+
+.nav-item.active::after,
+.nav-item:hover::after {
+  width: 100%;
+}
+
+.nav-item.active,
+.nav-item:hover {
+  color: var(--primary-color);
+  transform: translateY(-2px);
+}
+
+/* Submenu */
+.submenu-container {
+  position: relative;
+}
+
+.pages-menu {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-small);
+  border-radius: 4px;
+  transition: background-color var(--transition-speed);
+}
+
+.pages-menu:hover {
+  background-color: var(--hover-color);
+}
+
+.dropdown-icon {
+  transition: transform var(--transition-speed);
+}
+
+.dropdown-icon.rotate {
+  transform: rotate(180deg);
+}
+
+.submenu {
+  position: absolute;
+  background-color: var(--submenu-bg);
+  padding: var(--padding-small) 0;
+  border-radius: 4px;
+  box-shadow: var(--card-shadow);
+  list-style: none;
+  border: 1px solid var(--submenu-border);
+  min-width: 150px;
+  transition: all var(--transition-speed) ease;
+  z-index: 10000;
+  margin: auto;
+}
+
+.submenu-container:hover .submenu {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(5px);
+}
+
+.submenu li {
+  padding: var(--padding-medium) var(--padding-large);
+  cursor: pointer;
+  color: var(--text-color);
+  transition: background-color var(--transition-speed),
+    color var(--transition-speed);
+  font-size: var(--font-size-medium);
+  font-weight: 600;
+}
+
+.submenu li:hover {
+  background-color: var(--primary-color);
+  color: var(--secondary-color);
+  padding-left: calc(var(--padding-large) * 1.5);
+  transform: scale(1.05);
+}
+
+/* Media Queries */
+@media (max-width: 1024px) {
+  .header-contact {
+    gap: var(--gap-medium);
+  }
+  .nav-links {
+    gap: var(--gap-medium);
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .pages-menu {
+    display: block; /* Changed from flex to block for mobile */
+    gap: 0; /* Removed gap for block display */
+    border-radius: var(--border-radius-small);
+    transition: background-color var(--transition-speed);
+  }
+
+  .header {
+    flex-direction: column;
+    align-items: center;
+  }
+  .hamburger {
+    display: block;
+  }
+  .nav-links {
+    display: none;
+    flex-direction: column;
+    position: absolute;
+    left: 0;
+    width: 100%;
+    background-color: var(--secondary-color);
+    text-align: center;
+    padding: var(--padding-small);
+    z-index: 10000;
+  }
+  .nav-links.active {
+    display: flex;
+  }
+  .nav-item {
+    justify-content: center;
+  }
+  .submenu {
+    position: relative;
+    background-color: var(--secondary-color);
+  }
+}
+
+@media (max-width: 576px) {
+  .logo-image {
+    width: 50px;
+  }
+  .submenu {
+    min-width: 100%;
+    padding: var(--padding-small);
+  }
+  .submenu li {
+    padding: var(--padding-small) 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .logo-image {
+    width: 60%;
+  }
+  .hamburger {
+    font-size: 1.8rem;
+  }
+}
+
+/* updated code of the css */
+
+/* Add/modify these CSS rules in your existing styles */
+
+.nav-links {
+  /* ... existing styles ... */
+  top: 100%; /* Position it right below the navbar */
+}
+
+.nav-links.active {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1rem 0;
+}
+
+/* Ensure submenu is properly positioned and styled on mobile */
+@media (max-width: 768px) {
+  .submenu-container {
+    width: 100%;
+  }
+
+  .submenu {
+    position: static;
+    width: 100%;
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    box-shadow: none;
+    border: none;
+    background-color: rgba(0, 0, 0, 0.02);
+    margin-top: 0.5rem;
+  }
+
+  .nav-item {
+    width: 100%;
+    padding: 0.75rem 1rem;
+  }
+
+  .nav-item span {
+    display: block;
+    width: 100%;
+  }
+
+  .pages-menu {
+    width: 100%;
+    display: flex !important;
+    justify-content: center;
+    align-items: center;
+    padding: 0 1rem;
+    gap: 2px;
+  }
+
+  .dropdown-icon {
+    transition: transform 0.3s ease;
+  }
+
+  .dropdown-icon.active {
+    transform: rotate(180deg);
+  }
+}
+
+/*  */
+
+/* Base Sign-In Button */
+.sign-in-btn {
+  background-color: #0152a8; /* Primary color */
+  color: #ffffff; /* Secondary color */
+  padding: clamp(4px, 2vw + 4px, 8px); /* Reduce padding more for compactness */
+  border-radius: clamp(4px, 2vw, 6px); /* Smaller border-radius */
+  font-size: clamp(
+    10px,
+    2.5vw + 4px,
+    14px
+  ); /* Adjust font size for smaller screens */
+  font-weight: 500; /* Medium font weight */
+  cursor: pointer;
+  transition: all 0.3s ease; /* Smooth transition effect */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Light box shadow */
+  border: none; /* Remove border */
+  display: inline-flex;
+  align-items: center; /* Aligns icon and text in a row */
+  justify-content: center; /* Center content */
+  gap: 6px; /* Gap between the icon and text */
+  max-width: 200px; /* Limit max-width for better control */
+  text-align: center; /* Center the text */
+}
+
+/* Hide the icon on mobile */
+@media (max-width: 480px) {
+  .sign-in-btn {
+    font-size: clamp(10px, 4vw + 4px, 12px); /* Smaller font size on mobile */
+    padding: clamp(4px, 3vw + 3px, 8px); /* Reduced padding on mobile */
+    border-radius: clamp(3px, 2vw, 5px); /* Smaller border-radius on mobile */
+    max-width: 180px; /* Reduce max-width on small screens */
+    gap: 4px; /* Reduce gap for smaller screen */
+  }
+
+  .sign-in-btn svg {
+    display: none; /* Hide the icon on mobile */
+  }
+}
+
+/* Tablet (Medium screens) */
+@media (max-width: 768px) {
+  .sign-in-btn {
+    font-size: clamp(12px, 3vw + 8px, 14px); /* Adjust font size on tablets */
+    padding: clamp(6px, 2vw + 4px, 10px); /* Adjust padding for tablet */
+    max-width: 200px; /* Maintain compact size for tablet */
+    gap: 8px; /* Add some gap between icon and text on tablet */
+  }
+}
+
+/* Large screens (Desktop) */
+@media (min-width: 1024px) {
+  .sign-in-btn {
+    font-size: clamp(
+      12px,
+      1.5vw + 8px,
+      14px
+    ); /* Slightly larger font size for desktop */
+    padding: clamp(
+      6px,
+      2vw + 4px,
+      10px
+    ); /* Slightly smaller padding on desktop */
+    max-width: 200px; /* Prevent button from growing too large */
+    gap: 8px; /* Consistent gap on larger screens */
+  }
+}

@@ -1,0 +1,50 @@
+.slick-dots li button {
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  /* background: rgba(
+    0,
+    0,
+    0,
+    0.2
+  ) !important;  */
+  background-color: hidden;
+  transition: all 0.2s ease;
+}
+
+.slick-dots li button:before {
+  display: none;
+}
+
+.slick-dots li.slick-active button {
+  /* background: #2563eb !important; */
+  box-shadow: 0 0 10px rgba(37, 99, 235, 0.5), 0 0 20px rgba(37, 99, 235, 0.3); /* Added glow effect */
+  transform: scale(1.2);
+  background-color: hidden;
+}
+
+/* Simple hover effect */
+.slick-dots li:not(.slick-active):hover button {
+  background: rgba(0, 0, 0, 0.3);
+}
+
+/* Mobile optimization */
+@media (max-width: 768px) {
+  .slick-dots {
+    gap: 3px;
+    padding: 3px 6px;
+  }
+}
+
+/* High contrast support */
+@media (forced-colors: active) {
+  .slick-dots li button {
+    background: GrayText;
+  }
+
+  .slick-dots li.slick-active button {
+    background: CanvasText;
+  }
+}

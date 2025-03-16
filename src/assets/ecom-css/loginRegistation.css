@@ -1,0 +1,1049 @@
+.login-page,
+.register-page,
+.forgot-password-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.login-card,
+.register-card,
+.forgot-password-card {
+  display: flex;
+  background: white;
+  border-radius: 24px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  width: 100%;
+  max-width: 1000px;
+  min-height: 600px;
+  position: relative;
+}
+
+.login-content,
+.register-content,
+.forgot-password-content {
+  flex: 1;
+  padding: 40px;
+  position: relative;
+  z-index: 1;
+}
+
+.brand-section {
+  text-align: center;
+  margin-bottom: 40px;
+  animation: slideIn 0.6s ease-out;
+}
+
+.brand-logo {
+  width: 80px;
+  height: 80px;
+  background: var(--primary-gradient);
+  border-radius: 50%;
+  margin: 0 auto 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: pulse 2s infinite;
+}
+
+.shopping-cart-icon {
+  font-size: 36px;
+  color: white;
+}
+
+.brand-section h1 {
+  color: #2d3748;
+  font-size: 28px;
+  margin: 0;
+  font-weight: 600;
+}
+.brand-section p {
+  color: #718096;
+  font-size: 16px;
+  margin: 0;
+}
+
+.login-form,
+.register-form,
+.forgot-password-form {
+  max-width: 360px;
+  margin: 0 auto;
+}
+
+.form-group {
+  margin-bottom: 24px;
+}
+
+.input-container {
+  position: relative;
+  border: 2px solid #e2e8f0;
+  display: flex;
+  align-items: center;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+}
+/* 
+.input-container.focused {
+  border-color: #667eea;
+  box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+} */
+
+.input-icon {
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 20px;
+}
+
+.input-container input {
+  width: 100%;
+  padding: 16px 16px 16px 50px;
+  border: none;
+  background: transparent;
+  font-size: 16px;
+  color: #2d3748;
+}
+
+.input-container input:focus {
+  outline: none;
+}
+
+.login-button,
+.register-button,
+.reset-button {
+  width: 100%;
+  padding: 16px;
+  background: var(--primary-gradient);
+  border: none;
+  border-radius: 12px;
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.login-button:hover,
+.register-button:hover,
+.reset-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+}
+
+.login-button.loading,
+.register-button.loading,
+.reset-button.loading {
+  opacity: 0.8;
+  cursor: wait;
+}
+
+.button-text {
+  margin-right: 10px;
+}
+
+.button-icon {
+  transition: transform 0.3s ease;
+}
+
+.login-button:hover .button-icon,
+.register-button:hover .button-icon,
+.reset-button:hover .button-icon {
+  transform: translateX(5px);
+}
+
+.form-footer {
+  margin-top: 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.form-footer-center {
+  margin-top: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.forgot-link,
+.register-link,
+.login-link,
+.back-to-login {
+  color: #667eea;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  transition: color 0.3s ease;
+  border-bottom: 0.1px solid #cfd8ff;
+}
+
+.forgot-link:hover,
+.register-link:hover,
+.login-link:hover,
+.back-to-login:hover {
+  color: #764ba2;
+}
+
+.error-message {
+  background: #fff5f5;
+  color: #e53e3e;
+  padding: 12px 16px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  border: 1px solid #feb2b2;
+}
+
+.error-icon {
+  margin-right: 8px;
+}
+
+.decoration-section {
+  flex: 1;
+  background: var(--hover-gradient);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Animated Circles */
+.animated-circles {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+.circle {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  animation: float 6s infinite;
+}
+
+.circle-1 {
+  width: 100px;
+  height: 100px;
+  top: 20%;
+  left: 20%;
+  animation-delay: 0s;
+}
+
+.circle-2 {
+  width: 150px;
+  height: 150px;
+  top: 40%;
+  right: 20%;
+  animation-delay: 2s;
+}
+
+.circle-3 {
+  width: 80px;
+  height: 80px;
+  bottom: 20%;
+  left: 30%;
+  animation-delay: 4s;
+}
+
+/* Shopping Bag Animation */
+.shopping-illustration {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 200px;
+  height: 200px;
+}
+
+.illustration-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  animation: bounce 3s infinite;
+}
+
+.shopping-bag {
+  position: relative;
+  width: 120px;
+  height: 140px;
+  margin: 0 auto;
+}
+
+.bag-body {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 80%;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+}
+
+.bag-top {
+  position: absolute;
+  top: 0;
+  width: 140%;
+  height: 20%;
+  left: -20%;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 20px;
+}
+
+.bag-handle {
+  position: absolute;
+  top: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 40px;
+  height: 30px;
+  border: 8px solid rgba(255, 255, 255, 0.3);
+  border-bottom: none;
+  border-radius: 20px 20px 0 0;
+}
+
+.shopping-elements {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.element {
+  position: absolute;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  animation: float 4s infinite;
+}
+
+.element-1 {
+  width: 30px;
+  height: 30px;
+  top: 20%;
+  left: 20%;
+  animation-delay: 0.5s;
+}
+
+.element-2 {
+  width: 20px;
+  height: 20px;
+  top: 40%;
+  right: 20%;
+  animation-delay: 1s;
+}
+
+.element-3 {
+  width: 25px;
+  height: 25px;
+  bottom: 30%;
+  left: 30%;
+  animation-delay: 1.5s;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(102, 126, 234, 0.4);
+  }
+  70% {
+    transform: scale(1.05);
+    box-shadow: 0 0 0 15px rgba(102, 126, 234, 0);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(102, 126, 234, 0);
+  }
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+@keyframes bounce {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-15px);
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .login-card {
+    flex-direction: column;
+  }
+
+  .decoration-section {
+    display: none;
+  }
+
+  .login-content {
+    padding: 30px 20px;
+  }
+
+  .brand-section h1 {
+    font-size: 24px;
+  }
+}
+
+/* registation  */
+
+/* Animated Shapes */
+.animated-shapes {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+.shape {
+  position: absolute;
+  background: rgba(255, 255, 255, 0.1);
+  animation: float 6s infinite;
+}
+
+.shape-1 {
+  width: 120px;
+  height: 120px;
+  top: 20%;
+  left: 20%;
+  clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+  animation-delay: 0s;
+}
+
+.shape-2 {
+  width: 80px;
+  height: 80px;
+  top: 40%;
+  right: 20%;
+  clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
+  animation-delay: 2s;
+}
+
+.shape-3 {
+  width: 100px;
+  height: 100px;
+  bottom: 20%;
+  left: 30%;
+  border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+  animation-delay: 4s;
+}
+
+/* Profile Card Animation */
+.signup-illustration {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 200px;
+  height: 200px;
+}
+
+.illustration-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  animation: float 4s infinite;
+}
+
+.profile-card {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 16px;
+  padding: 20px;
+  width: 160px;
+  height: 200px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  backdrop-filter: blur(5px);
+}
+
+.profile-circle {
+  width: 80px;
+  height: 80px;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  margin-bottom: 20px;
+}
+
+.profile-lines {
+  width: 100%;
+}
+
+.line {
+  background: rgba(255, 255, 255, 0.3);
+  height: 12px;
+  border-radius: 6px;
+  margin-bottom: 12px;
+}
+
+.line-1 {
+  width: 80%;
+}
+
+.line-2 {
+  width: 60%;
+}
+
+.floating-elements {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+.element {
+  position: absolute;
+  font-size: 24px;
+  animation: floatElement 4s infinite;
+}
+
+.element-1 {
+  top: 20%;
+  left: -30px;
+  animation-delay: 0.5s;
+}
+
+.element-2 {
+  top: 40%;
+  right: -30px;
+  animation-delay: 1s;
+}
+
+.element-3 {
+  bottom: 20%;
+  left: 50%;
+  animation-delay: 1.5s;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(67, 160, 71, 0.4);
+  }
+  70% {
+    transform: scale(1.05);
+    box-shadow: 0 0 0 15px rgba(67, 160, 71, 0);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(67, 160, 71, 0);
+  }
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+@keyframes floatElement {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  50% {
+    transform: translate(10px, -15px);
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .register-card {
+    flex-direction: column;
+  }
+
+  .decoration-section {
+    display: none;
+  }
+
+  .register-content {
+    padding: 30px 20px;
+  }
+
+  .brand-section h1 {
+    font-size: 24px;
+  }
+}
+
+/* Adding shine effect to inputs */
+/* Adding shine effect to inputs */
+.input-container::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    to right,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  transition: 0.3s;
+}
+
+.input-container:hover::after {
+  left: 100%;
+}
+
+/* Form validation styles */
+.input-container input:invalid:not(:placeholder-shown) {
+  border-color: #e53e3e;
+}
+
+.input-container input:valid:not(:placeholder-shown) {
+  border-color: #43a047;
+}
+
+/* Additional animations */
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Apply animations to elements */
+.brand-section {
+  animation: slideIn 0.6s ease-out;
+}
+
+.form-group {
+  animation: slideIn 0.6s ease-out;
+  animation-fill-mode: both;
+}
+
+.form-group:nth-child(1) {
+  animation-delay: 0.2s;
+}
+
+.form-group:nth-child(2) {
+  animation-delay: 0.4s;
+}
+
+.form-group:nth-child(3) {
+  animation-delay: 0.6s;
+}
+
+/* Loading state animations */
+.register-button.loading .button-icon {
+  animation: rotate 1.5s linear infinite;
+}
+
+/* Enhanced focus states */
+.input-container input:focus::placeholder {
+  opacity: 0.7;
+  transform: translateX(10px);
+  transition: all 0.3s ease;
+}
+
+/* Custom scrollbar for the page */
+.register-page {
+  scrollbar-width: thin;
+  scrollbar-color: #43a047 #e2e8f0;
+}
+
+.register-page::-webkit-scrollbar {
+  width: 8px;
+}
+
+.register-page::-webkit-scrollbar-track {
+  background: #e2e8f0;
+}
+
+.register-page::-webkit-scrollbar-thumb {
+  background-color: #43a047;
+  border-radius: 4px;
+}
+
+/* Additional hover effects */
+.brand-logo:hover {
+  transform: scale(1.05);
+  transition: transform 0.3s ease;
+}
+
+.profile-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.profile-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Success state animations */
+@keyframes success {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.register-button.success {
+  background: #43a047;
+  animation: success 0.5s ease-out;
+}
+
+/* Error shake animation */
+@keyframes shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-10px);
+  }
+  75% {
+    transform: translateX(10px);
+  }
+}
+
+.error-message {
+  animation: shake 0.5s ease-in-out;
+}
+
+/* Typography enhancements */
+.brand-section h1 {
+  letter-spacing: -0.5px;
+}
+
+.brand-section p {
+  letter-spacing: 0.2px;
+}
+
+/* Additional responsive adjustments */
+@media (max-width: 480px) {
+  .register-card {
+    margin: 10px;
+    min-height: auto;
+  }
+
+  .brand-section h1 {
+    font-size: 22px;
+  }
+
+  .brand-section p {
+    font-size: 14px;
+  }
+
+  .input-container input {
+    font-size: 14px;
+  }
+
+  .register-button {
+    font-size: 14px;
+    padding: 14px;
+  }
+}
+
+/* Print styles */
+@media print {
+  .register-page {
+    background: none;
+  }
+
+  .decoration-section {
+    display: none;
+  }
+
+  .register-card {
+    box-shadow: none;
+    border: 1px solid #e2e8f0;
+  }
+}
+
+/* foret passowed  */
+
+.reset-button.success {
+  background: #00b894;
+}
+
+/* Animated Keys */
+.animated-keys {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+.key {
+  position: absolute;
+  border: 4px solid rgba(255, 255, 255, 0.2);
+  animation: float 6s infinite;
+}
+
+.key-1 {
+  width: 60px;
+  height: 60px;
+  top: 20%;
+  left: 20%;
+  border-radius: 20px;
+  animation-delay: 0s;
+}
+
+.key-2 {
+  width: 40px;
+  height: 40px;
+  top: 40%;
+  right: 20%;
+  border-radius: 15px;
+  animation-delay: 2s;
+}
+
+.key-3 {
+  width: 50px;
+  height: 50px;
+  bottom: 20%;
+  left: 30%;
+  border-radius: 18px;
+  animation-delay: 4s;
+}
+
+/* Envelope Animation */
+.reset-illustration {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 200px;
+  height: 200px;
+}
+
+.illustration-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  animation: float 4s infinite;
+}
+
+.envelope {
+  position: relative;
+  width: 160px;
+  height: 100px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+}
+
+.envelope-top {
+  position: absolute;
+  top: -20px;
+  left: 0;
+  width: 100%;
+  height: 40px;
+  background: rgba(255, 255, 255, 0.3);
+  clip-path: polygon(0 50%, 50% 0, 100% 50%, 100% 100%, 0 100%);
+}
+
+.envelope-body {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 80px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+}
+
+.letter {
+  position: absolute;
+  top: 10px;
+  left: 20px;
+  right: 20px;
+  height: 60px;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 5px;
+  padding: 10px;
+}
+
+.letter-line {
+  height: 4px;
+  background: rgba(255, 255, 255, 0.4);
+  margin-bottom: 8px;
+  border-radius: 2px;
+}
+
+.floating-elements {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+.element {
+  position: absolute;
+  font-size: 24px;
+  animation: floatElement 4s infinite;
+}
+
+.element-1 {
+  top: -40px;
+  left: -30px;
+  animation-delay: 0.5s;
+}
+
+.element-2 {
+  top: 20px;
+  right: -30px;
+  animation-delay: 1s;
+}
+
+.element-3 {
+  bottom: -20px;
+  left: 50%;
+  animation-delay: 1.5s;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+@keyframes floatElement {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  50% {
+    transform: translate(10px, -15px);
+  }
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(255, 159, 67, 0.4);
+  }
+  70% {
+    transform: scale(1.05);
+    box-shadow: 0 0 0 15px rgba(255, 159, 67, 0);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(255, 159, 67, 0);
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .forgot-password-card {
+    flex-direction: column;
+  }
+
+  .decoration-section {
+    display: none;
+  }
+
+  .forgot-password-content {
+    padding: 30px 20px;
+  }
+
+  .brand-section h1 {
+    font-size: 24px;
+  }
+}
+
+/* Adding shine effect to inputs */
+.input-container::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    to right,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  transition: 0.3s;
+}
+
+.input-container:hover::after {
+  left: 100%;
+}
+
+/* Loading spinner styles */
+.loading-spinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: #fff;
+  animation: spin 0.6s linear infinite;
+  margin-right: 8px;
+  display: inline-block;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.button-loading {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* Form submission styles */
+form:active button[type="submit"] .button-text {
+  display: none;
+}
+
+form:active button[type="submit"] .loading-spinner {
+  display: inline-block !important;
+}
+
+form:active button[type="submit"] {
+  opacity: 0.7;
+  cursor: wait;
+}

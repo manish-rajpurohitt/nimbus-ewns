@@ -1,0 +1,78 @@
+/* WorkingHours.css */
+
+/* Container styling */
+.working-hours-container {
+  background-size: cover;
+  background-position: center;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  box-sizing: border-box;
+  height: 100%;
+}
+
+/* Content box styling */
+.working-hours-content {
+  max-width: 450px;
+  width: 90%;
+  padding: 3rem;
+  border-radius: 4px;
+  background-color: var(--secondary-color); /* Updated to use CSS variable */
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+/* Title styling */
+.working-hours-title {
+  font-size: 2rem;
+  font-weight: 600;
+  color: #343a40;
+  margin-bottom: 20px;
+}
+
+/* Details styling */
+.working-hours-details {
+  font-size: 1.1rem;
+  color: #495057;
+}
+
+/* Label styling */
+.label {
+  font-weight: bold;
+  color: #00a99d;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .working-hours-content {
+    padding: 2rem;
+  }
+
+  .working-hours-title {
+    font-size: 1.5rem;
+  }
+
+  .working-hours-details {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .working-hours-content {
+    padding: 1.5rem;
+  }
+
+  .working-hours-title {
+    font-size: 1.25rem;
+  }
+
+  .working-hours-details {
+    font-size: 0.9rem;
+  }
+}

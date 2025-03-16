@@ -1,0 +1,185 @@
+/* Base styles */
+.appointment-page-container {
+  margin: 0 auto;
+  padding: 2rem;
+  flex-direction: column;
+  transition: background-color 0.3s ease; /* Smooth background transition */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 60px;
+  background: linear-gradient(to bottom, #dcedfe 60%, #ffffff 40%);
+}
+
+.appointment-main-title {
+  font-size: 2.5rem;
+  text-align: center;
+  margin-bottom: 2rem;
+  color: #1a1a1a;
+  font-weight: 600;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1); /* Subtle text shadow for depth */
+}
+
+.form-card {
+  background: #f1f1f1;
+  border-radius: 12px;
+  padding: 3rem;
+  width: 100%;
+  max-width: 800px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); /* Enhanced shadow for depth */
+  animation: slideUp 0.5s ease-out;
+}
+
+.appointment-label {
+  color: var(--primary-color);
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  text-align: left; /* Align labels to the left */
+}
+
+.appointment-title {
+  font-size: 2rem;
+  color: #1a1a1a;
+  margin: 1rem 0 2rem;
+  font-weight: 600;
+}
+
+.appointment-form {
+  display: grid;
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(300px, 1fr)
+  ); /* Responsive grid */
+  gap: 1.5rem;
+}
+
+.appointment-row {
+  display: flex;
+  flex-direction: column;
+}
+
+.appointment-input,
+.appointment-select {
+  padding: 0.75rem 1rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  font-size: 1rem;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  background-color: white;
+  width: 92%;
+}
+
+.appointment-input:focus,
+.appointment-select:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.appointment-submit-button {
+  grid-column: 1 / -1;
+  background-color: var(--primary-color);
+  color: white;
+  padding: 1rem;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.2s; /* Added transform transition */
+  margin-top: 1rem;
+  width: 100%;
+}
+
+.appointment-submit-button:hover {
+  background-color: #1d4ed8;
+  transform: translateY(-2px); /* Subtle lift effect on hover */
+}
+
+.appointment-thank-you-text {
+  text-align: center;
+  color: var(--primary-color);
+  margin-top: 1.5rem;
+  font-size: 0.875rem;
+}
+
+/* Loading and Error states */
+.loading,
+.error {
+  text-align: center;
+  padding: 2rem;
+  font-size: 1.125rem;
+  color: #666;
+}
+
+.error {
+  color: #dc2626;
+}
+
+/* Animations */
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .appointment-container {
+    padding: 1rem;
+  }
+
+  .form-card {
+    padding: 1.5rem;
+  }
+
+  .appointment-form {
+    grid-template-columns: 1fr; /* Stack fields on small screens */
+  }
+
+  .appointment-main-title {
+    font-size: 2rem;
+  }
+
+  .appointment-title {
+    font-size: 1.5rem;
+  }
+}
+
+/* Input Icons */
+.appointment-row.phone input {
+  background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>');
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  background-size: 1.25rem;
+  padding-right: 2.5rem;
+}
+
+.appointment-row.date input {
+  background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>');
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  background-size: 1.25rem;
+  padding-right: 2.5rem;
+}
+
+.appointment-row.time input {
+  background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>');
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  background-size: 1.25rem;
+  padding-right: 2.5rem;
+}
+.appointment-title-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}

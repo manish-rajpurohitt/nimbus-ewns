@@ -1,0 +1,77 @@
+/* Base styles for html and body */
+html {
+  font-size: 16px;
+  -webkit-text-size-adjust: 100%;
+  -moz-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  font-family: "Inter", sans-serif !important;
+  font-optical-sizing: auto !important;
+  font-weight: 350 !important;
+  font-style: normal !important;
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  min-height: 100dvh; /* For mobile browsers */
+  width: 100%;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Root container styles */
+#root {
+  position: relative;
+  min-height: 100vh;
+  min-height: 100dvh;
+  width: 100%;
+  max-width: 100%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Media query for high-DPI screens */
+@media screen and (-webkit-min-device-pixel-ratio: 1.25),
+  screen and (min-resolution: 120dpi) {
+  html {
+    font-size: calc(
+      16px / 1.25
+    ); /* Adjust base font size for zoomed displays */
+  }
+}
+
+/* Media query for large screens */
+@media screen and (min-width: 1920px) {
+  html {
+    font-size: calc(
+      16px * 1.1
+    ); /* Slightly larger base font size for large screens */
+  }
+}
+
+/* Media query for landscape orientation */
+@media screen and (orientation: landscape) {
+  #root {
+    min-height: 100vh;
+    min-height: 100dvh;
+  }
+}
+
+/* Ensure images and media are responsive */
+img,
+video,
+canvas,
+picture {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Ensure proper box sizing throughout the app */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}

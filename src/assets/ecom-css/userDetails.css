@@ -1,0 +1,140 @@
+/* Custom Properties */
+
+.login-btn {
+  background-color: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.signup-btn {
+  background-color: var(--accent-color);
+  color: var(--text-light);
+  border: none;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.signup-btn:hover {
+  background-color: #7c3aed;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 8px -1px rgba(0, 0, 0, 0.15);
+}
+
+.user-menu {
+  position: relative;
+}
+
+.user-btn {
+  font-weight: 500;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  background-color: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(8px);
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  width: 250px;
+  padding: 0.5rem;
+  margin-top: 0.75rem;
+  border: 1px solid rgba(229, 231, 235, 0.5);
+  backdrop-filter: blur(8px);
+  animation: dropdownFade 0.3s ease;
+}
+
+@keyframes dropdownFade {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.user-info {
+  padding: 1rem;
+  border-bottom: 1px solid rgba(229, 231, 235, 0.5);
+  background: linear-gradient(to right, #f3f4f6, #ffffff);
+  border-radius: 8px;
+  margin-bottom: 0.5rem;
+}
+
+.username {
+  display: block;
+  font-weight: 600;
+  color: var(--text-dark);
+  font-size: 1.1rem;
+}
+
+.email {
+  display: block;
+  font-size: 0.875rem;
+  color: var(--text-gray);
+  margin-top: 0.25rem;
+}
+
+.dropdown-menu button {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: none;
+  background: none;
+  color: var(--text-dark);
+  font-size: 0.925rem;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border-radius: 6px;
+}
+
+.dropdown-menu button:hover {
+  background-color: var(--bg-hover);
+  transform: translateX(4px);
+}
+
+.dropdown-menu button svg {
+  color: var(--primary-color);
+  transition: transform 0.2s ease;
+}
+
+.dropdown-menu button:hover svg {
+  transform: scale(1.1);
+}
+
+.navbar-mobile-toggle {
+  display: none;
+  font-size: 1.5rem;
+  background: none;
+  border: none;
+  color: var(--text-light);
+  cursor: pointer;
+  padding: 0.5rem;
+  transition: transform 0.3s ease;
+}
+
+.navbar-mobile-toggle:hover {
+  transform: rotate(90deg);
+}
+
+/* Loading state */
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 70px;
+  font-size: 1rem;
+  color: var(--text-light);
+  background: linear-gradient(
+    135deg,
+    var(--gradient-start) 0%,
+    var(--gradient-end) 100%
+  );
+}

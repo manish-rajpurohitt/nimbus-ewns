@@ -1,0 +1,76 @@
+/* News Section */
+/* General R
+/* workin cotect us detail */
+.contact-detail-container {
+  text-align: center;
+}
+
+.contact-detail-title {
+  font-size: 32px;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 40px;
+}
+
+.contact-detail-content {
+  display: flex;
+  justify-content: center;
+}
+
+.contact-detail-info {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  max-width: 1300px;
+}
+
+.contact-detail-item {
+  display: flex;
+  align-items: center;
+  background-color: #fff;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  padding: 15px;
+  margin: 20px;
+  width: 300px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  flex-direction: column;
+}
+
+.contact-detail-item:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 25px rgba(0, 0, 0, 0.2);
+}
+
+.contact-detail-icon {
+  font-size: 26px;
+  color: #007bff;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background-color: #f0f7ff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.contact-detail-details h3 {
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.contact-detail-address,
+.contact-detail-phone,
+.contact-detail-email {
+  font-size: 14px;
+  color: #666;
+  line-height: 1.5;
+}
+
+.contact-detail-phone,
+.contact-detail-email {
+  margin-top: 5px;
+}
