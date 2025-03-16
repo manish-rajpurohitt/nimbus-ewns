@@ -6,7 +6,6 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import PathDebugger from "@/components/PathDebugger";
 import "./globals.css";
-import { headers } from "next/headers";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { cookies } from "next/headers";
@@ -15,6 +14,7 @@ import { Toaster } from "sonner";
 import "@/assets/css/index";
 import "@/assets/ecom-css/index";
 import "@/assets/css/albums.css";
+import { headers } from "next/headers";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -31,10 +31,10 @@ export const metadata: Metadata = {
   description: "Welcome to our business website"
 };
 
-async function getInitialData() {
+async function getInitialData(hostname: any) {
   try {
     const [businessRes, addressRes] : any = await Promise.all([
-      fetchBusinessData(),
+      fetchBusinessData(hostname),
       fetchBusinessAddress()
     ]);
 
@@ -61,6 +61,7 @@ export default async function RootLayout({
   const routePath = headersList.get("x-route-path");
   const cookiePath = cookieStore.get("current-path")?.value;
   const pathname = routePath || cookiePath || "/";
+  const host = headersList.get("host"); // This returns hostname with optional port
 
   console.log("Path sources:", {
     routePath,
@@ -69,7 +70,7 @@ export default async function RootLayout({
   });
 
   const hideHeaderFooter = pathname.includes("/media/");
-  const data :any = await getInitialData();
+  const data :any = await getInitialData(host);
   const cart :any = await getCart();
   const cartCount = cart?.items?.length || 0;
 

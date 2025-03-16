@@ -1,11 +1,11 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
-
+import { headers } from "next/headers"
 // Base URL from environment variables
 const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_URL || "https://api-v2.ewns.in/api";
 
 // Visitor token handling
-async function getVisitorToken(domainName: string) {
+async function getVisitorToken(domainName: any) {
   try {
     const res = await axios.get(
       `${API_BASE_URL}/website/getVisitorToken?domainName=${domainName}`
@@ -19,7 +19,11 @@ async function getVisitorToken(domainName: string) {
   return null;
 }
 
-const getServerHostname = () => "balajinoveltiesb932.ewns.in";
+const getServerHostname = async () => {
+  const headersList = await headers();
+  const host = headersList.get("host"); // This returns hostname with optional port
+  return host;
+};
 
 // Add custom error type
 interface ApiError extends Error {
@@ -156,7 +160,7 @@ async function createApiClient(): Promise<AxiosInstance> {
     const hostname =
       typeof window !== "undefined"
         ? window.location.hostname
-        : getServerHostname();
+        : await getServerHostname();
     token = await getVisitorToken(hostname);
 
     if (token && typeof window !== "undefined") {
