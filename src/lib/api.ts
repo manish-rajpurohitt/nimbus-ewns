@@ -443,8 +443,6 @@ interface CategoriesResponse {
 }
 
 export async function getMetaTagsOfPage(path: any) {
-  let apiClient = await createApiClient();
-
   let response = await fetchWithCache(path)
   console.log("---------------------------------------------------------------------------------------------");
   console.log(response);
@@ -457,10 +455,15 @@ export async function fetchWithCache(path: string, cacheTime: number = 3600) {
   console.log("🚀 Fetching fresh metadata:", path);
   const apiClient = await createApiClient();
   const response = await apiClient.get(`/website/getMetaTagsOfPage?pageUrl=${path}`);
-  console.log(path, response);
-  return response.data;
-}
 
+  if (response && response?.data && response?.data?.data) {
+    return response.data;
+  } else {
+    console.warn("⚠️ No metadata found, using defaults.");
+    return { title: "Default Title", description: "Default Description" };
+
+  }
+}
 export const api = {
   auth: {
     async login(credentials: { email: string; password: string }) {
