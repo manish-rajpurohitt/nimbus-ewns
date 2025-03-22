@@ -2,7 +2,7 @@ import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
 import { headers } from "next/headers"
 // Base URL from environment variables
 const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_URL || "https://api-v2.ewns.in/api";
+  process.env.NEXT_PUBLIC_API_URL || "https://api.ewns.in/api";
 
 // Visitor token handling
 async function getVisitorToken(domainName: any) {
@@ -20,10 +20,10 @@ async function getVisitorToken(domainName: any) {
 }
 
 const getServerHostname = async () => {
-  // const headersList = await headers();
-  // const host = headersList.get("host"); // This returns hostname with optional port
-  // return host;
-  return "icontechpro.ewns.in";
+  const headersList = await headers();
+  const host = headersList.get("host"); // This returns hostname with optional port
+  return host;
+  // return "icontechpro.ewns.in";
 };
 
 // Add custom error type
@@ -444,8 +444,6 @@ interface CategoriesResponse {
 
 export async function getMetaTagsOfPage(path: any) {
   let response = await fetchWithCache(path)
-  console.log("---------------------------------------------------------------------------------------------");
-  console.log(response);
   return response.data;
 };
 

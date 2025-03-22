@@ -196,31 +196,42 @@ export const businessQuotes = [
   "Success usually comes to those who are too busy to be looking for it. – Henry David Thoreau"
 ];
 
-export const getPageMEtadata = async (url: string): Promise<any> => {
-  let metaTags: any = await getMetaTagsOfPage(url);
-  console.log("PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP");
+export const getPageMEtadata = async (url: string, logoUrl: any = null): Promise<any> => {
+  const metaTags = await getMetaTagsOfPage(url);
   console.log(metaTags);
+  const title = metaTags?.title || "Default Title";
+  const description = metaTags?.description || "Default Description";
+  const ogImage = metaTags?.ogImage || "/default-og-image.jpg";
+  const canonical = metaTags?.canonical || url;
+  const author = metaTags?.author || "EWNS";
+  const keywords = metaTags?.keywords?.map((k: any) => k.keyword).join(", ");
+
   return {
-    title: metaTags?.title || "Default Title",
-    description: metaTags?.description || "Default Description",
-    keywords: metaTags?.keywords?.map((k: any) => k.keyword).join(", ") || undefined,
-    alternates: { canonical: metaTags?.canonical },
+    title,
+    description,
+    keywords: keywords || undefined,
+    alternates: {
+      canonical,
+    },
     openGraph: {
-      title: metaTags?.title,
-      description: metaTags?.description,
-      url: url,
-      images: [metaTags?.ogImage || "/default-og-image.jpg"],
+      title,
+      description,
+      url,
+      images: [ogImage],
       type: "website",
     },
     twitter: {
       card: "summary_large_image",
-      title: metaTags?.title || "Default Title",
-      description: metaTags?.description || "Default Description",
-      images: [metaTags?.ogImage || "/default-og-image.jpg"],
+      title,
+      description,
+      images: [ogImage],
     },
     robots: "index, follow",
-    authors: [{ name: metaTags?.author || "EWNS" }],
+    authors: [{ name: author }],
     viewport: "width=device-width, initial-scale=1",
     themeColor: "#ffffff",
+    icons: {
+      icon: logoUrl ? logoUrl : '/favicon.ico',
+    },
   };
-}
+};

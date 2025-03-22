@@ -109,8 +109,8 @@ export async function generateMetadata({ params }: { params: any; }): Promise<Me
     const headerList = await headers();
     const protocol = headerList.get("x-forwarded-proto") || "https";
     const host = headerList.get("host") || "example.com";
-    // const fullUrl = `${protocol}://${host}/services/`;
-    const fullUrl = `https://icontechpro.com/`;
+    const fullUrl = `${protocol}://${host}/`;
+    // const fullUrl = `https://icontechpro.com/`;
 
     return await getPageMEtadata(fullUrl);
   } catch (error) {

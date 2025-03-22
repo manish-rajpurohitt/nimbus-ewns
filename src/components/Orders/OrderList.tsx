@@ -56,6 +56,8 @@ export default function OrderList({ orders }: OrderListProps) {
                     <Image 
                       src={item.logo}
                       alt={item.name}
+                      width="100"
+                      height="100"
                       className="object-cover rounded-md"
                     />
                   </div>
