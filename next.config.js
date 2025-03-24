@@ -12,6 +12,7 @@ const nextConfig = {
       "livewebsitesjson.s3.ap-south-1.amazonaws.com",
       "localhost",
       "placehold.co",
+      "ewns_albums.s3.ap-south-1.amazonaws.com",
       "cdn-icons-png.flaticon.com"
     ],
     remotePatterns: [
