@@ -22,10 +22,11 @@ export default function BlogCard({
   return (
     <Link href={`/blog/${sku}`} className="news-card">
       <div className="news-image-container">
-        <img
+        <Image
           src={media?.[0]?.url || "/default-image.jpg"}
           alt={title}
           className="news-image"
+          key={media?.[0]?.url}
         />
       </div>
       <div className="news-content">

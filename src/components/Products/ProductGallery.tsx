@@ -48,6 +48,7 @@ export default function ProductGallery({
       <div className="relative aspect-square rounded-lg overflow-hidden bg-gray-100">
         <Image
           src={images?.[currentIndex]?.url || defaultImage}
+          key={images?.[currentIndex]?.url || defaultImage}
           alt={productName}
           fill
           className="object-cover"
@@ -92,6 +93,7 @@ export default function ProductGallery({
               >
                 <Image
                   src={image.url}
+                  key={image.url}
                   alt={`${productName} thumbnail ${index + 1}`}
                   fill
                   className="object-cover"

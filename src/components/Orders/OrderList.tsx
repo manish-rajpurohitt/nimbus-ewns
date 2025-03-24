@@ -55,6 +55,7 @@ export default function OrderList({ orders }: OrderListProps) {
                   <div className="relative w-20 h-20">
                     <Image 
                       src={item.logo}
+                      key={item.logo}
                       alt={item.name}
                       width="100"
                       height="100"

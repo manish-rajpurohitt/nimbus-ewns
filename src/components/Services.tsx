@@ -57,6 +57,10 @@ export default function Services({
                         service?.media?.[0]?.url ||
                         "https://placehold.co/600.png?text=No+Image"
                       }
+                      key={
+                        service?.media?.[0]?.url ||
+                        "https://placehold.co/600.png?text=No+Image"
+                      }
                       alt={service.title || "Service image"}
                       fill
                       className="object-cover"

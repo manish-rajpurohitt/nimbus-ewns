@@ -103,6 +103,7 @@ export default async function MediaPage({ params }: any) {
                       sizes="(max-width: 640px) 100vw, (max-width: 1024px) 80vw, 70vw"
                       priority
                       quality={95}
+                      key={currentMedia.originalUrl}
                     />
                   </div>
                 </div>

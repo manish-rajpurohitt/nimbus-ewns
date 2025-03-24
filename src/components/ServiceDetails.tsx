@@ -34,6 +34,7 @@ export default function ServiceDetails({
           <div className="details__banner-single">
             <Image
               src={uniqueMedia[0].url || "https://placehold.co/600.png"}
+              key={uniqueMedia[0].url || "https://placehold.co/600.png"}
               alt={serviceData?.title || "Service banner"}
               fill
               className="details__banner-image"
@@ -47,6 +48,7 @@ export default function ServiceDetails({
             {serviceData?.media?.[0]?.url && (
               <Image
                 src={serviceData.media[0].url}
+                key={serviceData.media[0].url}
                 alt={serviceData?.title}
                 width={80}
                 height={80}

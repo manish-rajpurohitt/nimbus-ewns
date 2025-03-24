@@ -26,6 +26,7 @@ export default function AlbumCard({ album }: { album: Album }) {
           fill
           className="media-image"
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          key={getThumbnail()}
         />
         <div className="media-overlay">
           <div className="media-type-icon"></div>

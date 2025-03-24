@@ -93,6 +93,9 @@ export default function ProductCard({ product }: any) {
           <Image
             src={
               product.pic || product.files?.[0]?.url || "/default-product.jpg"
+            }            
+            key={
+              product.pic || product.files?.[0]?.url || "/default-product.jpg"
             }
             alt={product.name}
             fill

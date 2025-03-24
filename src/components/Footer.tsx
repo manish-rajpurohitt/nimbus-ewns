@@ -97,6 +97,7 @@ export default function Footer({
               <div>
                 <Image
                   src={businessData.logoURl}
+                  key={businessData.logoURl}
                   alt={businessData.businessName || "Business Logo"}
                   width={192}
                   height={48}
@@ -209,6 +210,7 @@ export default function Footer({
                   {link.logo ? (
                     <div className="w-5 h-5 relative">
                       <Image
+                        key={link.logo}
                         src={link.logo}
                         alt={`${link.platform} social link`}
                         width={20}

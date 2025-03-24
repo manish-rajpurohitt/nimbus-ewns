@@ -73,6 +73,7 @@ export default function RecentOrders({ orders }: RecentOrdersProps) {
                 >
                   <Image
                     src={item.logo}
+                    key={item.logo}
                     alt={item.name}
                     fill
                     className="object-cover rounded"

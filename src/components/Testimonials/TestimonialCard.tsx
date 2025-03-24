@@ -35,6 +35,7 @@ export default function TestimonialCard({
           <div className="relative w-16 h-16">
             <Image
               src={userLogo.url}
+              key={userLogo.url}
               alt={userName}
               fill
               className="testimonial-image"

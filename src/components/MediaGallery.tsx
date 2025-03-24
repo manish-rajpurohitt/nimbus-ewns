@@ -93,6 +93,7 @@ export default function MediaGallery({ media, title }: MediaGalleryProps) {
                   <div className="service-media__image-container">
                     <Image
                       src={item.url}
+                      key={item.url}
                       alt={`Media ${index + 1}`}
                       fill
                       className="service-media__image"

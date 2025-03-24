@@ -144,6 +144,8 @@ export default function AlbumDetails({ album }: AlbumDetailsProps) {
                       subAlbum.images?.[0]?.originalUrl ||
                       "/default-album.jpg"
                     }
+                    key={subAlbum.images?.[0]?.thumbnailUrl ||
+                      subAlbum.images?.[0]?.originalUrl}
                     alt={subAlbum.name}
                     fill
                     className="object-cover group-hover:scale-105 transition-transform duration-300"
@@ -198,6 +200,9 @@ export default function AlbumDetails({ album }: AlbumDetailsProps) {
               }
               alt=""
               fill
+              key={media.type === "image"
+                ? media.thumbnailUrl || media.originalUrl
+                : media.thumbnailUrl}
               className="object-cover group-hover:opacity-90 transition-opacity"
               sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw"
             />

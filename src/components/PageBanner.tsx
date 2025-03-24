@@ -15,6 +15,7 @@ export default function PageBanner({
     <div className="relative h-[500px] w-full">
       <Image
         src={bannerImage}
+        key={bannerImage}
         alt={`${title} Banner`}
         fill
         className="object-cover"

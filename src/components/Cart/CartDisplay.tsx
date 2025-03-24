@@ -42,6 +42,7 @@ export default function CartDisplay({
             <div className="relative w-24 h-24">
               <Image
                 src={item.logo || "/default-product.jpg"}
+                key={item.logo || "/default-product.jpg"}
                 alt={item.name}
                 fill
                 className="object-cover rounded-md"

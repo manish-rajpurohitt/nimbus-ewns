@@ -43,6 +43,7 @@ export default function BlogDetails({
               fill
               className="details__banner-image"
               priority
+              key={uniqueMedia[0].url}
             />
           </div>
         )}
@@ -52,6 +53,7 @@ export default function BlogDetails({
             {blogData?.media?.[0]?.url ? (
               <Image
                 src={blogData.media[0].url}
+                key={blogData.media[0].url}
                 alt={blogData?.title}
                 width={80}
                 height={80}
@@ -60,6 +62,7 @@ export default function BlogDetails({
             ) : (
               <Image
                 src={"https://placehold.co/600.png?text=Blog+Details+Banner"}
+                key={"https://placehold.co/600.png?text=Blog+Details+Banner"}
                 alt={blogData?.title}
                 width={80}
                 height={80}

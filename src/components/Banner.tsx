@@ -35,6 +35,7 @@ export default function Banner({ businessData }: BannerProps) {
       <div className="absolute inset-0 w-full h-full">
         <Image
           src={bannerUrl}
+          key={bannerUrl}
           alt={businessInfo?.businessName || "Business Banner"}
           fill
           priority

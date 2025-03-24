@@ -86,6 +86,10 @@ export default function AboutDetails({ businessData }: AboutUsProps) {
                 businessInfo?.featuredUrl ||
                 "https://images.pexels.com/photos/1427107/pexels-photo-1427107.jpeg"
               }
+              key={
+                businessInfo?.featuredUrl ||
+                "https://images.pexels.com/photos/1427107/pexels-photo-1427107.jpeg"
+              }
               alt="About Us Hero"
               width={600}
               height={400}

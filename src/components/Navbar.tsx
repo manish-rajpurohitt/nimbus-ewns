@@ -56,6 +56,7 @@ export default async function Navbar({
             {businessData?.logoURl && (
               <Image
                 src={businessData.logoURl}
+                key={businessData.logoURl}
                 alt="Logo"
                 width={120}
                 height={40}

@@ -29,6 +29,7 @@ export default function MemberDetails({
             <div className="relative w-[180px] h-[180px]">
               <Image
                 src={memberData.media?.[0]?.url || "/default-member.jpg"}
+                key={memberData.media?.[0]?.url || "/default-member.jpg"}
                 alt={memberData.name}
                 fill
                 className="card-image object-cover"
@@ -80,6 +81,7 @@ export default function MemberDetails({
                     >
                       <Image
                         src={link.logo}
+                        key={link.logo}
                         alt={link.title}
                         width={24}
                         height={24}

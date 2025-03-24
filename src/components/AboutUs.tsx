@@ -95,6 +95,7 @@ export default function AboutUs({ businessData }: AboutUsProps) {
         <div className="about-image">
           <Image
             src={imageUrl}
+            key={imageUrl}
             alt={`About ${businessInfo?.businessName || "Our Business"}`}
             fill
             className="main-image"

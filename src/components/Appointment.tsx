@@ -34,6 +34,7 @@ export default function Appointment({ businessData }: AppointmentProps) {
       <div className="absolute inset-0 w-full h-full">
         <Image
           src="https://ewns-albums.s3.ap-south-1.amazonaws.com/website-images/1731170475467-apoment.png"
+          key="https://ewns-albums.s3.ap-south-1.amazonaws.com/website-images/1731170475467-apoment.png"
           alt="Appointment Background"
           fill
           className="object-cover"

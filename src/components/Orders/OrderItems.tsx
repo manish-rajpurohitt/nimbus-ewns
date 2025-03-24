@@ -21,6 +21,7 @@ export default function OrderItems({ order }: OrderItemsProps) {
               <div className="relative w-24 h-24 flex-shrink-0">
                 <Image
                   src={item.logo}
+                  key={item.logo}
                   alt={item.name}
                   fill
                   className="object-cover rounded-md"

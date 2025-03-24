@@ -60,6 +60,7 @@ export default function TeamDetails({
                   <div className="relative h-64 w-full">
                     <Image
                       src={member.media?.[0]?.url || "/default-member.jpg"}
+                      key={member.media?.[0]?.url || "/default-member.jpg"}
                       alt={member.name}
                       fill
                       className="object-cover rounded-t-lg"

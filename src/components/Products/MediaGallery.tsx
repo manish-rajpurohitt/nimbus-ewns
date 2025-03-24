@@ -19,6 +19,7 @@ export default function MediaGallery({
       <div className="relative aspect-square rounded-lg overflow-hidden">
         <Image
           src={mainImage}
+          key={mainImage}
           alt={productName}
           fill
           className="object-cover"
@@ -37,6 +38,7 @@ export default function MediaGallery({
             >
               <Image
                 src={image.url}
+                key={image.url}
                 alt={`${productName} - ${index + 1}`}
                 fill
                 className="object-cover"

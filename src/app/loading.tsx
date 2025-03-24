@@ -19,6 +19,7 @@ export default async function Loading() {
                 fill
                 className="object-contain"
                 priority
+                key={logoUrl}
               />
             </div>
           )}

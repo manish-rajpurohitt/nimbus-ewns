@@ -20,6 +20,7 @@ export default function TeamCard({
     <Link href={`/teams/${id}`} className="team-card">
       <Image
         src={mediaUrl}
+        key={mediaUrl}
         alt={name}
         width={400}
         height={300}
@@ -29,6 +30,7 @@ export default function TeamCard({
         {logoUrl && (
           <Image
             src={logoUrl}
+            key={logoUrl}
             alt={`${name} logo`}
             width={70}
             height={70}

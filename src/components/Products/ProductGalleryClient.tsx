@@ -34,6 +34,7 @@ export default function ProductGalleryClient({
         <div className="gallery__image-wrapper">
           <Image
             src={mainImage}
+            key={mainImage}
             alt={productName}
             fill
             sizes="(max-width: 480px) 100vw, (max-width: 768px) 80vw, 700px"
@@ -92,6 +93,7 @@ export default function ProductGalleryClient({
                 <div className="gallery__thumb-wrapper">
                   <Image
                     src={image.url}
+                    key={image.url}
                     alt={`${productName} - ${idx + 1}`}
                     fill
                     sizes="100px"
