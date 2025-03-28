@@ -4,13 +4,10 @@ const nextConfig = {
     ignoreDuringBuilds: true,
   },
   reactStrictMode: true,
-  experimental: {
-    appDir: true,
-  },
   images: {
     domains: [
       "livewebsitesjson.s3.ap-south-1.amazonaws.com",
-      "localhost",
+      "localhost:3001",
       "ewns-albums.s3.ap-south-1.amazonaws.com",
       "placehold.co",
       "cdn-icons-png.flaticon.com"

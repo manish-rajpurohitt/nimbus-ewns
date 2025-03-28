@@ -1,6 +1,7 @@
 import { api, getMetaTagsOfPage } from "@/lib/api";
 import type { Business, BusinessAddress } from "@/types/business.types";
 import { headers } from "next/headers";
+
 // Format business address
 export const getBusinessAdd = (businessAddress: BusinessAddress): string => {
   if (!businessAddress) return "";
@@ -198,7 +199,6 @@ export const businessQuotes = [
 
 export const getPageMEtadata = async (url: string, logoUrl: any = null): Promise<any> => {
   const metaTags = await getMetaTagsOfPage(url);
-  console.log(metaTags);
   const title = metaTags?.title || "Default Title";
   const description = metaTags?.description || "Default Description";
   const ogImage = metaTags?.ogImage || "/default-og-image.jpg";
@@ -228,10 +228,11 @@ export const getPageMEtadata = async (url: string, logoUrl: any = null): Promise
     },
     robots: "index, follow",
     authors: [{ name: author }],
-    viewport: "width=device-width, initial-scale=1",
-    themeColor: "#ffffff",
+    // viewport: "width=device-width, initial-scale=1",
+    // themeColor: "#ffffff",
     icons: {
       icon: logoUrl ? logoUrl : '/favicon.ico',
     },
+    metadataBase: new URL(url),
   };
 };

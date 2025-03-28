@@ -1,7 +1,8 @@
 import Banner from "@/components/Banner";
 import AboutUs from "@/components/AboutUs";
+import { redirect } from "next/navigation";
 import Services from "@/components/Services";
-import { fetchBusinessData } from "@/utils/api.utils";
+import { fetchBusinessData, getRedirectUrl } from "@/utils/api.utils";
 import { api } from "@/lib/api";
 import { debugLog } from "@/utils/debug.util";
 import Appointment from "@/components/Appointment";
@@ -13,11 +14,32 @@ import { getPageMEtadata } from "@/utils/common.util";
 
 export default async function Page() {
   try {
-    const [businessRes, servicesRes, blogsRes] = await Promise.all([
+    const [businessRes, servicesRes, blogsRes, isRedirect] = await Promise.all([
       fetchBusinessData(),
       api.business.getServices(1, 6), // Fetch first 6 services for homepage
-      api.business.getBlogs(1, 3)
+      api.business.getBlogs(1, 3),
+      getRedirectUrl()
     ]);
+    console.log(isRedirect);
+
+    if (
+      isRedirect?.isSuccess &&
+      isRedirect?.data?.isRedirect &&
+      isRedirect?.data?.redirectDomain
+    ) {
+      try{
+        const target = isRedirect.data.redirectDomain.startsWith("http")
+        ? isRedirect.data.redirectDomain
+        : `https://${isRedirect.data.redirectDomain}`;
+    
+      console.log("🔁 Redirecting to:", target);
+      redirect(target);
+      }
+      catch(Er){
+        console.log(Er);
+      }
+      
+    }
 
     if (!businessRes?.isSuccess) {
       throw new Error("Failed to fetch business data");
@@ -92,7 +114,7 @@ export default async function Page() {
       </>
     );
   } catch (error) {
-    console.error("Error in HomePage:", error);
+    // console.error("Error in HomePage:", error);
     return (
       <div className="min-h-[500px] flex items-center justify-center">
         <p className="text-gray-600">Failed to load content</p>
@@ -102,7 +124,7 @@ export default async function Page() {
 }
 
 export async function generateMetadata({ params }: { params: any; }): Promise<Metadata> {
-  console.log("🚀 Running generateMetadata for:", params);
+  // console.log("🚀 Running generateMetadata for:", params);
 
   try {
 
@@ -110,12 +132,12 @@ export async function generateMetadata({ params }: { params: any; }): Promise<Me
     const protocol = headerList.get("x-forwarded-proto") || "https";
     const host = headerList.get("host") || "example.com";
     const fullUrl = `${protocol}://${host}/`;
-    console.log("-----------------------------------------------------------" + fullUrl + "-------------------------------------------");
+    // console.log("-----------------------------------------------------------" + fullUrl + "-------------------------------------------");
     // const fullUrl = `https://icontechpro.com/`;
 
     return await getPageMEtadata(fullUrl);
   } catch (error) {
-    console.error("⚠️ Metadata Error:", error);
+    // console.error("⚠️ Metadata Error:", error);
     return {
       title: "Default Title",
       description: "Default Description",

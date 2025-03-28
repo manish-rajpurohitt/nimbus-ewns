@@ -9,7 +9,7 @@ export async function getCart() {
   try {
     const user = await validateAuth();
     if (!user) {
-      console.log("Get cart: No authenticated user");
+      // console.log("Get cart: No authenticated user");
       return null;
     }
 
@@ -17,7 +17,7 @@ export async function getCart() {
     const token = cookieStore.get("_et");
 
     if (!token?.value) {
-      console.log("Get cart: No auth token");
+      // console.log("Get cart: No auth token");
       return null;
     }
 
@@ -28,13 +28,13 @@ export async function getCart() {
     });
 
     if (!res.isSuccess) {
-      console.log("Get cart failed:", res.message);
+      // console.log("Get cart failed:", res.message);
       return null;
     }
 
     return res.data;
   } catch (error) {
-    console.error("Get cart error:", error);
+    // console.error("Get cart error:", error);
     return null;
   }
 }
@@ -44,11 +44,11 @@ export async function addToCart(formData: FormData): Promise<any> {
     const productId = formData.get("productId");
     const quantity = Number(formData.get("quantity")) || 1;
 
-    console.log("Add to cart validation:", {
-      productId,
-      quantity,
-      formData: Object.fromEntries(formData)
-    });
+    // console.log("Add to cart validation:", {
+    //   productId,
+    //   quantity,
+    //   formData: Object.fromEntries(formData)
+    // });
 
     if (!productId || typeof productId !== "string") {
       console.error("Add to cart failed: Invalid productId", productId);
@@ -64,7 +64,7 @@ export async function addToCart(formData: FormData): Promise<any> {
     const cookieStore = await cookies();
     const token = cookieStore.get("_et");
 
-    console.log("Sending cart request:", { productId, quantity });
+    // console.log("Sending cart request:", { productId, quantity });
 
     const res = await post(
       "/website/cart",
@@ -76,7 +76,7 @@ export async function addToCart(formData: FormData): Promise<any> {
       }
     );
 
-    console.log("Cart response:", res);
+    // console.log("Cart response:", res);
 
     if (!res.isSuccess) {
       console.error("Add to cart failed:", res.message);
@@ -127,7 +127,7 @@ export async function removeFromCart(formData: FormData) {
       }
     );
 
-    console.log("Remove cart response:", res);
+    // console.log("Remove cart response:", res);
 
     if (!res.isSuccess) {
       console.error("Remove from cart failed:", res.message);

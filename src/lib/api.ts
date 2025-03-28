@@ -2,7 +2,8 @@ import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
 import { headers } from "next/headers"
 // Base URL from environment variables
 const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_URL || "https://api.ewns.in/api";
+  // process.env.NEXT_PUBLIC_API_URL || "https://api.ewns.in/api";
+  "http://localhost:9000/api";
 
 // Visitor token handling
 async function getVisitorToken(domainName: any) {
@@ -14,6 +15,7 @@ async function getVisitorToken(domainName: any) {
       return res.data.data.token;
     }
   } catch (error) {
+    // console.log(error)
     console.error("Error getting visitor token:", error);
   }
   return null;
@@ -22,8 +24,8 @@ async function getVisitorToken(domainName: any) {
 const getServerHostname = async () => {
   const headersList = await headers();
   const host = headersList.get("host"); // This returns hostname with optional port
-  return host;
-  // return "icontechpro.ewns.in";
+  // return host;
+  return "icontechpro.ewns.in";
 };
 
 // Add custom error type
@@ -106,26 +108,26 @@ async function fetchApi<T>(
     apiError.status = axios.isAxiosError(error) ? error.response?.status : 500;
     apiError.response = axios.isAxiosError(error) ? error.response?.data : null;
 
-    console.error(`API ${method} error:`, {
-      url,
-      status: apiError.status,
-      message: apiError.message,
-      response: apiError.response
-    });
+    // console.error(`API ${method} error:`, {
+    //   url,
+    //   status: apiError.status,
+    //   message: apiError.message,
+    //   response: apiError.response
+    // });
 
     // Add specific handling for cart operations
     if (url.includes("/cart")) {
-      console.error("Cart operation failed:", {
-        method,
-        url,
-        error: axios.isAxiosError(error)
-          ? {
-            status: error.response?.status,
-            data: error.response?.data,
-            message: error.message
-          }
-          : error
-      });
+      // console.error("Cart operation failed:", {
+      //   method,
+      //   url,
+      //   error: axios.isAxiosError(error)
+      //     ? {
+      //       status: error.response?.status,
+      //       data: error.response?.data,
+      //       message: error.message
+      //     }
+      //     : error
+      // });
     }
 
     return {
@@ -160,7 +162,8 @@ async function createApiClient(): Promise<AxiosInstance> {
         ? window.location.hostname
         : await getServerHostname();
     token = await getVisitorToken(hostname);
-    console.log(hostname);
+
+    // console.log(token);
 
     if (token && typeof window !== "undefined") {
       localStorage.setItem("_t", token);
@@ -194,11 +197,11 @@ export async function post<T>(
   data: any,
   config?: AxiosRequestConfig
 ): Promise<ApiResponse<T>> {
-  console.log("Making POST request:", {
-    url,
-    data,
-    headers: config?.headers
-  });
+  // console.log("Making POST request:", {
+  //   url,
+  //   data,
+  //   headers: config?.headers
+  // });
 
   try {
     const response = await fetchApi<T>("POST", url, data, {
@@ -209,7 +212,7 @@ export async function post<T>(
       }
     });
 
-    console.log("POST response:", response);
+    // console.log("POST response:", response);
     return response;
   } catch (error) {
     console.error("POST request failed:", error);
@@ -450,7 +453,7 @@ export async function getMetaTagsOfPage(path: any) {
 
 export async function fetchWithCache(path: string, cacheTime: number = 3600) {
 
-  console.log("🚀 Fetching fresh metadata:", path);
+  // console.log("🚀 Fetching fresh metadata:", path);
   const apiClient = await createApiClient();
   const response = await apiClient.get(`/website/getMetaTagsOfPage?pageUrl=${path}`);
 
@@ -622,11 +625,11 @@ export const api = {
           `/website/getBlogs?pageNumber=${pageNumber}&limit=${limit}`
         );
 
-        console.log("API Blog Response:", {
-          raw: response?.data,
-          blogs: response?.data?.data?.blogs,
-          pagination: response?.data?.data?.pagination
-        });
+        // console.log("API Blog Response:", {
+        //   raw: response?.data,
+        //   blogs: response?.data?.data?.blogs,
+        //   pagination: response?.data?.data?.pagination
+        // });
 
         if (!response?.data?.isSuccess) {
           throw new Error("Failed to fetch blogs");

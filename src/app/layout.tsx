@@ -63,16 +63,19 @@ export default async function RootLayout({
   const pathname = routePath || cookiePath || "/";
   const host = headersList.get("host"); // This returns hostname with optional port
 
-  console.log("Path sources:", {
-    routePath,
-    cookiePath,
-    finalPath: pathname
-  });
+  // console.log("Path sources:", {
+  //   routePath,
+  //   cookiePath,
+  //   finalPath: pathname
+  // });
 
   const hideHeaderFooter = pathname.includes("/media/");
   const data :any = await getInitialData();
   const cart :any = await getCart();
   const cartCount = cart?.items?.length || 0;
+  const scrollToTop = () => {
+
+  }
 
   return (
     <html lang="en">
@@ -81,13 +84,13 @@ export default async function RootLayout({
           dangerouslySetInnerHTML={{
             __html: `
               .scroll-btn-hidden { opacity: 0; pointer-events: none; }
-              .scroll-btn-visible { opacity: 1; pointer-events: auto; }
+              .scroll-btn-visible { opacity: 1; pointer-events: auto; cursor:pointer }
               .initial-loader {
                 position: fixed;
                 inset: 0;
                 background: rgba(255,255,255,0.95);
                 backdrop-filter: blur(4px);
-                z-index: 9999;
+                z-index: 999;
                 display: flex;
                 align-items: center;
                 justify-content: center;

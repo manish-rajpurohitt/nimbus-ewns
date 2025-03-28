@@ -43,6 +43,33 @@ export async function fetchBusinessData() {
   }
 }
 
+export async function getRedirectUrl() {
+  try {
+    // console.log("Fetching business data...");
+    const response: any = await get(
+      "/website/redirectData"
+    );
+    // console.log(response);
+
+    // console.log("Raw Business Response:", response);
+
+    // Transform and validate data
+    const transformedResponse = {
+      isSuccess: Boolean(response?.isSuccess),
+      data: {
+        isRedirect: response?.data?.redirectData?.isRedirect,
+        redirectDomain: response?.data?.redirectData?.redirectDomain
+      }
+    };
+
+    // console.log("Transformed Business Data:", transformedResponse);
+    return transformedResponse;
+  } catch (error) {
+    console.error("Business Data Error:", error);
+    return { isSuccess: false, data: { business: null, staticData: null } };
+  }
+}
+
 export async function fetchBusinessAddress() {
   try {
     // console.log("Fetching business address...");

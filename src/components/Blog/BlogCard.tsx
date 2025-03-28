@@ -27,6 +27,8 @@ export default function BlogCard({
           alt={title}
           className="news-image"
           key={media?.[0]?.url}
+          width={100}
+          height={100}
         />
       </div>
       <div className="news-content">

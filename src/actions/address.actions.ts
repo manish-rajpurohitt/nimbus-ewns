@@ -35,13 +35,10 @@ export async function addAddress(formData: FormData) {
     // Send the raw form data directly
     const payload = Object.fromEntries(formData);
 
-    console.log("Sending address payload:", payload);
 
     const res = await post("/website/address", payload, {
       headers: { Authorization: `Bearer ${token?.value}` }
     });
-
-    console.log("Add address response:", res);
 
     if (!res.isSuccess) {
       return { success: false, error: res.message };
@@ -50,7 +47,7 @@ export async function addAddress(formData: FormData) {
     revalidatePath("/address");
     return { success: true, data: res.data };
   } catch (error) {
-    console.error("Add address error:", error);
+    // console.error("Add address error:", error);
     return { success: false, error: "Failed to add address" };
   }
 }
