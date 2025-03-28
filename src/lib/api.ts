@@ -2,8 +2,8 @@ import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
 import { headers } from "next/headers"
 // Base URL from environment variables
 const API_BASE_URL =
-  // process.env.NEXT_PUBLIC_API_URL || "https://api.ewns.in/api";
-  "http://localhost:9000/api";
+  process.env.NEXT_PUBLIC_API_URL || "https://api.ewns.in/api";
+// "http://localhost:9000/api";
 
 // Visitor token handling
 async function getVisitorToken(domainName: any) {
