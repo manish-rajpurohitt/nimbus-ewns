@@ -24,8 +24,8 @@ async function getVisitorToken(domainName: any) {
 const getServerHostname = async () => {
   const headersList = await headers();
   const host = headersList.get("host"); // This returns hostname with optional port
-  // return host;
-  return "icontechpro.ewns.in";
+  return host;
+  // return "icontechpro.ewns.in";
 };
 
 // Add custom error type
