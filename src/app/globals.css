@@ -82,3 +82,78 @@ html.js-loading {
   -webkit-backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.2);
 }
+
+/* Toast Animations */
+@keyframes slide-up {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-5px);
+  }
+  75% {
+    transform: translateX(5px);
+  }
+}
+
+/* Enhanced Toast Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Toast Styles */
+.success-toast {
+  border-radius: 8px !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
+  font-weight: 500 !important;
+  transform-origin: center;
+  transition: all 0.3s ease;
+}
+
+.success-toast:hover {
+  transform: scale(1.02);
+}
+
+.error-toast {
+  border-radius: 8px !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
+  font-weight: 500 !important;
+}
+
+/* Form Success/Error Feedback */
+.form-feedback {
+  padding: 1rem;
+  border-radius: 8px;
+  margin: 1rem 0;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.form-feedback.success {
+  background-color: #def7ec;
+  color: #046c4e;
+  border: 1px solid #a7f3d0;
+}
+
+.form-feedback.error {
+  background-color: #fde8e8;
+  color: #9b1c1c;
+  border: 1px solid #fbd5d5;
+}

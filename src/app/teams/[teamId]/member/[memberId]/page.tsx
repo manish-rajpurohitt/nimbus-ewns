@@ -3,15 +3,18 @@ import { api } from "@/lib/api";
 import MemberDetails from "@/components/Teams/MemberDetails";
 import { notFound } from "next/navigation";
 
-interface PageParams {
+interface MemberPageProps {
   params: { teamId: string; memberId: string };
 }
 
-export default async function MemberPage({ params }: any) {
+export default async function MemberPage({ params }: MemberPageProps) {
+  const teamId = await Promise.resolve(params.teamId);
+  const memberId = await Promise.resolve(params.memberId);
+
   try {
     const [businessRes, memberRes] = await Promise.all([
       fetchBusinessData(),
-      api.business.getMemberDetails(params.teamId, params.memberId)
+      api.business.getMemberDetails(teamId, memberId)
     ]);
 
     if (!businessRes?.isSuccess || !memberRes?.isSuccess) {
@@ -22,7 +25,7 @@ export default async function MemberPage({ params }: any) {
       <MemberDetails
         businessData={businessRes.data}
         memberData={memberRes.data}
-        teamId={params.teamId}
+        teamId={teamId}
       />
     );
   } catch (error) {

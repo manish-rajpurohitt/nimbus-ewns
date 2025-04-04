@@ -4,7 +4,6 @@ import { fetchBusinessData, fetchBusinessAddress } from "@/utils/api.utils";
 import Header from "@/components/Header";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import PathDebugger from "@/components/PathDebugger";
 import "./globals.css";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -26,14 +25,86 @@ const geistMono = Geist_Mono({
   subsets: ["latin"]
 });
 
-export const metadata: Metadata = {
-  title: "Business Website",
-  description: "Welcome to our business website"
-};
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const businessRes = await fetchBusinessData();
+  const business = businessRes?.data?.business;
+
+  if (!business) {
+    console.error("Failed to fetch business data for metadata");
+    return {
+      title: "Loading...",
+      icons: {
+        icon: [{ url: "/favicon.ico", type: "image/x-icon" }]
+      }
+    };
+  }
+
+  const description =
+    business.description || `Welcome to ${business.businessName}`;
+  const keywords =
+    business.keywords || `${business.businessName}, services, business`;
+
+  return {
+    title: {
+      default: business.businessName,
+      template: `%s | ${business.businessName}`
+    },
+    description: description,
+    keywords: keywords,
+    metadataBase: new URL(siteUrl),
+    openGraph: {
+      type: "website",
+      title: business.businessName,
+      description: description,
+      siteName: business.businessName,
+      images: [
+        {
+          url: business.logoURl || "/favicon.ico",
+          width: 1200,
+          height: 630,
+          alt: business.businessName
+        }
+      ]
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: business.businessName,
+      description: description,
+      images: [business.logoURl || "/favicon.ico"],
+      creator: "@" + (business.twitterHandle || business.businessName)
+    },
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+        "max-video-preview": -1,
+        "max-image-preview": "large",
+        "max-snippet": -1
+      }
+    },
+    icons: {
+      icon: [
+        {
+          url: business.logoURl || "/favicon.ico",
+          type: "image/x-icon"
+        }
+      ],
+      shortcut: ["/favicon.ico"],
+      apple: [{ url: "/apple-icon.png", sizes: "180x180", type: "image/png" }]
+    },
+    verification: {
+      google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION || undefined
+    }
+  };
+}
 
 async function getInitialData() {
   try {
-    const [businessRes, addressRes] : any = await Promise.all([
+    const [businessRes, addressRes]: any = await Promise.all([
       fetchBusinessData(),
       fetchBusinessAddress()
     ]);
@@ -57,25 +128,11 @@ export default async function RootLayout({
   const headersList = await headers();
   const cookieStore = await cookies();
 
-  // Get path from multiple sources for consistency
-  const routePath = headersList.get("x-route-path");
-  const cookiePath = cookieStore.get("current-path")?.value;
-  const pathname = routePath || cookiePath || "/";
-  const host = headersList.get("host"); // This returns hostname with optional port
-
-  // console.log("Path sources:", {
-  //   routePath,
-  //   cookiePath,
-  //   finalPath: pathname
-  // });
-
+  const pathname = headersList.get("x-pathname") || "/";
   const hideHeaderFooter = pathname.includes("/media/");
-  const data :any = await getInitialData();
-  const cart :any = await getCart();
+  const data = await getInitialData();
+  const cart = await getCart();
   const cartCount = cart?.items?.length || 0;
-  const scrollToTop = () => {
-
-  }
 
   return (
     <html lang="en">
@@ -86,7 +143,7 @@ export default async function RootLayout({
               .scroll-btn-hidden { opacity: 0; pointer-events: none; }
               .scroll-btn-visible { opacity: 1; pointer-events: auto; cursor:pointer }
               .initial-loader {
-                position: fixed;
+                position: absolute; /* Changed from fixed to absolute */
                 inset: 0;
                 background: rgba(255,255,255,0.95);
                 backdrop-filter: blur(4px);
@@ -114,14 +171,20 @@ export default async function RootLayout({
         <script
           dangerouslySetInnerHTML={{
             __html: `
-              // Page loader
+              // Improved Page loader
               document.addEventListener('DOMContentLoaded', function() {
                 if (!window.initialLoadComplete) {
                   window.initialLoadComplete = true;
                   const loaderDiv = document.createElement('div');
                   loaderDiv.className = 'initial-loader';
+                  loaderDiv.setAttribute('data-testid', 'loader');
                   loaderDiv.innerHTML = '<div class="loader-spinner"></div>';
-                  document.body.appendChild(loaderDiv);
+                  
+                  // Append to main content instead of body
+                  const mainContent = document.querySelector('main');
+                  if (mainContent) {
+                    mainContent.appendChild(loaderDiv);
+                  }
                   
                   setTimeout(() => {
                     loaderDiv.classList.add('hide');
@@ -130,20 +193,32 @@ export default async function RootLayout({
                 }
               });
 
-              // Scroll to top functionality
+              // Improved Scroll to top functionality
               document.addEventListener('DOMContentLoaded', function() {
                 const scrollBtn = document.getElementById('scroll-top');
                 if (!scrollBtn) return;
                 
-                scrollBtn.classList.add('scroll-btn-hidden');
+                const handleScroll = () => {
+                  const shouldShow = window.pageYOffset > 300;
+                  if (shouldShow && scrollBtn.classList.contains('scroll-btn-hidden')) {
+                    scrollBtn.classList.remove('scroll-btn-hidden');
+                    scrollBtn.classList.add('scroll-btn-visible');
+                  } else if (!shouldShow && scrollBtn.classList.contains('scroll-btn-visible')) {
+                    scrollBtn.classList.remove('scroll-btn-visible');
+                    scrollBtn.classList.add('scroll-btn-hidden');
+                  }
+                };
 
+                let ticking = false;
                 window.addEventListener('scroll', () => {
-                  requestAnimationFrame(() => {
-                    const shouldShow = window.pageYOffset > 300;
-                    scrollBtn.classList.toggle('scroll-btn-hidden', !shouldShow);
-                    scrollBtn.classList.toggle('scroll-btn-visible', shouldShow);
-                  });
-                });
+                  if (!ticking) {
+                    window.requestAnimationFrame(() => {
+                      handleScroll();
+                      ticking = false;
+                    });
+                    ticking = true;
+                  }
+                }, { passive: true });
 
                 scrollBtn.addEventListener('click', (e) => {
                   e.preventDefault();
@@ -163,7 +238,7 @@ export default async function RootLayout({
                 businessData={data.business}
                 staticData={data.static}
                 pathname={pathname}
-                key={pathname} // Force remount on path change
+                key={pathname}
                 cartCount={cartCount}
               />
             </>
@@ -174,14 +249,12 @@ export default async function RootLayout({
               businessData={data.business}
               businessAddress={data.address}
               staticData={data.static}
-              pathname={pathname}
             />
           )}
         </div>
-        {/* <PathDebugger pathname={pathname} /> */}
         <button
           id="scroll-top"
-          className="fixed bottom-8 right-8 bg-[rgb(1,82,168)] text-white p-3 rounded-full shadow-lg transition-all duration-300"
+          className="fixed bottom-8 right-8 bg-[rgb(1,82,168)] text-white p-3 rounded-full shadow-lg transition-all duration-300 scroll-btn-hidden"
           aria-label="Scroll to top"
         >
           <svg

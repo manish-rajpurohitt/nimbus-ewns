@@ -2,9 +2,8 @@ import { fetchBusinessData } from "@/utils/api.utils";
 import { api } from "@/lib/api";
 import Image from "next/image";
 import Link from "next/link";
-import { ChevronLeft, ChevronRight} from "lucide-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { notFound } from "next/navigation";
-
 
 async function getPageData(path: string) {
   try {
@@ -183,7 +182,7 @@ export default async function MediaPage({ params }: any) {
 
 function getAllMedia(album: any) {
   let media = [
-    ...(album.images || []).map((img:any) => ({
+    ...(album.images || []).map((img: any) => ({
       ...img,
       type: "image" as const
     })),

@@ -3,15 +3,23 @@ import { api } from "@/lib/api";
 import TeamDetails from "@/components/Teams/TeamDetails";
 import { notFound } from "next/navigation";
 
+interface TeamPageProps {
+  params: { teamId: string };
+  searchParams: { [key: string]: string | string[] | undefined };
+}
+
 export default async function TeamPage({
   params,
   searchParams
-}:any) {
+}: TeamPageProps) {
+  const teamId = await Promise.resolve(params.teamId);
+  const page = await Promise.resolve(searchParams.page);
+  const currentPage = Number(page) || 1;
+
   try {
-    const currentPage = Number(searchParams.page) || 1;
     const [businessRes, teamRes] = await Promise.all([
       fetchBusinessData(),
-      api.business.getTeamDetails(params.teamId)
+      api.business.getTeamDetails(teamId)
     ]);
 
     if (!businessRes?.isSuccess || !teamRes?.isSuccess) {

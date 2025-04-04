@@ -1,4 +1,12 @@
+"use client";
 import { api } from "@/lib/api";
+import { useState, useRef } from "react";
+import { toast } from "sonner";
+import { submitContactForm } from "@/actions/form.actions";
+import {
+  showSuccessMessage,
+  showErrorMessage
+} from "@/utils/notification.utils";
 
 interface FormField {
   name: string;
@@ -53,9 +61,14 @@ export default function AppointmentForm({
   businessId: string;
   formFields?: FormField[];
 }) {
-  async function handleSubmit(formData: FormData):Promise<any> {
-    "use server";
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const formRef = useRef<HTMLFormElement>(null);
+
+  async function handleSubmit(formData: FormData): Promise<any> {
     try {
+      if (isSubmitting) return;
+      setIsSubmitting(true);
+
       const data: any = {
         name: formData.get("name") as string,
         email: formData.get("email") as string,
@@ -66,20 +79,47 @@ export default function AppointmentForm({
         businessId
       };
 
+      // Validation
       if (!data.name?.trim()) {
-        return { error: "Please enter your name" };
+        toast.error("Please enter your name");
+        return;
       }
       if (!data.email?.trim()) {
-        return { error: "Please enter your email" };
+        toast.error("Please enter your email");
+        return;
       }
       if (!data.message?.trim()) {
-        return { error: "Please enter a message" };
+        toast.error("Please enter a message");
+        return;
       }
 
-      const response = await api.business.sendContactMessage(data);
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(data.email)) {
+        toast.error("Please enter a valid email address");
+        return;
+      }
+
+      const response = await submitContactForm(data);
+
+      if (response.isSuccess) {
+        showSuccessMessage(
+          "Appointment request sent successfully! We'll get back to you soon."
+        );
+        if (formRef.current) {
+          formRef.current.reset();
+        }
+      } else {
+        showErrorMessage(
+          response.message ||
+            "Failed to send appointment request. Please try again."
+        );
+      }
+
       return response;
     } catch (error) {
-      return { isSuccess: false, message: "Failed to send message" };
+      showErrorMessage("An error occurred. Please try again later.");
+    } finally {
+      setIsSubmitting(false);
     }
   }
 
@@ -92,7 +132,11 @@ export default function AppointmentForm({
             <h2 className="appointment-title">Consult with Our Experts</h2>
           </div>
 
-          <form action={handleSubmit} className="appointment-form">
+          <form
+            ref={formRef}
+            action={handleSubmit}
+            className="appointment-form"
+          >
             {formFields.map((field, index) => (
               <div key={index} className="appointment-row">
                 <label htmlFor={field.name} className="appointment-label">
@@ -133,8 +177,12 @@ export default function AppointmentForm({
               </label>
             </div>
 
-            <button type="submit" className="appointment-submit-button">
-              Book Appointment Now
+            <button
+              type="submit"
+              className="appointment-submit-button"
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? "Sending..." : "Book Appointment Now"}
             </button>
           </form>
         </div>

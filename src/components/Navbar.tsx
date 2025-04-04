@@ -6,8 +6,10 @@ import { generatePages } from "@/utils/common.util";
 import { validateAuth } from "@/utils/auth.utils";
 import type { Business, StaticData } from "@/types/business.types";
 import { User, ShoppingCart, MapPin, Package, LogOut } from "lucide-react";
-import { isActivePath } from "@/utils/path.utils";
 import { CartBadge } from "./Cart/CartBadge";
+import NavLinks from "./NavLinks";
+import MobileNavLinks from "./MobileNavLinks";
+import MobileMenu from "./MobileMenu";
 
 interface NavbarProps {
   businessData: Business;
@@ -16,36 +18,12 @@ interface NavbarProps {
   cartCount: number;
 }
 
-export default async function Navbar({
-  businessData,
-  pathname,
-  cartCount
-}: NavbarProps) {
+export default async function Navbar({ businessData, cartCount }: NavbarProps) {
   const pages = generatePages(businessData);
-  const middlePages = pages.filter((page: any) => page.group === "navbar-middle");
-  const user : any = await validateAuth();
-
-  const isActiveLink = (path: string) => {
-    // Don't consider query params for matching
-    const cleanPath = pathname.split("?")[0];
-    const isActive = isActivePath(cleanPath, path);
-    return isActive;
-  };
-
-  const isActiveParent = (item: any) => {
-    if (!item.hasChildren) {
-      return isActiveLink(item.to);
-    }
-    return item.children?.some((child: any) => isActiveLink(child.to));
-  };
-
-  // Update mobile menu link className
-  const getMobileItemClass = (itemPath: string) =>
-    `block px-3 py-2 text-sm sm:text-base rounded-md transition-all duration-200 ${
-      isActiveLink(itemPath)
-        ? "bg-[rgb(1,82,168)] text-white"
-        : "text-gray-700 hover:bg-[rgb(1,82,168)]/10 hover:text-[rgb(1,82,168)]"
-    }`;
+  const middlePages = pages.filter(
+    (page: any) => page.group === "navbar-middle"
+  );
+  const user = await validateAuth();
 
   return (
     <nav className="sticky top-0 z-50 bg-white shadow-md">
@@ -62,11 +40,12 @@ export default async function Navbar({
                 height={40}
                 className="logo-navbar"
                 priority
+                sizes="(max-width: 768px) 120px, (max-width: 1200px) 120px, 120px"
               />
             )}
           </Link>
 
-          {/* Mobile Auth Links - Moved outside dropdown */}
+          {/* Mobile Auth Links and Menu */}
           <div className="flex items-center space-x-2 lg:hidden">
             {businessData?.enableEcommerce && (
               <>
@@ -166,115 +145,14 @@ export default async function Navbar({
                 )}
               </>
             )}
-            {/* Mobile Menu Button */}
-            <details className="lg:hidden group">
-              <summary className="p-2 rounded-md text-gray-700 hover:text-[rgb(1,82,168)] focus:outline-none cursor-pointer list-none">
-                <svg
-                  className="h-5 w-5 sm:h-6 sm:w-6"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M4 6h16M4 12h16M4 18h16"
-                  />
-                </svg>
-              </summary>
-              <div className="absolute left-0 right-0 mt-2 bg-white shadow-lg rounded-b-lg border-t">
-                {middlePages.map((item:any) => (
-                  <div key={item.label} className="p-2">
-                    {!item.hasChildren ? (
-                      <Link
-                        href={item.to}
-                        className={getMobileItemClass(item.to)}
-                      >
-                        {item.label}
-                      </Link>
-                    ) : (
-                      <div className="w-full space-y-1">
-                        <div className="text-sm font-medium text-gray-700 px-3 py-2 bg-gray-50">
-                          {item.label}
-                        </div>
-                        {item.children?.map((child) => (
-                          <Link
-                            key={child.label}
-                            href={child.to}
-                            className={`block px-4 py-2 rounded-md transition-all duration-200 ${
-                              pathname === child.to
-                                ? "bg-[rgb(1,82,168)] text-white font-medium shadow-md"
-                                : "text-gray-600 hover:bg-[rgb(1,82,168)]/10 hover:text-[rgb(1,82,168)]"
-                            }`}
-                          >
-                            {child.label}
-                          </Link>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                ))}
-              </div>
-            </details>
+            <MobileMenu middlePages={middlePages} />
           </div>
 
           {/* Desktop Menu */}
           <div className="hidden lg:flex items-center space-x-1">
-            {middlePages.map((item:any) => (
+            {middlePages.map((item: any) => (
               <div key={item.label} className="relative group">
-                {!item.hasChildren ? (
-                  <Link
-                    href={item.to}
-                    className={`px-4 py-2 rounded-md transition-all duration-200 ${
-                      isActiveLink(item.to)
-                        ? "text-[rgb(1,82,168)] bg-[rgb(1,82,168)]/5 font-medium"
-                        : "text-gray-700 hover:text-[rgb(1,82,168)] hover:bg-[rgb(1,82,168)]/5"
-                    }`}
-                  >
-                    {item.label}
-                  </Link>
-                ) : (
-                  <div className="relative inline-block text-left group">
-                    <button
-                      className={`px-4 py-2 rounded-md transition-all duration-200 inline-flex items-center relative ${
-                        isActiveParent(item)
-                          ? "text-[rgb(1,82,168)] font-medium after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-[rgb(1,82,168)]"
-                          : "text-gray-700 hover:text-[rgb(1,82,168)] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-[rgb(1,82,168)] after:transition-all after:duration-300 group-hover:after:w-full"
-                      }`}
-                    >
-                      <span>{item.label}</span>
-                      <svg
-                        className="w-4 h-4 ml-1"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="2"
-                          d="M19 9l-7 7-7-7"
-                        />
-                      </svg>
-                    </button>
-                    <div className="absolute left-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
-                      {item.children?.map((child) => (
-                        <Link
-                          key={child.label}
-                          href={child.to}
-                          className={`block px-4 py-2 text-sm transition-all duration-200 ${
-                            isActiveLink(child.to)
-                              ? "bg-[rgb(1,82,168)]/10 text-[rgb(1,82,168)] font-medium"
-                              : "text-gray-700 hover:bg-[rgb(1,82,168)]/5 hover:text-[rgb(1,82,168)]"
-                          }`}
-                        >
-                          {child.label}
-                        </Link>
-                      ))}
-                    </div>
-                  </div>
-                )}
+                <NavLinks item={item} />
               </div>
             ))}
           </div>

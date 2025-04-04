@@ -6,71 +6,60 @@ import { getPageMEtadata } from "@/utils/common.util";
 import { Metadata } from "next";
 import { headers } from "next/headers";
 
-
-
-export async function generateMetadata({ params }: { params: any; }): Promise<Metadata> {
+export async function generateMetadata({
+  params
+}: {
+  params: any;
+}): Promise<Metadata> {
   console.log("🚀 Running generateMetadata for:", params);
 
   try {
-
     const headerList = await headers();
     const protocol = headerList.get("x-forwarded-proto") || "https";
     const host = headerList.get("host") || "example.com";
     const fullUrl = `${protocol}://${host}/services`;
-    // const fullUrl = `https://icontechpro.com/services`;
 
     return await getPageMEtadata(fullUrl);
   } catch (error) {
     console.error("⚠️ Metadata Error:", error);
     return {
       title: "Default Title",
-      description: "Default Description",
+      description: "Default Description"
     };
   }
 }
 
-export default async function ServicesPage({
-  searchParams
-}:any) {
+export default async function ServicesPage({ searchParams }: any) {
   try {
-    const srchPArams = await searchParams;
-    async function getServices(pageNumber = 1, limit = 3) {
-      try {
-        const response = await api.business.getServices(pageNumber, limit);
-        if (!response.isSuccess) {
-          throw new Error("Failed to fetch services");
-        }
-        return {
-          services: response.data.services,
-          totalPages: response.data.pagination.totalPages
-        };
-      } catch (error) {
-        console.error("Error in getServices:", error);
-        return { services: [], totalPages: 1 };
-      }
-    }
-    const pageNumber = srchPArams?.page ?? "1";
+    const pageNumber = searchParams?.page ?? "1";
     const page = Math.max(1, parseInt(pageNumber));
-    const limit = 3; // Increased limit for better pagination
+    const limit = 6;
 
-    const [businessRes, servicesRes] = await Promise.allSettled([
+    // Fetch all services in one request
+    const [businessRes, allServicesRes] = await Promise.all([
       fetchBusinessData(),
-      getServices(page, limit)
+      api.business.getAllServices()
     ]);
 
-    if (businessRes.status === "rejected") {
-      throw new Error("Failed to fetch business data");
+    if (!businessRes?.isSuccess || !allServicesRes?.isSuccess) {
+      throw new Error("Failed to fetch data");
     }
 
-    const businessData = businessRes.value;
-    const servicesData =
-      servicesRes.status === "fulfilled"
-        ? servicesRes.value
-        : { services: [], totalPages: 1 };
+    const allServices = allServicesRes.data.services || [];
 
-    if (!businessData?.isSuccess) {
-      throw new Error("Invalid business data");
-    }
+    // Sort services by createdAt (newest first)
+    const sortedServices = allServices.sort(
+      (a: any, b: any) =>
+        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+    );
+
+    // Paginate services
+    const startIndex = (page - 1) * limit;
+    const paginatedServices = sortedServices.slice(
+      startIndex,
+      startIndex + limit
+    );
+    const totalPages = Math.ceil(allServices.length / limit);
 
     return (
       <>
@@ -80,10 +69,10 @@ export default async function ServicesPage({
           currentPage="Services"
         />
         <Services
-          businessData={businessData.data}
-          services={servicesData.services}
+          businessData={businessRes.data}
+          services={paginatedServices}
           currentPage={page}
-          totalPages={servicesData.totalPages}
+          totalPages={totalPages}
           isHomepage={false}
         />
       </>
@@ -93,4 +82,3 @@ export default async function ServicesPage({
     return <div>Error loading services</div>;
   }
 }
-

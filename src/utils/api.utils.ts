@@ -46,9 +46,7 @@ export async function fetchBusinessData() {
 export async function getRedirectUrl() {
   try {
     // console.log("Fetching business data...");
-    const response: any = await get(
-      "/website/redirectData"
-    );
+    const response: any = await get("/website/redirectData");
     // console.log(response);
 
     // console.log("Raw Business Response:", response);
@@ -139,4 +137,21 @@ export async function validateProductData(product: any) {
   // });
 
   return validated;
+}
+
+export async function getBusinessMetadata() {
+  try {
+    const response = await fetchBusinessData();
+    if (!response?.isSuccess) {
+      throw new Error("Failed to fetch business data");
+    }
+    return {
+      name: response?.data?.business?.businessName,
+      description: response?.data?.business?.description,
+      logo: response?.data?.business?.logoURl
+    };
+  } catch (error) {
+    console.error("Error fetching business metadata:", error);
+    return null;
+  }
 }

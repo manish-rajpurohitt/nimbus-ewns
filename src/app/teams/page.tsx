@@ -7,9 +7,7 @@ import { Metadata } from "next";
 import { headers } from "next/headers";
 import { getPageMEtadata } from "@/utils/common.util";
 
-export default async function TeamsPage({
-  searchParams
-}:any) {
+export default async function TeamsPage({ searchParams }: any) {
   try {
     const page = Number(searchParams.page) || 1;
     const TEAMS_PER_PAGE = 3; // Show 3 teams per page
@@ -49,11 +47,14 @@ export default async function TeamsPage({
   }
 }
 
-export async function generateMetadata({ params }: { params: any; }): Promise<Metadata> {
+export async function generateMetadata({
+  params
+}: {
+  params: any;
+}): Promise<Metadata> {
   console.log("🚀 Running generateMetadata for:", params);
 
   try {
-
     const headerList = await headers();
     const protocol = headerList.get("x-forwarded-proto") || "https";
     const host = headerList.get("host") || "example.com";
@@ -65,7 +66,7 @@ export async function generateMetadata({ params }: { params: any; }): Promise<Me
     console.error("⚠️ Metadata Error:", error);
     return {
       title: "Default Title",
-      description: "Default Description",
+      description: "Default Description"
     };
   }
 }

@@ -275,6 +275,10 @@
 }
 
 @media (max-width: 868px) {
+  .about-image {
+    display: none !important;
+  }
+
   .about-text h4 {
     margin: 0 auto;
   }

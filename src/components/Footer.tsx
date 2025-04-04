@@ -1,10 +1,16 @@
 import Link from "next/link";
 import Image from "next/image";
-import { Phone, Mail, MapPin } from "lucide-react";
+import {
+  Phone,
+  Mail,
+  MapPin,
+  Facebook,
+  Twitter,
+  Instagram,
+} from "lucide-react";
 import { getBusinessAdd } from "@/utils/common.util";
-import { getActiveRoute } from "@/utils/path.util";
-import { debugLog } from "@/utils/debug.util";
 import type { Business, BusinessAddress } from "@/types/business.types";
+import FooterNavLinks from "./FooterNavLinks";
 
 interface FooterProps {
   businessData?: Business | null;
@@ -17,6 +23,7 @@ interface FooterProps {
         description?: string;
         buttonText?: string;
       };
+      designedBy?: string;
     };
   } | null;
 }
@@ -27,22 +34,28 @@ const defaultNavLinks = {
     { title: "About", path: "/about" },
     { title: "Services", path: "/services" },
     { title: "Products", path: "/products" },
-    { title: "Contact", path: "/contact-us" }
+    { title: "Contact", path: "/contact-us" },
   ],
   resources: [
     { title: "Book Appointment", path: "/appointment" },
     { title: "Blog", path: "/blogs" },
     { title: "Albums", path: "/albums" },
-    { title: "Teams", path: "/teams" }
-  ]
+    { title: "Teams", path: "/teams" },
+    { title: "Sitemap", path: "/sitemap.xml" },
+  ],
+  ecommerce: [
+    { title: "Products", path: "/products" },
+    { title: "Profile", path: "/profile" },
+    { title: "Orders", path: "/orders" },
+    { title: "Addresses", path: "/address" },
+  ],
 };
 
 export default function Footer({
   businessData,
   businessAddress,
   staticData,
-  pathname
-}: FooterProps & { pathname: string }) {
+}: FooterProps) {
   if (!businessData) return null;
 
   const year = new Date().getFullYear();
@@ -60,24 +73,56 @@ export default function Footer({
     )}`;
   }
 
-  const renderLink = (link: { title: string; path: string }) => {
-    const isActive = getActiveRoute(pathname, link.path);
-
-    return (
-      <li key={link.path}>
-        <Link
-          href={link.path}
-          className={`transition-colors duration-200 ${
-            isActive
-              ? "text-[var(--primary-color)] font-medium border-b-2 border-[var(--primary-color)]"
-              : "text-[var(--text-color)] hover:text-[var(--primary-color)]"
-          }`}
-        >
-          {link.title}
-        </Link>
-      </li>
-    );
+  const getSocialIcon = (platform: string) => {
+    switch (platform.toLowerCase()) {
+      case "facebook":
+        return <Facebook className="h-5 w-5" />;
+      case "twitter":
+        return <Twitter className="h-5 w-5" />;
+      case "instagram":
+        return <Instagram className="h-5 w-5" />;
+      default:
+        return null;
+    }
   };
+
+  const getNavLinks = () => {
+    let navLinks = {
+      main: [...defaultNavLinks.main],
+      resources: [...defaultNavLinks.resources],
+      ecommerce: [] as typeof defaultNavLinks.ecommerce,
+    };
+
+    if (!businessData.showServices) {
+      navLinks.main = navLinks.main.filter((link) => link.title !== "Services");
+    }
+
+    if (!businessData.showBlogs) {
+      navLinks.resources = navLinks.resources.filter(
+        (link) => link.title !== "Blog"
+      );
+    }
+
+    if (!businessData.showAlbums) {
+      navLinks.resources = navLinks.resources.filter(
+        (link) => link.title !== "Albums"
+      );
+    }
+
+    if (!businessData.showTeams) {
+      navLinks.resources = navLinks.resources.filter(
+        (link) => link.title !== "Teams"
+      );
+    }
+
+    if (businessData.enableEcommerce) {
+      navLinks.ecommerce = [...defaultNavLinks.ecommerce];
+    }
+
+    return navLinks;
+  };
+
+  const links = getNavLinks();
 
   return (
     <footer className="relative text-gray-900 pt-16 pb-8 overflow-hidden">
@@ -103,6 +148,7 @@ export default function Footer({
                   height={48}
                   className="logo-footer"
                   priority
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 />
               </div>
             )}
@@ -150,9 +196,7 @@ export default function Footer({
             <h3 className="text-lg font-semibold mb-6 text-[var(--primary-color)]">
               Main Navigation
             </h3>
-            <ul className="space-y-3">
-              {defaultNavLinks.main.map(renderLink)}
-            </ul>
+            <FooterNavLinks links={links.main} />
           </div>
 
           {/* Resources Links */}
@@ -160,10 +204,18 @@ export default function Footer({
             <h3 className="text-lg font-semibold mb-6 text-[var(--primary-color)]">
               Resources
             </h3>
-            <ul className="space-y-3">
-              {defaultNavLinks.resources.map(renderLink)}
-            </ul>
+            <FooterNavLinks links={links.resources} />
           </div>
+
+          {/* E-commerce Links */}
+          {businessData.enableEcommerce && links.ecommerce.length > 0 && (
+            <div className="p-4 rounded ">
+              <h3 className="text-lg font-semibold mb-6 text-[var(--primary-color)]">
+                E-Commerce
+              </h3>
+              <FooterNavLinks links={links.ecommerce} />
+            </div>
+          )}
 
           {/* Newsletter Section */}
           <div className="p-4 rounded ">
@@ -195,10 +247,13 @@ export default function Footer({
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
             <p className="text-[var(--text-color)] font-medium p-2 rounded ">
               © {year} {businessData?.businessName}. All rights reserved.
+              {staticData?.footer?.designedBy && (
+                <span> | {staticData.footer.designedBy}</span>
+              )}
             </p>
 
             {/* Social Links */}
-            <div className="flex space-x-4  p-2 rounded-full">
+            <div className="flex space-x-4 p-2 rounded-full">
               {businessData?.externalLinks?.map((link: any) => (
                 <a
                   key={link._id}
@@ -221,7 +276,9 @@ export default function Footer({
                       />
                     </div>
                   ) : (
-                    <span className="font-medium">{link.platform}</span>
+                    getSocialIcon(link.platform) || (
+                      <span className="font-medium">{link.platform}</span>
+                    )
                   )}
                 </a>
               ))}

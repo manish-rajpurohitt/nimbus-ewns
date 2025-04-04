@@ -1,24 +1,54 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
-import { headers } from "next/headers"
+import { headers } from "next/headers";
 // Base URL from environment variables
 const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_URL || "https://api.ewns.in/api";
 // "http://localhost:9000/api";
 
 // Visitor token handling
-async function getVisitorToken(domainName: any) {
+async function getVisitorToken(domainName: any, retryCount = 0) {
   try {
-    const res = await axios.get(
-      `${API_BASE_URL}/website/getVisitorToken?domainName=${domainName}`
-    );
-    if (res.data.isSuccess && res.data?.data?.token) {
-      return res.data.data.token;
+    if (!domainName || domainName.includes("localhost")) {
+      const defaultDomain =
+        process.env.NEXT_PUBLIC_DEFAULT_DOMAIN || "kjsdental.co.in";
+      domainName = defaultDomain;
     }
-  } catch (error) {
-    // console.log(error)
-    console.error("Error getting visitor token:", error);
+
+    const maxRetries = 2;
+    const retryDelay = 1000;
+
+    try {
+      const res = await axios.get(
+        `${API_BASE_URL}/website/getVisitorToken?domainName=${domainName}`,
+        {
+          timeout: 5000,
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json"
+          }
+        }
+      );
+
+      if (res.data?.isSuccess && res.data?.data?.token) {
+        return res.data.data.token;
+      }
+
+      throw new Error("Invalid token response");
+    } catch (error: any) {
+      if (retryCount < maxRetries) {
+        await new Promise((resolve) => setTimeout(resolve, retryDelay));
+        return getVisitorToken(domainName, retryCount + 1);
+      }
+      throw error;
+    }
+  } catch (error: any) {
+    const errorMessage = error?.response?.data?.message || error.message;
+    console.error(`Visitor token error (attempt ${retryCount + 1}):`, {
+      domain: domainName,
+      error: errorMessage
+    });
+    return null;
   }
-  return null;
 }
 
 const getServerHostname = async () => {
@@ -49,90 +79,68 @@ async function fetchApi<T>(
   retryCount = 0
 ): Promise<any> {
   try {
-    // console.log(method, url, data, config);
-    // return;
     const client = await createApiClient();
-
-    const headers: any = {
+    const maxRetries = 2;
+    const headers = {
       ...client.defaults.headers,
       ...(config?.headers || {})
     };
 
-    // console.log(`Making ${method} request to:`, {
-    //   url,
-    //   method,
-    //   data,
-    //   headers
-    // });
-
     let response;
-    switch (method) {
-      case "GET":
-        response = await client.get(url, { ...config, headers });
-        break;
-      case "PUT":
-        response = await client.put(url, data, { ...config, headers });
-        break;
-      default:
-        response = await client.post(url, data, { ...config, headers });
-    }
-
-    return response.data;
-  } catch (error) {
-    if (axios.isAxiosError(error) && error.response?.status === 401) {
-      // Clear existing token
-      if (typeof window !== "undefined") {
-        localStorage.removeItem("_t");
+    try {
+      switch (method) {
+        case "GET":
+          response = await client.get(url, { ...config, headers });
+          break;
+        case "PUT":
+          response = await client.put(url, data, { ...config, headers });
+          break;
+        default:
+          response = await client.post(url, data, { ...config, headers });
       }
 
-      // Retry logic for 401 errors
-      if (retryCount < RETRY_CONFIG.maxRetries) {
-        await new Promise((resolve) =>
-          setTimeout(resolve, RETRY_CONFIG.delayMs)
-        );
+      return response.data;
+    } catch (error: any) {
+      if (axios.isAxiosError(error)) {
+        // Handle 401/500 errors with retry
+        if (
+          [401, 500].includes(error.response?.status || 0) &&
+          retryCount < maxRetries
+        ) {
+          await new Promise((resolve) => setTimeout(resolve, 1000));
 
-        // Try to get a new token
-        const hostname =
-          typeof window !== "undefined"
-            ? window.location.hostname
-            : getServerHostname();
-        const newToken = await getVisitorToken(hostname);
+          // Try to refresh token on 401
+          if (error.response?.status === 401) {
+            if (typeof window !== "undefined") {
+              localStorage.removeItem("_t");
+            }
+            const hostname =
+              typeof window !== "undefined"
+                ? window.location.hostname
+                : await getServerHostname();
+            const newToken = await getVisitorToken(hostname);
+            if (newToken) {
+              return fetchApi<T>(method, url, data, config, retryCount + 1);
+            }
+          }
 
-        if (newToken) {
+          // Generic retry for 500
           return fetchApi<T>(method, url, data, config, retryCount + 1);
         }
       }
+      throw error;
     }
-
-    const apiError: ApiError = new Error("API request failed");
+  } catch (error: any) {
+    const apiError: ApiError = new Error(error.message || "API request failed");
     apiError.status = axios.isAxiosError(error) ? error.response?.status : 500;
     apiError.response = axios.isAxiosError(error) ? error.response?.data : null;
 
-    // console.error(`API ${method} error:`, {
-    //   url,
-    //   status: apiError.status,
-    //   message: apiError.message,
-    //   response: apiError.response
-    // });
-
-    // Add specific handling for cart operations
-    if (url.includes("/cart")) {
-      // console.error("Cart operation failed:", {
-      //   method,
-      //   url,
-      //   error: axios.isAxiosError(error)
-      //     ? {
-      //       status: error.response?.status,
-      //       data: error.response?.data,
-      //       message: error.message
-      //     }
-      //     : error
-      // });
-    }
-
     return {
       isSuccess: false,
-      message: apiError.response?.message || "An unexpected error occurred",
+      message:
+        apiError.response?.message ||
+        apiError.message ||
+        "An unexpected error occurred",
       error: {
         status: apiError.status,
         message: apiError.message
@@ -162,8 +170,6 @@ async function createApiClient(): Promise<AxiosInstance> {
         ? window.location.hostname
         : await getServerHostname();
     token = await getVisitorToken(hostname);
-
-    // console.log(token);
 
     if (token && typeof window !== "undefined") {
       localStorage.setItem("_t", token);
@@ -197,12 +203,6 @@ export async function post<T>(
   data: any,
   config?: AxiosRequestConfig
 ): Promise<ApiResponse<T>> {
-  // console.log("Making POST request:", {
-  //   url,
-  //   data,
-  //   headers: config?.headers
-  // });
-
   try {
     const response = await fetchApi<T>("POST", url, data, {
       ...config,
@@ -212,7 +212,6 @@ export async function post<T>(
       }
     });
 
-    // console.log("POST response:", response);
     return response;
   } catch (error) {
     console.error("POST request failed:", error);
@@ -301,19 +300,15 @@ export const getClientApiInstance = async (): Promise<AxiosInstance> => {
 };
 
 interface BusinessResponse {
-  // Define the structure of BusinessResponse here
   id: string;
   name: string;
-  // Add other fields as necessary
 }
 
 interface AddressResponse {
-  // Define the structure of AddressResponse here
   street: string;
   city: string;
   state: string;
   zipCode: string;
-  // Add other fields as necessary
 }
 
 interface ServiceResponse {
@@ -446,25 +441,41 @@ interface CategoriesResponse {
 }
 
 export async function getMetaTagsOfPage(path: any) {
-  let response = await fetchWithCache(path)
+  let response = await fetchWithCache(path);
   return response.data;
-};
+}
 
-
+// Update fetchWithCache with better error handling
 export async function fetchWithCache(path: string, cacheTime: number = 3600) {
+  try {
+    const apiClient = await createApiClient();
+    const response = await apiClient.get(
+      `/website/getMetaTagsOfPage?pageUrl=${path}`
+    );
 
-  // console.log("🚀 Fetching fresh metadata:", path);
-  const apiClient = await createApiClient();
-  const response = await apiClient.get(`/website/getMetaTagsOfPage?pageUrl=${path}`);
+    if (response?.data?.isSuccess && response?.data?.data) {
+      return response.data;
+    }
 
-  if (response && response?.data && response?.data?.data) {
-    return response.data;
-  } else {
-    console.warn("⚠️ No metadata found, using defaults.");
-    return { title: "Default Title", description: "Default Description" };
-
+    return {
+      isSuccess: false,
+      data: {
+        title: "Default Title",
+        description: "Default Description"
+      }
+    };
+  } catch (error) {
+    console.warn("⚠️ Error fetching metadata:", error);
+    return {
+      isSuccess: false,
+      data: {
+        title: "Default Title",
+        description: "Default Description"
+      }
+    };
   }
 }
+
 export const api = {
   auth: {
     async login(credentials: { email: string; password: string }) {
@@ -499,7 +510,6 @@ export const api = {
           error.response?.data || error.message
         );
 
-        // Handle specific error cases
         if (error.response?.status === 400) {
           return {
             isSuccess: false,
@@ -554,25 +564,57 @@ export const api = {
       const client = await createApiClient();
       return client.get<AddressResponse>("/website/getBusinessAddress");
     },
-    async getServices(pageNumber: number = 1, limit: number = 10) {
+    async getServices(
+      pageNumber: number = 1,
+      limit: number = 10,
+      sortBy: string = "createdAt_desc"
+    ) {
       try {
         const client = await createApiClient();
+        const skip = (pageNumber - 1) * limit;
+
+        console.log("Fetching services with:", {
+          pageNumber,
+          limit,
+          skip,
+          sortBy
+        });
+
         const response = await client.get<ServiceResponse>(
-          `/website/getServices?pageNumber=${pageNumber}&limit=${limit}`
+          `/website/getServices?pageNumber=${pageNumber}&limit=${limit}&skip=${skip}&sortBy=${sortBy}`
         );
 
         if (!response.data.isSuccess) {
-          throw new Error(response.data.message || "Failed to fetch services");
+          throw new Error("Failed to fetch services");
+        }
+
+        const services = response.data.data.services || [];
+        const total = response.data.data.pagination.total || 0;
+        const actualTotalPages = Math.ceil(total / limit);
+
+        // Add debug logging to check for duplicates
+        const serviceIds = services.map((s) => s.sku);
+        const uniqueIds = new Set(serviceIds);
+
+        if (serviceIds.length !== uniqueIds.size) {
+          console.warn("Duplicate services detected in API response:", {
+            total: serviceIds.length,
+            unique: uniqueIds.size,
+            duplicates: serviceIds.filter(
+              (id, index) => serviceIds.indexOf(id) !== index
+            )
+          });
         }
 
         return {
           isSuccess: true,
           data: {
-            services: response.data.data.services || [],
-            pagination: response.data.data.pagination || {
-              totalPages: 1,
-              currentPage: 1,
-              totalItems: 0
+            services: services,
+            pagination: {
+              totalPages: actualTotalPages,
+              currentPage: pageNumber,
+              totalItems: total,
+              itemsPerPage: limit
             }
           }
         };
@@ -624,12 +666,6 @@ export const api = {
         const response = await client.get<BlogsResponse>(
           `/website/getBlogs?pageNumber=${pageNumber}&limit=${limit}`
         );
-
-        // console.log("API Blog Response:", {
-        //   raw: response?.data,
-        //   blogs: response?.data?.data?.blogs,
-        //   pagination: response?.data?.data?.pagination
-        // });
 
         if (!response?.data?.isSuccess) {
           throw new Error("Failed to fetch blogs");
@@ -796,18 +832,51 @@ export const api = {
       businessId: string;
     }) {
       try {
+        console.log("Sending contact message:", data); // Debug log
         const client = await createApiClient();
-        await client.post("/website/contact", data);
+        const response = await client.post("/website/contact", data);
+        console.log("Contact API response:", response.data); // Debug log
 
         return {
-          isSuccess: true,
-          message: "Message sent successfully!"
+          isSuccess: response?.data?.isSuccess ?? false,
+          message: response?.data?.message || "Message sent successfully!"
         };
       } catch (error) {
-        console.error("Error sending contact message:", error);
+        console.error("Contact API error:", error); // Debug log
         return {
           isSuccess: false,
           message: "Failed to send message"
+        };
+      }
+    },
+
+    async getAllServices() {
+      try {
+        const client = await createApiClient();
+
+        console.log("Fetching all services");
+
+        const response = await client.get<ServiceResponse>(
+          `/website/getServices?getAll=true`
+        );
+
+        if (!response.data.isSuccess) {
+          throw new Error("Failed to fetch all services");
+        }
+
+        return {
+          isSuccess: true,
+          data: {
+            services: response.data.data.services || []
+          }
+        };
+      } catch (error) {
+        console.error("Error fetching all services:", error);
+        return {
+          isSuccess: false,
+          data: {
+            services: []
+          }
         };
       }
     }
@@ -872,7 +941,7 @@ export const api = {
     async getCategories(page = 1, limit = 100) {
       return get(`/website/fetchCategories?pageNumber=${page}&limit=${limit}`);
     }
-  },
+  }
 };
 
 export default getClientApiInstance;

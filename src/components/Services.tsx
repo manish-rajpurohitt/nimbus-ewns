@@ -30,6 +30,13 @@ export default function Services({
 
   if (!services) return <Loader />;
 
+  console.log("Services Component Debug:", {
+    currentPage,
+    totalPages,
+    servicesCount: services?.length,
+    isHomepage
+  });
+
   return (
     <section className="py-16 px-4 md:px-8">
       <div className="departments">
@@ -79,14 +86,13 @@ export default function Services({
               ))}
             </div>
 
-            {isHomepage && services.length > 3 && (
-              <div className="text-center mt-12">
-                {/* <Link
-                  href="/services"
-                  className="inline-block px-8 py-3 bg-[rgb(1,82,168)] text-white rounded-full hover:bg-[rgb(3,48,97)] transition-colors"
-                >
-                  View All Services
-                </Link> */}
+            {!isHomepage && services.length > 0 && totalPages > 1 && (
+              <div className="mt-12 flex justify-center">
+                <Pagination
+                  currentPage={currentPage}
+                  totalPages={totalPages}
+                  basePath="/services"
+                />
               </div>
             )}
           </>
@@ -95,16 +101,6 @@ export default function Services({
             <p className="text-gray-600">
               No services found. Please try again later.
             </p>
-          </div>
-        )}
-
-        {!isHomepage && totalPages > 1 && (
-          <div className="mt-12">
-            <Pagination
-              currentPage={currentPage}
-              totalPages={totalPages}
-              basePath="/services"
-            />
           </div>
         )}
       </div>

@@ -1,4 +1,5 @@
 import { api, getMetaTagsOfPage } from "@/lib/api";
+import { fetchBusinessData } from "@/utils/api.utils"; // Add this import
 import type { Business, BusinessAddress } from "@/types/business.types";
 import { headers } from "next/headers";
 
@@ -23,12 +24,33 @@ export const getBusinessAdd = (businessAddress: BusinessAddress): string => {
   );
 };
 
+// Add a utility function to get the default domain
+export const getDefaultDomain = (): string => {
+  return process.env.NEXT_PUBLIC_DEFAULT_DOMAIN || "kjsdental.co.in";
+};
+
 // Get hostname (safely works on both client and server)
 export const getHostName = () => {
   if (typeof window !== "undefined") {
-    return window.location.hostname;
+    // Client-side
+    const hostname = window.location.hostname;
+    if (hostname === "localhost") {
+      return getDefaultDomain();
+    }
+    return hostname;
   }
-  return "balajinoveltiesb932.ewns.in"; // Default fallback for server-side
+
+  // Server-side
+  try {
+    const headersList = headers();
+    const host = headersList.get("host") || "";
+    if (host.includes("localhost")) {
+      return getDefaultDomain();
+    }
+    return host.split(":")[0]; // Remove port if present
+  } catch (error) {
+    return getDefaultDomain();
+  }
 };
 
 // Generate navigation pages based on business settings
@@ -197,42 +219,80 @@ export const businessQuotes = [
   "Success usually comes to those who are too busy to be looking for it. – Henry David Thoreau"
 ];
 
-export const getPageMEtadata = async (url: string, logoUrl: any = null): Promise<any> => {
-  const metaTags = await getMetaTagsOfPage(url);
-  const title = metaTags?.title || "Default Title";
-  const description = metaTags?.description || "Default Description";
-  const ogImage = metaTags?.ogImage || "/default-og-image.jpg";
-  const canonical = metaTags?.canonical || url;
-  const author = metaTags?.author || "EWNS";
-  const keywords = metaTags?.keywords?.map((k: any) => k.keyword).join(", ");
+export const getPageMEtadata = async (
+  url: string,
+  logoUrl: any = null
+): Promise<any> => {
+  try {
+    const businessData = await fetchBusinessData();
+    const businessName = businessData?.data?.business?.businessName;
+    const businessDescription = businessData?.data?.business?.description;
+    const businessLogo = businessData?.data?.business?.logoURl;
 
-  return {
-    title,
-    description,
-    keywords: keywords || undefined,
-    alternates: {
-      canonical,
-    },
-    openGraph: {
-      title,
-      description,
-      url,
-      images: [ogImage],
-      type: "website",
-    },
-    twitter: {
-      card: "summary_large_image",
-      title,
-      description,
-      images: [ogImage],
-    },
-    robots: "index, follow",
-    authors: [{ name: author }],
-    // viewport: "width=device-width, initial-scale=1",
-    // themeColor: "#ffffff",
-    icons: {
-      icon: logoUrl ? logoUrl : '/favicon.ico',
-    },
-    metadataBase: new URL(url),
-  };
+    const metaTags = await getMetaTagsOfPage(url);
+    if (!metaTags?.isSuccess) {
+      return {
+        title: businessName || "Business Website",
+        description: businessDescription || "Welcome to our website",
+        icons: {
+          icon: [
+            {
+              url: businessLogo || "/favicon.ico",
+              type: "image/x-icon"
+            }
+          ]
+        },
+        openGraph: {
+          title: businessName,
+          description: businessDescription,
+          url,
+          images: [businessLogo || "/default-og-image.jpg"],
+          type: "website"
+        }
+      };
+    }
+
+    return {
+      title: businessName || metaTags?.title,
+      description: businessDescription || metaTags?.description,
+      keywords: metaTags?.keywords?.map((k: any) => k.keyword).join(", "),
+      alternates: {
+        canonical: metaTags?.canonical || url
+      },
+      openGraph: {
+        title: businessName || metaTags?.title,
+        description: businessDescription || metaTags?.description,
+        url,
+        images: [businessLogo || metaTags?.ogImage || "/default-og-image.jpg"],
+        type: "website"
+      },
+      twitter: {
+        card: "summary_large_image",
+        title: businessName || metaTags?.title,
+        description: businessDescription || metaTags?.description,
+        images: [businessLogo || metaTags?.ogImage || "/default-og-image.jpg"]
+      },
+      robots: "index, follow",
+      authors: [{ name: businessName || "EWNS" }],
+      icons: {
+        icon: [
+          {
+            url: businessLogo || "/favicon.ico",
+            type: "image/x-icon"
+          }
+        ]
+      },
+      metadataBase: new URL(url)
+    };
+  } catch (error) {
+    const businessData = await fetchBusinessData();
+    const businessName = businessData?.data?.business?.businessName;
+    return {
+      title: businessName || "Business Website",
+      description: "Welcome to our website",
+      icons: {
+        icon: [{ url: "/favicon.ico", type: "image/x-icon" }]
+      }
+    };
+  }
 };

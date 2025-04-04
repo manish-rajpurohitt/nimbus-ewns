@@ -15,7 +15,7 @@ export default async function Loading() {
             <div className="w-48 h-24 mx-auto relative animate-pulse">
               <Image
                 src={logoUrl}
-                alt="Business Logo"
+                alt={businessName}
                 fill
                 className="object-contain"
                 priority
@@ -23,7 +23,6 @@ export default async function Loading() {
               />
             </div>
           )}
-
           <div className="space-y-3">
             <h2 className="text-2xl font-semibold text-[rgb(1,82,168)] animate-fadeIn">
               {businessName}
