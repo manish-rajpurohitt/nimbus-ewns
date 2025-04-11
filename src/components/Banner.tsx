@@ -23,7 +23,7 @@ interface BannerProps {
 export default function Banner({ businessData }: BannerProps) {
   debugLog("Banner", "Rendering with data", businessData);
 
-  const bannerData = businessData?.staticData?.home?.banner;
+  const bannerData = businessData?.business?.staticData?.home?.banner;
   const businessInfo = businessData?.business;
 
   const defaultBannerUrl =

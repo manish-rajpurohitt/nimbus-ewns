@@ -35,7 +35,6 @@ export default async function ServicesPage({ searchParams }: any) {
     const page = Math.max(1, parseInt(pageNumber));
     const limit = 6;
 
-    // Fetch all services in one request
     const [businessRes, allServicesRes] = await Promise.all([
       fetchBusinessData(),
       api.business.getAllServices()
@@ -47,7 +46,6 @@ export default async function ServicesPage({ searchParams }: any) {
 
     const allServices = allServicesRes.data.services || [];
 
-    // Sort services by createdAt (newest first)
     const sortedServices = allServices.sort(
       (a: any, b: any) =>
         new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
@@ -60,11 +58,12 @@ export default async function ServicesPage({ searchParams }: any) {
       startIndex + limit
     );
     const totalPages = Math.ceil(allServices.length / limit);
+    const staticData = businessRes.data.staticData.services;
 
     return (
       <>
         <PageBanner
-          bannerImage="https://progatetechnology.com/public/assets/banner1.jpg"
+          bannerImage= {staticData?.bannerUrl || "https://ewnsalbums.s3.ap-south-1.amazonaws.com/common/ChatGPT+Image+Apr+11%2C+2025%2C+09_54_29+PM.png"}
           title="Our Services"
           currentPage="Services"
         />
