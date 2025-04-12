@@ -17,8 +17,9 @@ const nextConfig = {
         protocol: "https",
         hostname: "**"
       }
-    ]
-  },
+    ],
+    unoptimized: true,
+   },
   typescript: {
     ignoreBuildErrors: true,
   },

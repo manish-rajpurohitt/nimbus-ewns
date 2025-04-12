@@ -42,7 +42,6 @@ export default function AboutUs({ businessData }: AboutUsProps) {
         <div className="about-content">
           <div className="about-text">
             <h4>{aboutUs?.title || "ABOUT US"}</h4>
-            {/* <h2>{businessInfo?.businessName || "Our Business"}</h2> */}
             <div className="subheading">
               {aboutUs?.heading || "Professional Solutions"}
             </div>
