@@ -21,7 +21,7 @@ export default async function AboutPage() {
       )?.image ||
       "https://www.evyavancapital.com/wp-content/uploads/2019/10/about-sec-inner-banner-neww.jpg";
 
-      const staticData = businessRes.data.staticData.about;
+      const staticData = businessRes.data.staticData.aboutUs;
     return (
       <div>
         <PageBanner
