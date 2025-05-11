@@ -21,10 +21,12 @@ export default async function AlbumsPage({
       throw new Error("Failed to fetch albums");
     }
 
+    const staticData = businessRes.data.staticData.albums;
+
     return (
       <>
         <PageBanner
-          bannerImage="https://images.unsplash.com/photo-1500051638674-ff996a0ec29e?auto=format&fit=crop&q=80"
+          bannerImage={ staticData?.bannerUrl || "https://images.unsplash.com/photo-1500051638674-ff996a0ec29e?auto=format&fit=crop&q=80" }
           title="Photo Gallery"
           currentPage="Gallery"
         />

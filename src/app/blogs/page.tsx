@@ -81,10 +81,12 @@ export default async function BlogsPage({
       }
     };
 
+    const staticData = businessRes.data.staticData.blogs;
+
     return (
       <>
         <PageBanner
-          bannerImage="https://www.swg.com/can/wp-content/uploads/sites/38/2014/09/About-us-banner.jpg"
+          bannerImage= {staticData?.bannerUrl || "https://www.swg.com/can/wp-content/uploads/sites/38/2014/09/About-us-banner.jpg"}
           title="Our Blog"
           currentPage="Blog"
         />

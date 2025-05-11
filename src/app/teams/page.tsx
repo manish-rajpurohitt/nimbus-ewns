@@ -27,10 +27,12 @@ export default async function TeamsPage({ searchParams }: any) {
       totalPages: teamsRes.data.pagination.totalPages
     };
 
+    const staticData = businessRes.data.staticData.teams;
+
     return (
       <div className="teams-page">
         <PageBanner
-          bannerImage="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?auto=format&fit=crop&q=80"
+          bannerImage={staticData?.bannerUrl || "https://images.unsplash.com/photo-1600880292203-757bb62b4baf?auto=format&fit=crop&q=80"}
           title="Our Teams"
           currentPage="Teams"
         />
