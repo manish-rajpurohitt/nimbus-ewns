@@ -1,5 +1,7 @@
 .banner {
   width: 100%;
+  min-height: 80vh;
+  max-height: 80vh;
   height: auto;
   display: flex;
   align-items: center; /* Center items vertically */
@@ -14,19 +16,7 @@
   padding: 0; /* Reset padding */
   gap: var(--gap-small); /* Added gap for better spacing */
 }
-@media (min-width: 1401px) {
-  .banner {
-    min-height: 60vh;
-    max-height: 60vh;
-  }
-}
 
-@media (min-width: 1200px) and (max-width: 1400px) {
-  .banner {
-    min-height: 80vh;
-    max-height: 80vh;
-  }
-}
 /* 🔹 Responsive Adjustments */
 @media (max-width: 1024px) {
   .banner {

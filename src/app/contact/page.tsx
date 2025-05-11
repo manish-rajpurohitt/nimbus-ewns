@@ -25,13 +25,14 @@ export default async function ContactPage() {
       businessRes.data?.staticData?.pageBanners?.find(
         (banner: any) => banner.type === "contact"
       )?.image || DEFAULT_BANNER;
+      const staticData = businessRes.data.staticData.contactDetails;
 
     return (
       <div className="main-page-container">
         <div
           className="banner-page"
           style={{
-            backgroundImage: `url(${bannerImage})`,
+            backgroundImage: `url(${staticData?.bannerUrl || bannerImage})`,
             backgroundSize: "cover",
             backgroundPosition: "center"
           }}
