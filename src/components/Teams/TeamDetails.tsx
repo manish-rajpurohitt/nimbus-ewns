@@ -12,7 +12,8 @@ interface TeamDetailsProps {
 
 export default function TeamDetails({
   teamData,
-  currentPage
+  currentPage,
+  businessData
 }: TeamDetailsProps) {
   if (!teamData) return null;
 
@@ -28,10 +29,16 @@ export default function TeamDetails({
     indexOfFirstMember,
     indexOfLastMember
   );
+  const staticData = businessData.staticData?.teams?.members;
 
   return (
     <div className="team-detail-page">
-      <div className="team-banner">
+      <div className="team-banner" style={{
+        backgroundImage: `url(${'"'+staticData?.bannerUrl + '"'|| 'https://t4.ftcdn.net/jpg/06/52/48/93/360_F_652489397_e54E2mUvjI4RLIU4dKgmH0pgfvOzJqKM.jpg'})`,
+        backgroundRepeat: 'no-repeat',
+        backgroundPosition: 'center center',
+        backgroundSize: 'cover',
+      }}>
         <div className="team-banner-overlay">
           <div className="banner-content-team">
             <h1>{teamData.name}</h1>

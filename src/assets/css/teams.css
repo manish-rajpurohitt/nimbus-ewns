@@ -142,8 +142,6 @@
 .team-banner {
   position: relative;
   height: 50vh;
-  background: url("https://t4.ftcdn.net/jpg/06/52/48/93/360_F_652489397_e54E2mUvjI4RLIU4dKgmH0pgfvOzJqKM.jpg")
-    no-repeat center center/cover;
   display: flex;
   align-items: center;
   justify-content: center;
