@@ -1,10 +1,8 @@
 .banner {
-  width: 100vw;
+  width: 100%;
   height: auto;
-  max-height: clamp(50vh, 70vh, 90vh); /* Ensures adaptability */
-  min-height: 50vh; /* Avoids excessive shrinking */
   display: flex;
-  align-items: center;
+  align-items: center; /* Center items vertically */
   justify-content: center; /* Centers content */
   background-size: cover;
   background-position: center;
@@ -12,43 +10,53 @@
   position: relative;
   transition: all var(--transition-speed, 0.3s) ease;
   overflow: hidden;
-  margin: 0;
-  padding: 0;
+  margin: 0; /* Reset margin */
+  padding: 0; /* Reset padding */
+  gap: var(--gap-small); /* Added gap for better spacing */
+}
+@media (min-width: 1401px) {
+  .banner {
+    min-height: 60vh;
+    max-height: 60vh;
+  }
 }
 
+@media (min-width: 1200px) and (max-width: 1400px) {
+  .banner {
+    min-height: 80vh;
+    max-height: 80vh;
+  }
+}
 /* 🔹 Responsive Adjustments */
 @media (max-width: 1024px) {
   .banner {
-    min-height: 60vh; /* Slightly smaller for tablets */
+    min-height: 70vh; /* Adjusted for tablets */
   }
 }
 
 @media (max-width: 768px) {
   .banner {
-    min-height: 50vh; /* Adjust height for small devices */
-    background-position: center top;
+    min-height: 60vh; /* Adjust height for small devices */
   }
 }
 
 @media (max-width: 480px) {
   .banner {
-    min-height: 40vh; /* Ensures proper visibility on small screens */
+    min-height: 50vh; /* Ensures proper visibility on small screens */
   }
 }
 
 .banner-header {
   background: var(--tertiary-color);
   width: fit-content;
-  padding: 2px var(--padding-medium);
-  gap: var(--gap-small);
+  padding: var(--padding-small); /* Standardized padding */
   font-family: var(--font-family);
-  font-size: var(--font-size-small);
-  font-weight: 500;
-  letter-spacing: 0.4em;
+  font-size: calc(var(--font-size-small) * 1.1); /* Standardized font size */
+  font-weight: 400;
   text-align: left;
   color: var(--text-color-black);
   animation: fadeInUp var(--animation-duration) ease forwards;
-  margin-bottom: var(--gap-medium);
+  margin: var(--gap-small) 0; /* Standardized margin */
 }
 
 .banner-overlay {
@@ -64,37 +72,34 @@
   );
   display: flex;
   align-items: center;
-  padding: 0 var(--padding-large);
+  padding: var(--padding-small); /* Standardized padding */
   animation: fadeIn var(--animation-duration) ease-in-out;
 }
 
 .banner-content {
-  margin-left: 5%;
   color: var(--secondary-color);
   width: 100%;
-  max-width: 600px;
+  height: fit-content !important;
+  max-width: 40%; /* Fixed width for mobile view */
   text-align: left;
   animation: fadeIn var(--animation-duration) ease-in-out;
-  transform: translateY(var(--gap-small));
-  height: fit-content;
-  justify-content: center;
   display: flex;
   flex-direction: column;
+  gap: var(--gap-small); /* Common gap for all elements */
+  margin-left: 3%; /* Use percentage for responsive gaps */
 }
 
 .banner-title {
-  font-size: clamp(1.8rem, 4vw, 2.8rem);
+  font-size: clamp(1.8rem, 4vw, 2.6rem); /* Standardized font size */
   font-weight: 700;
   line-height: 1.2;
-  margin-bottom: var(--padding-medium);
   color: var(--secondary-color);
   animation: slideInLeft var(--animation-duration) ease forwards;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .banner-subtitle {
-  font-size: clamp(1rem, 2vw, 1.2rem);
-  margin-bottom: var(--gap-medium);
+  font-size: clamp(1rem, 2.2vw, 1.3rem); /* Standardized font size */
   color: var(--secondary-color);
   animation: slideInLeft var(--animation-duration) 0.3s ease forwards;
   line-height: 1.6;
@@ -102,14 +107,14 @@
 
 .banner-button-home {
   width: fit-content;
-  padding: var(--padding-small) calc(var(--padding-large) * 1.4);
+  padding: var(--padding-small); /* Standardized padding */
   background-color: var(--primary-color);
   color: var(--secondary-color);
   border: none;
   border-radius: 25px;
   cursor: pointer;
   font-weight: 600;
-  font-size: var(--font-size-small);
+  font-size: calc(var(--font-size-small) * 0.9); /* Standardized font size */
   transition: all var(--transition-speed) ease;
   animation: slideInLeft var(--animation-duration) 0.6s ease forwards;
   box-shadow: var(--card-shadow);
@@ -130,29 +135,23 @@
 
 @media (max-width: 900px) {
   .banner-content {
-    max-width: 400px;
+    max-width: 40%; /* Fixed width for mobile view */
+    margin-left: 0.5%; /* Decreased margin for tighter spacing */
   }
 }
 
 @media (max-width: 750px) {
   .banner {
-    min-height: 45vh;
+    min-height: 50vh; /* Adjusted height for smaller screens */
   }
   .banner-content {
-    max-width: 320px;
-  }
-  .banner-button-home {
-    font-size: var(--font-size-small);
-    padding: var(--padding-small) var(--padding-large);
+    max-width: 50%; /* Fixed width for mobile view */
   }
 }
 
 @media (max-width: 480px) {
   .banner {
-    min-height: 40vh;
-  }
-  .banner-overlay {
-    padding: 0 var(--padding-medium);
+    min-height: 40vh; /* Ensures proper visibility on small screens */
   }
 }
 
@@ -187,7 +186,7 @@
   align-items: center;
   color: white;
   text-align: center;
-  padding: var(--padding-medium);
+  padding: var(--padding-small); /* Standardized padding */
 }
 .overlay-pages {
   position: absolute;
@@ -202,7 +201,7 @@
   align-items: flex-start;
   color: white;
   text-align: center;
-  padding: var(--padding-medium);
+  padding: var(--padding-small); /* Standardized padding */
 }
 .navigation-content {
   margin-left: clamp(10px, 2vw, 20px);
@@ -214,7 +213,7 @@
   justify-content: flex-start;
   margin-bottom: clamp(10px, 2vw, 20px);
   width: 100%;
-  padding: 0 var(--padding-medium);
+  padding: var(--padding-small); /* Standardized padding */
 }
 
 .navigation ul {
@@ -263,4 +262,125 @@
   }
 }
 
-/* Banner Styles for all the pages */
+/* for the product detail */
+
+/* Update existing product gallery styles */
+.product-gallery {
+  position: relative;
+}
+
+.product-gallery .main-image-container {
+  background-color: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  margin-bottom: 0.5rem; /* Reduced margin */
+}
+
+.product-gallery .thumbnails-container::-webkit-scrollbar {
+  height: 4px;
+}
+
+.product-gallery .thumbnails-container::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.product-gallery .thumbnails-container::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 2px;
+}
+
+.product-gallery .thumbnail-item {
+  transition: all 0.2s ease-in-out;
+}
+
+.product-gallery .thumbnail-item:hover {
+  border-color: #93c5fd;
+}
+
+.thumbnails-container {
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  gap: 0.5rem; /* Consistent small gap */
+  padding: 0 2rem; /* Space for navigation buttons */
+}
+
+.thumbnail-item {
+  width: 60px;
+  height: 60px;
+  border: 2px solid #e5e7eb;
+  border-radius: 0.25rem;
+  overflow: hidden;
+  transition: all 0.2s ease-in-out;
+  flex: 0 0 auto;
+  margin: 0 0.25rem; /* Small margin between thumbnails */
+}
+
+.thumbnail-item img {
+  pointer-events: none;
+}
+
+/* Add image counter styles */
+.image-counter {
+  position: absolute;
+  bottom: 1rem;
+  right: 1rem;
+  background-color: rgba(0, 0, 0, 0.6);
+  color: white;
+  padding: 0.25rem 0.5rem;
+  border-radius: 1rem;
+  font-size: 0.875rem;
+  z-index: 10;
+}
+
+/* buttons */
+
+/* Add these styles after your existing product gallery styles */
+
+.product-gallery .main-image-container button {
+  opacity: 0;
+  transition: opacity 0.2s ease-in-out;
+}
+
+.product-gallery .main-image-container:hover button {
+  opacity: 1;
+}
+
+.product-gallery .main-image-container button:hover {
+  transform: translateY(-50%) scale(1.1);
+}
+
+.product-gallery .main-image-container button:active {
+  transform: translateY(-50%) scale(0.95);
+}
+
+@media (max-width: 768px) {
+  .product-gallery .main-image-container button {
+    opacity: 1;
+    padding: 1rem;
+  }
+}
+
+/* pro thum */
+
+/* Add these styles to your existing product gallery styles */
+
+.thumbnails-container {
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.thumbnails-container::-webkit-scrollbar {
+  display: none;
+}
+
+.thumbnail-item {
+  transition: all 0.2s ease-in-out;
+  flex: 0 0 auto;
+}
+
+.thumbnail-item img {
+  pointer-events: none;
+}
