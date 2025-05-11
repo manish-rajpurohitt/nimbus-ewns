@@ -6,11 +6,9 @@ import { Metadata } from "next";
 import { headers } from "next/headers";
 import { getPageMEtadata } from "@/utils/common.util";
 
-export default async function ProductPage({
-  params
-}:any) {
+export default async function ProductPage({ params }: any) {
   try {
-    const res : any= await get(
+    const res: any = await get(
       `/website/fetchProductDetails?productId=${params.sku}`
     );
 
@@ -26,5 +24,6 @@ export default async function ProductPage({
 }
 
 export async function generateMetadata({ params }: any): Promise<Metadata> {
-  return getPageMEtadata(["about"]);
+  // Change from array to string
+  return getPageMEtadata("about");
 }
