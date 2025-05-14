@@ -21,7 +21,7 @@ export async function getAddresses() {
 
     return res.data;
   } catch (error) {
-    console.error("Get addresses error:", error);
+    // console.error("Get addresses error:", error);
     return [];
   }
 }
@@ -81,7 +81,7 @@ export async function updateAddress(addressId: string, formData: FormData) {
     revalidatePath("/address");
     return { success: true };
   } catch (error) {
-    console.error("Update address error:", error);
+    // console.error("Update address error:", error);
     return { success: false, error: "Failed to update address" };
   }
 }
@@ -101,7 +101,7 @@ export async function getAddress(addressId: string) {
 
     return { success: true, data: res.data };
   } catch (error) {
-    console.error("Get address error:", error);
+    // console.error("Get address error:", error);
     return { success: false, error: "Failed to fetch address" };
   }
 }
@@ -121,7 +121,7 @@ export async function deleteAddress(addressId: string) {
     revalidatePath("/address");
     return { success: true };
   } catch (error) {
-    console.error("Delete address error:", error);
+    // console.error("Delete address error:", error);
     return { success: false };
   }
 }
@@ -133,7 +133,7 @@ export async function getPincodeDetails(pincode: string) {
       ? { success: true, data: res.data }
       : { success: false, error: res.message };
   } catch (error) {
-    console.error("Pincode lookup error:", error);
+    // console.error("Pincode lookup error:", error);
     return { success: false, error: "Failed to fetch pincode details" };
   }
 }

@@ -39,7 +39,7 @@ export async function fetchBusinessData() {
     // console.log("Transformed Business Data:", transformedResponse);
     return transformedResponse;
   } catch (error) {
-    console.error("Business Data Error:", error);
+    // console.error("Business Data Error:", error);
     return { isSuccess: false, data: { business: null, staticData: null } };
   }
 }
@@ -64,7 +64,7 @@ export async function getRedirectUrl() {
     // console.log("Transformed Business Data:", transformedResponse);
     return transformedResponse;
   } catch (error) {
-    console.error("Business Data Error:", error);
+    // console.error("Business Data Error:", error);
     return { isSuccess: false, data: { business: null, staticData: null } };
   }
 }
@@ -79,7 +79,7 @@ export async function fetchBusinessAddress() {
     // });
     return response;
   } catch (error) {
-    console.error("Error fetching business address:", error);
+    // console.error("Error fetching business address:", error);
     return { isSuccess: false, data: null };
   }
 }
@@ -99,7 +99,7 @@ export async function validateAuth() {
 
     return response.data;
   } catch (error) {
-    console.error("Auth validation error:", error);
+    // console.error("Auth validation error:", error);
     return null;
   }
 }
@@ -152,7 +152,7 @@ export async function getBusinessMetadata() {
       logo: response?.data?.business?.logoURl
     };
   } catch (error) {
-    console.error("Error fetching business metadata:", error);
+    // console.error("Error fetching business metadata:", error);
     return null;
   }
 }

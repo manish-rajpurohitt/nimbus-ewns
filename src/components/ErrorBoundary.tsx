@@ -10,7 +10,7 @@ export default function ErrorBoundary({
   reset: () => void;
 }) {
   useEffect(() => {
-    console.error("Error:", error);
+    // console.error("Error:", error);
   }, [error]);
 
   return (

@@ -6,6 +6,6 @@ export const debugLog = (component: string, message: string, data?: any) => {
 
 export const debugError = (component: string, error: any) => {
   if (process.env.NODE_ENV === "development") {
-    console.error(`[${component} Error]`, error);
+    // console.error(`[${component} Error]`, error);
   }
 };

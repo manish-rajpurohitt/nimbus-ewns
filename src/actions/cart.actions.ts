@@ -51,7 +51,7 @@ export async function addToCart(formData: FormData): Promise<any> {
     // });
 
     if (!productId || typeof productId !== "string") {
-      console.error("Add to cart failed: Invalid productId", productId);
+      // console.error("Add to cart failed: Invalid productId", productId);
       return { success: false, error: "Invalid product" };
     }
 
@@ -78,7 +78,7 @@ export async function addToCart(formData: FormData): Promise<any> {
     // console.log("Cart response:", res);
 
     if (!res.isSuccess) {
-      console.error("Add to cart failed:", res.message);
+      // console.error("Add to cart failed:", res.message);
       return { success: false, error: res.message || "Failed to add item" };
     }
 
@@ -89,7 +89,7 @@ export async function addToCart(formData: FormData): Promise<any> {
 
     return { success: true };
   } catch (error) {
-    console.error("Add to cart error:", error);
+    // console.error("Add to cart error:", error);
     return { success: false, error: "Failed to add item to cart" };
   }
 }

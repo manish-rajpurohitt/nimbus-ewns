@@ -44,7 +44,7 @@ async function getVisitorToken(domainName: any, retryCount = 0) {
     }
   } catch (error: any) {
     const errorMessage = error?.response?.data?.message || error.message;
-    console.error(`Visitor token error (attempt ${retryCount + 1}):`, {
+    // console.error(`Visitor token error (attempt ${retryCount + 1}):`, {
       domain: domainName,
       error: errorMessage
     });
@@ -215,7 +215,7 @@ export async function post<T>(
 
     return response;
   } catch (error) {
-    console.error("POST request failed:", error);
+    // console.error("POST request failed:", error);
     throw error;
   }
 }
@@ -285,7 +285,7 @@ export const setupClientApiInterceptors = (client: AxiosInstance) => {
             window.location.reload();
           }
         } catch (innerError) {
-          console.error("Error refreshing token:", innerError);
+          // console.error("Error refreshing token:", innerError);
         }
       }
       return Promise.reject(error);
@@ -494,10 +494,10 @@ export const api = {
           message: "Login successful"
         };
       } catch (error: any) {
-        console.error(
-          "Login API error:",
-          error.response?.data || error.message
-        );
+        // console.error(
+        //   "Login API error:",
+        //   error.response?.data || error.message
+        // );
 
         if (error.response?.status === 400) {
           return {
@@ -601,7 +601,7 @@ export const api = {
           }
         };
       } catch (error) {
-        console.error("Error fetching services:", error);
+        // console.error("Error fetching services:", error);
         return {
           isSuccess: false,
           data: {

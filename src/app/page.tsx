@@ -155,7 +155,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const business = businessRes?.data?.business;
 
   if (!business) {
-    console.error("Failed to fetch business data for metadata");
+    // console.error("Failed to fetch business data for metadata");
     return {
       title: "Loading...",
       icons: {

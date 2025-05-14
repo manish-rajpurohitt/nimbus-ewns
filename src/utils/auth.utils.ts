@@ -30,7 +30,7 @@ export async function validateAuth() {
 
     return res.data;
   } catch (error) {
-    console.error("Auth validation error:", error);
+    // console.error("Auth validation error:", error);
     // Only modify cookies in server actions
     const headersList = await headers();
     const path = headersList.get("x-invoke-path");
@@ -91,7 +91,7 @@ export async function logoutUser() {
     (await cookies()).delete("_et");
     return { success: true };
   } catch (error) {
-    console.error("Logout error:", error);
+    // console.error("Logout error:", error);
     return { success: false };
   }
 }

@@ -6,7 +6,7 @@ export function formatDate(dateStr: string): string {
       day: "numeric"
     }).format(new Date(dateStr));
   } catch (error) {
-    console.error("Error formatting date:", error);
+    // console.error("Error formatting date:", error);
     return dateStr;
   }
 }
@@ -21,7 +21,7 @@ export function formatDateTime(dateStr: string): string {
       minute: "2-digit"
     }).format(new Date(dateStr));
   } catch (error) {
-    console.error("Error formatting datetime:", error);
+    // console.error("Error formatting datetime:", error);
     return dateStr;
   }
 }

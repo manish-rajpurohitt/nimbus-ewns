@@ -44,7 +44,7 @@ async function getInitialData() {
       address: addressRes?.isSuccess ? addressRes.data?.address : null
     };
   } catch (error) {
-    console.error("Error in getInitialData:", error);
+    // console.error("Error in getInitialData:", error);
     return { business: null, static: null, address: null, user: null };
   }
 }
