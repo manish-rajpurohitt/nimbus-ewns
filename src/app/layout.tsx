@@ -140,13 +140,13 @@ export default async function RootLayout({
   const data = await getInitialData();
   const cart = await getCart();
   const cartCount = cart?.items?.length || 0;
-  const schema = {
+  const schema = businessRes?.business ? {
     "@context": "https://schema.org",
-    "@type": businessRes.business?.category,
-    "name": businessRes.business.businessName,
-    "image": businessRes.business.logoURl,
-    "url": businessRes.business.websiteUrl,
-    "description": convert(businessRes.business.shortBio, { wordwrap: false }),
+    "@type": businessRes?.business?.category,
+    "name": businessRes?.business?.businessName,
+    "image": businessRes?.business?.logoURl,
+    "url": businessRes?.business?.websiteUrl,
+    "description": convert(businessRes?.business?.shortBio, { wordwrap: false }),
     "address": {
       "@type": "PostalAddress",
       "streetAddress": businessRes.business?.address?.addressLine1 || "",
@@ -157,7 +157,7 @@ export default async function RootLayout({
     },
     "telephone": businessRes.business?.phone || "+91-0000000000",
     "sameAs": businessRes.business?.externalLinks.map(link => link.url) || []
-  };
+  } : null;
   return (
     <html lang="en">
       <head>
@@ -192,10 +192,10 @@ export default async function RootLayout({
             `
           }}
         />
-         <script
+        {schema && <script
             type="application/ld+json"
             dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
-          />
+          />}
         <script
           dangerouslySetInnerHTML={{
             __html: `

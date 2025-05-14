@@ -66,21 +66,21 @@ export default async function Page() {
     debugLog("HomePage", "Transformed business data", transformedData);
     const schema = {
       "@context": "https://schema.org",
-      "@type": businessRes.data.business.category,
-      "name": businessRes.data.business.businessName,
-      "image": businessRes.data.business.logoURl,
-      "url": businessRes.data.business.websiteUrl,
-      "description": convert(businessRes.data.business.description, { wordwrap: false }),
+      "@type": businessRes?.data?.business?.category,
+      "name": businessRes?.data?.business?.businessName,
+      "image": businessRes?.data?.business?.logoURl,
+      "url": businessRes?.data?.business?.websiteUrl,
+      "description": convert(businessRes?.data?.business?.description, { wordwrap: false }),
       "address": {
         "@type": "PostalAddress",
-        "streetAddress": businessRes.data.business?.address?.addressLine1 || "",
-        "addressLocality": transformedData.business?.address?.city || "",
-        "addressRegion": transformedData.business?.address?.state || "",
-        "postalCode": businessRes.data.business?.address?.pincode || "",
+        "streetAddress": businessRes?.data?.business?.address?.addressLine1 || "",
+        "addressLocality": transformedData?.business?.address?.city || "",
+        "addressRegion": transformedData?.business?.address?.state || "",
+        "postalCode": businessRes?.data?.business?.address?.pincode || "",
         "addressCountry": "IN"
       },
-      "telephone": businessRes.data.business?.phone || "+91-0000000000",
-      "sameAs": businessRes.data.business?.socialLinks || []
+      "telephone": businessRes?.data?.business?.phone || "+91-0000000000",
+      "sameAs": businessRes?.data?.business?.socialLinks || []
     };
 
     const headerList = await headers();
