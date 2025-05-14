@@ -148,14 +148,10 @@ export default async function Page() {
   }
 }
 
+
 export async function generateMetadata(): Promise<Metadata> {
-  const headerList = await headers();
-  const protocol = headerList.get("x-forwarded-proto") || "https";
-  const host = headerList.get("host") || "example.com";
-  const fullUrl = `${protocol}://${host}/services`;
-    
   const businessRes = await fetchBusinessData();
-  const metaData = await getMetaTagsOfPage(fullUrl);
+  const metaData = await getMetaTagsOfPage(`${businessRes?.data?.business?.websiteUrl}/`);
   const business = businessRes?.data?.business;
 
   if (!business) {
@@ -174,23 +170,20 @@ export async function generateMetadata(): Promise<Metadata> {
   })  || `Welcome to ${business.businessName}`;
   
   const keywords =
-    metaData.keywords || [];
-    
+    metaData.keywords || `${business.businessName}, services, business`;
+
   return {
     title: {
       default: metaData.title,
       template: `%s | ${business.businessName}`
     },
-    description: business.shortBio,
-    keywords: keywords?.map((k: any) => k.keyword).join(", "),
-    metadataBase: new URL(fullUrl),
-    alternates: {
-      canonical: fullUrl, // ✅ sets <link rel="canonical">
-    },
+    description: description,
+    keywords: keywords,
+    metadataBase: new URL(siteUrl),
     openGraph: {
       type: "website",
       title: metaData.title,
-      description: business.shortBio,
+      description: description,
       siteName: business.businessName,
       images: [
         {
@@ -204,7 +197,7 @@ export async function generateMetadata(): Promise<Metadata> {
     twitter: {
       card: "summary_large_image",
       title: metaData.title,
-      description: business.shortBio,
+      description: description,
       images: [business.logoURl || "/favicon.ico"],
       creator: "@" + business.businessName
     },
