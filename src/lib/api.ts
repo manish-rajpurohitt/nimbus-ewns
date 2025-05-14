@@ -18,6 +18,7 @@ async function getVisitorToken(domainName: any, retryCount = 0) {
     const retryDelay = 1000;
 
     try {
+      if(domainName === "172.31.38.139") return null;
       const res = await axios.get(
         `${API_BASE_URL}/website/getVisitorToken?domainName=${domainName}`,
         {
