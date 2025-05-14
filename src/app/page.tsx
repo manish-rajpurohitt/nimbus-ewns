@@ -3,7 +3,7 @@ import AboutUs from "@/components/AboutUs";
 import { redirect } from "next/navigation";
 import Services from "@/components/Services";
 import { fetchBusinessData, getRedirectUrl } from "@/utils/api.utils";
-import { api } from "@/lib/api";
+import { api, getMetaTagsOfPage } from "@/lib/api";
 import { debugLog } from "@/utils/debug.util";
 import Appointment from "@/components/Appointment";
 import Testimonials from "@/components/Testimonials";
@@ -11,6 +11,10 @@ import BlogList from "@/components/Blog/BlogList";
 import { headers } from "next/headers";
 import { Metadata } from "next";
 import { getPageMEtadata } from "@/utils/common.util";
+import { convert } from "html-to-text";
+import Head from "next/head";
+import JsonLd from "@/components/common/JsonLd";
+
 
 export default async function Page() {
   try {
@@ -61,11 +65,37 @@ export default async function Page() {
         }
       }
     };
+    console.log("Transformed business data", transformedData);
 
     debugLog("HomePage", "Transformed business data", transformedData);
 
+    const schema = {
+      "@context": "https://schema.org",
+      "@type": businessRes.data.business.businessType,
+      "name": businessRes.data.business.businessName,
+      "image": businessRes.data.business.logoURl,
+      "url": businessRes.data.business.websiteUrl,
+      "description": convert(businessRes.data.business.description, { wordwrap: false }),
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": businessRes.data.business?.address?.addressLine1 || "",
+        "addressLocality": transformedData.business?.address?.city || "",
+        "addressRegion": transformedData.business?.address?.state || "",
+        "postalCode": businessRes.data.business?.address?.pincode || "",
+        "addressCountry": "IN"
+      },
+      "telephone": businessRes.data.business?.phone || "+91-0000000000",
+      "sameAs": businessRes.data.business?.socialLinks || []
+    };
+
+    const headerList = await headers();
+    const protocol = headerList.get("x-forwarded-proto") || "https";
+    const host = headerList.get("host") || "example.com";
+    const fullUrl = `${protocol}://${host}/`;
+    
     return (
       <>
+        <JsonLd data={schema} />
         <div className="bg-white">
           <Banner businessData={transformedData} />
         </div>
@@ -123,24 +153,91 @@ export default async function Page() {
   }
 }
 
-export async function generateMetadata({ params }: { params: any; }): Promise<Metadata> {
-  // console.log("🚀 Running generateMetadata for:", params);
-
-  try {
-
-    const headerList = await headers();
+export async function generateMetadata(): Promise<Metadata> {
+  const headerList = await headers();
     const protocol = headerList.get("x-forwarded-proto") || "https";
     const host = headerList.get("host") || "example.com";
     const fullUrl = `${protocol}://${host}/`;
-    // console.log("-----------------------------------------------------------" + fullUrl + "-------------------------------------------");
-    // const fullUrl = `https://icontechpro.com/`;
+    
+  const businessRes = await fetchBusinessData();
+  const metaData = await getMetaTagsOfPage(fullUrl);
+  const business = businessRes?.data?.business;
 
-    return await getPageMEtadata(fullUrl);
-  } catch (error) {
-    // console.error("⚠️ Metadata Error:", error);
+  if (!business) {
+    console.error("Failed to fetch business data for metadata");
     return {
-      title: "Default Title",
-      description: "Default Description",
+      title: "Loading...",
+      icons: {
+        icon: [{ url: "/favicon.ico", type: "image/x-icon" }]
+      }
     };
   }
+
+  const description = convert(business.description, {
+    wordwrap: false, // optional
+    selectors: [{ selector: 'a', options: { ignoreHref: true } }] // optional
+  })  || `Welcome to ${business.businessName}`;
+  
+  const keywords =
+    metaData.keywords || `${business.businessName}, services, business`;
+    
+    
+
+  return {
+    title: {
+      default: metaData.title,
+      template: `%s | ${business.businessName}`
+    },
+    description: business.shortBio,
+    keywords: keywords.map((k: any) => k.keyword).join(", "),
+    metadataBase: new URL(fullUrl),
+    alternates: {
+      canonical: fullUrl, // ✅ sets <link rel="canonical">
+    },
+    openGraph: {
+      type: "website",
+      title: metaData.title,
+      description: business.shortBio,
+      siteName: business.businessName,
+      images: [
+        {
+          url: business.logoURl || "/favicon.ico",
+          width: 1200,
+          height: 630,
+          alt: business.businessName
+        }
+      ]
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: metaData.title,
+      description: business.shortBio,
+      images: [business.logoURl || "/favicon.ico"],
+      creator: "@" + business.businessName
+    },
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+        "max-video-preview": -1,
+        "max-image-preview": "large",
+        "max-snippet": -1
+      }
+    },
+    icons: {
+      icon: [
+        {
+          url: business.logoURl,
+          type: "image/x-icon"
+        }
+      ],
+      shortcut: ["/favicon.ico"],
+      apple: [{ url: "/apple-icon.png", sizes: "180x180", type: "image/png" }]
+    },
+    verification: {
+      google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION || undefined
+    }
+  };
 }

@@ -14,6 +14,8 @@ import "@/assets/css/index";
 import "@/assets/ecom-css/index";
 import "@/assets/css/albums.css";
 import { headers } from "next/headers";
+import { convert } from 'html-to-text';
+import { getMetaTagsOfPage } from "@/lib/api";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -27,80 +29,84 @@ const geistMono = Geist_Mono({
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
 
-export async function generateMetadata(): Promise<Metadata> {
-  const businessRes = await fetchBusinessData();
-  const business = businessRes?.data?.business;
+// export async function generateMetadata(): Promise<Metadata> {
+//   const businessRes = await fetchBusinessData();
+//   const metaData = await getMetaTagsOfPage("https://kjsdental.co.in/");
+//   const business = businessRes?.data?.business;
 
-  if (!business) {
-    console.error("Failed to fetch business data for metadata");
-    return {
-      title: "Loading...",
-      icons: {
-        icon: [{ url: "/favicon.ico", type: "image/x-icon" }]
-      }
-    };
-  }
+//   if (!business) {
+//     console.error("Failed to fetch business data for metadata");
+//     return {
+//       title: "Loading...",
+//       icons: {
+//         icon: [{ url: "/favicon.ico", type: "image/x-icon" }]
+//       }
+//     };
+//   }
 
-  const description =
-    business.description || `Welcome to ${business.businessName}`;
-  const keywords =
-    business.keywords || `${business.businessName}, services, business`;
+//   const description = convert(business.description, {
+//     wordwrap: false, // optional
+//     selectors: [{ selector: 'a', options: { ignoreHref: true } }] // optional
+//   })  || `Welcome to ${business.businessName}`;
+  
+//   const keywords =
+//     metaData.keywords || `${business.businessName}, services, business`;
 
-  return {
-    title: {
-      default: business.businessName,
-      template: `%s | ${business.businessName}`
-    },
-    description: description,
-    keywords: keywords,
-    metadataBase: new URL(siteUrl),
-    openGraph: {
-      type: "website",
-      title: business.businessName,
-      description: description,
-      siteName: business.businessName,
-      images: [
-        {
-          url: business.logoURl || "/favicon.ico",
-          width: 1200,
-          height: 630,
-          alt: business.businessName
-        }
-      ]
-    },
-    twitter: {
-      card: "summary_large_image",
-      title: business.businessName,
-      description: description,
-      images: [business.logoURl || "/favicon.ico"],
-      creator: "@" + (business.twitterHandle || business.businessName)
-    },
-    robots: {
-      index: true,
-      follow: true,
-      googleBot: {
-        index: true,
-        follow: true,
-        "max-video-preview": -1,
-        "max-image-preview": "large",
-        "max-snippet": -1
-      }
-    },
-    icons: {
-      icon: [
-        {
-          url: business.logoURl || "/favicon.ico",
-          type: "image/x-icon"
-        }
-      ],
-      shortcut: ["/favicon.ico"],
-      apple: [{ url: "/apple-icon.png", sizes: "180x180", type: "image/png" }]
-    },
-    verification: {
-      google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION || undefined
-    }
-  };
-}
+//   return {
+//     title: {
+//       default: metaData.title,
+//       template: `%s | ${business.businessName}`
+//     },
+//     description: description,
+//     keywords: keywords,
+//     metadataBase: new URL(siteUrl),
+//     openGraph: {
+//       type: "website",
+//       title: metaData.title,
+//       description: description,
+//       siteName: business.businessName,
+//       images: [
+//         {
+//           url: business.logoURl || "/favicon.ico",
+//           width: 1200,
+//           height: 630,
+//           alt: business.businessName
+//         }
+//       ]
+//     },
+//     twitter: {
+//       card: "summary_large_image",
+//       title: metaData.title,
+//       description: description,
+//       images: [business.logoURl || "/favicon.ico"],
+//       creator: "@" + business.businessName
+//     },
+//     robots: {
+//       index: true,
+//       follow: true,
+//       googleBot: {
+//         index: true,
+//         follow: true,
+//         "max-video-preview": -1,
+//         "max-image-preview": "large",
+//         "max-snippet": -1
+//       }
+//     },
+//     icons: {
+//       icon: [
+//         {
+//           url: business.logoURl,
+//           type: "image/x-icon"
+//         }
+//       ],
+//       shortcut: ["/favicon.ico"],
+//       apple: [{ url: "/apple-icon.png", sizes: "180x180", type: "image/png" }]
+//     },
+//     verification: {
+//       google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION || undefined
+//     }
+//   };
+// }
 
 async function getInitialData() {
   try {
@@ -127,13 +133,31 @@ export default async function RootLayout({
 }) {
   const headersList = await headers();
   const cookieStore = await cookies();
+  const businessRes = await getInitialData();
 
   const pathname = headersList.get("x-pathname") || "/";
   const hideHeaderFooter = pathname.includes("/media/");
   const data = await getInitialData();
   const cart = await getCart();
   const cartCount = cart?.items?.length || 0;
-
+  const schema = {
+    "@context": "https://schema.org",
+    "@type": businessRes.business.category,
+    "name": businessRes.business.businessName,
+    "image": businessRes.business.logoURl,
+    "url": businessRes.business.websiteUrl,
+    "description": convert(businessRes.business.shortBio, { wordwrap: false }),
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": businessRes.business?.address?.addressLine1 || "",
+      "addressLocality": businessRes.business?.address?.city || "",
+      "addressRegion": businessRes.business?.address?.state || "",
+      "postalCode": businessRes.business?.address?.pincode || "",
+      "addressCountry": "IN"
+    },
+    "telephone": businessRes.business?.phone || "+91-0000000000",
+    "sameAs": businessRes.business?.externalLinks.map(link => link.url) || []
+  };
   return (
     <html lang="en">
       <head>
@@ -168,6 +192,10 @@ export default async function RootLayout({
             `
           }}
         />
+         <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+          />
         <script
           dangerouslySetInnerHTML={{
             __html: `

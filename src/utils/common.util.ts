@@ -226,7 +226,7 @@ export const getPageMEtadata = async (
   try {
     const businessData = await fetchBusinessData();
     const businessName = businessData?.data?.business?.businessName;
-    const businessDescription = businessData?.data?.business?.description;
+    const businessDescription = businessData?.data?.business?.shortBio;
     const businessLogo = businessData?.data?.business?.logoURl;
 
     const metaTags = await getMetaTagsOfPage(url);
