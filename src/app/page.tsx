@@ -70,7 +70,7 @@ export default async function Page() {
 
     const schema = {
       "@context": "https://schema.org",
-      "@type": businessRes.data.business.businessType,
+      "@type": businessRes.data.business.category,
       "name": businessRes.data.business.businessName,
       "image": businessRes.data.business.logoURl,
       "url": businessRes.data.business.websiteUrl,

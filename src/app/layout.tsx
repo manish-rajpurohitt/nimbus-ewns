@@ -142,7 +142,7 @@ export default async function RootLayout({
   const cartCount = cart?.items?.length || 0;
   const schema = {
     "@context": "https://schema.org",
-    "@type": businessRes.business.category,
+    "@type": businessRes.business?.category,
     "name": businessRes.business.businessName,
     "image": businessRes.business.logoURl,
     "url": businessRes.business.websiteUrl,
