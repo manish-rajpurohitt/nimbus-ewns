@@ -178,7 +178,7 @@ export async function generateMetadata(): Promise<Metadata> {
   })  || `Welcome to ${business.businessName}`;
   
   const keywords =
-    metaData.keywords || `${business.businessName}, services, business`;
+    metaData.keywords || [];
     
   return {
     title: {
@@ -186,7 +186,7 @@ export async function generateMetadata(): Promise<Metadata> {
       template: `%s | ${business.businessName}`
     },
     description: business.shortBio,
-    keywords: keywords.map((k: any) => k.keyword).join(", "),
+    keywords: keywords?.map((k: any) => k.keyword).join(", "),
     metadataBase: new URL(fullUrl),
     alternates: {
       canonical: fullUrl, // ✅ sets <link rel="canonical">
