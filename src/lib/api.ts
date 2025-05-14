@@ -45,9 +45,9 @@ async function getVisitorToken(domainName: any, retryCount = 0) {
   } catch (error: any) {
     const errorMessage = error?.response?.data?.message || error.message;
     // console.error(`Visitor token error (attempt ${retryCount + 1}):`, {
-      domain: domainName,
-      error: errorMessage
-    });
+    //   domain: domainName,
+    //   error: errorMessage
+    // });
     return null;
   }
 }
