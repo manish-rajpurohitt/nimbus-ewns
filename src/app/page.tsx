@@ -179,7 +179,7 @@ export async function generateMetadata(): Promise<Metadata> {
     },
     description: description,
     keywords: keywords,
-    metadataBase: new URL(siteUrl),
+    metadataBase: businessRes.data.business.websiteUrl,
     openGraph: {
       type: "website",
       title: metaData.title,
