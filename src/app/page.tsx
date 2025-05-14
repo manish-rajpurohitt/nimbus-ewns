@@ -197,7 +197,7 @@ export async function generateMetadata(): Promise<Metadata> {
     twitter: {
       card: "summary_large_image",
       title: metaData.title,
-      description: description,
+      description: businessRes.data.business.shortBio,
       images: [business.logoURl || "/favicon.ico"],
       creator: "@" + business.businessName
     },
