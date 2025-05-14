@@ -468,7 +468,7 @@ export async function fetchWithCache(path: string, cacheTime: number = 3600) {
       }
     };
   } catch (error) {
-    console.warn("⚠️ Error fetching metadata:", error);
+    // console.warn("⚠️ Error fetching metadata:", error);
     return {
       isSuccess: false,
       data: {
@@ -593,13 +593,13 @@ export const api = {
         const uniqueIds = new Set(serviceIds);
 
         if (serviceIds.length !== uniqueIds.size) {
-          console.warn("Duplicate services detected in API response:", {
-            total: serviceIds.length,
-            unique: uniqueIds.size,
-            duplicates: serviceIds.filter(
-              (id, index) => serviceIds.indexOf(id) !== index
-            )
-          });
+          // console.warn("Duplicate services detected in API response:", {
+          //   total: serviceIds.length,
+          //   unique: uniqueIds.size,
+          //   duplicates: serviceIds.filter(
+          //     (id, index) => serviceIds.indexOf(id) !== index
+          //   )
+          // });
         }
 
         return {
