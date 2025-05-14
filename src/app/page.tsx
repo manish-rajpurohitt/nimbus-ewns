@@ -37,7 +37,7 @@ export default async function Page() {
       redirect(target);
       }
       catch(Er){
-        console.log(Er);
+        // console.log(Er);
       }
       
     }
