@@ -170,20 +170,20 @@ export async function generateMetadata(): Promise<Metadata> {
   })  || `Welcome to ${business.businessName}`;
   
   const keywords =
-    metaData.keywords || `${business.businessName}, services, business`;
+    metaData.keywords || [];
 
   return {
     title: {
       default: metaData.title,
       template: `%s | ${business.businessName}`
     },
-    description: description,
-    keywords: keywords,
+    description: businessRes.data.business.shortBio,
+    keywords: keywords.map((keyword: string) => keyword.trim()).join(", "),
     metadataBase: businessRes.data.business.websiteUrl,
     openGraph: {
       type: "website",
       title: metaData.title,
-      description: description,
+      description: businessRes.data.business.shortBio,
       siteName: business.businessName,
       images: [
         {
@@ -219,11 +219,14 @@ export async function generateMetadata(): Promise<Metadata> {
           type: "image/x-icon"
         }
       ],
-      shortcut: ["/favicon.ico"],
+      shortcut: business.logoURl ? [business.logoURl] : ["/favicon.ico"],
       apple: [{ url: "/apple-icon.png", sizes: "180x180", type: "image/png" }]
     },
     verification: {
       google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION || undefined
+    },
+    alternates: {
+      canonical: `${business.websiteUrl}/`
     }
   };
 }
