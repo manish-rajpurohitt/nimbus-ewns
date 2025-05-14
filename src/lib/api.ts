@@ -454,28 +454,14 @@ export async function fetchWithCache(path: string, cacheTime: number = 3600) {
       `/website/getMetaTagsOfPage?pageUrl=${path}`
     );
 
-    console.log("PAthhhhhhhhhhhhhhhhhhhhhhhhhhhhh", path, response);
-
     if (response?.data?.isSuccess && response?.data?.data) {
       return response.data;
     }
 
-    return {
-      isSuccess: false,
-      data: {
-        title: "Default Title",
-        description: "Default Description"
-      }
-    };
+    return null;
   } catch (error) {
     // console.warn("⚠️ Error fetching metadata:", error);
-    return {
-      isSuccess: false,
-      data: {
-        title: "Default Title",
-        description: "Default Description"
-      }
-    };
+    return null;
   }
 }
 
