@@ -67,7 +67,7 @@ export default async function Page() {
     console.log("Transformed business data", transformedData);
 
     debugLog("HomePage", "Transformed business data", transformedData);
-
+    console.log("Scheeeeeeeeeeeeeeeeeeeeeeeema", businessRes.data.business.category);
     const schema = {
       "@context": "https://schema.org",
       "@type": businessRes.data.business.category,
