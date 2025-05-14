@@ -61,9 +61,9 @@ export default function AddressFormDialog() {
       const form = e.currentTarget;
       const formData = new FormData(form);
 
-      console.log("Form data being sent:", Object.fromEntries(formData));
+      // console.log("Form data being sent:", Object.fromEntries(formData));
       const result = await addAddress(formData);
-      console.log("Add address result:", result);
+      // console.log("Add address result:", result);
 
       if (result.success) {
         toast.success("Address added successfully");

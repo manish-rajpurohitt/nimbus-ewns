@@ -23,7 +23,7 @@ export default function CheckoutContent({
   initialDeliveryCharges,
   defaultAddressId
 }: CheckoutContentProps) {
-  console.log("Available payment methods:", paymentMethods);
+  // console.log("Available payment methods:", paymentMethods);
 
   const router = useRouter();
   const [selectedAddress, setSelectedAddress] = useState(defaultAddressId);
@@ -46,11 +46,11 @@ export default function CheckoutContent({
       formData.append("addressId", selectedAddress);
       formData.append("paymentMethod", selectedPayment);
 
-      console.log("Placing order with:", {
-        addressId: selectedAddress,
-        paymentMethod: selectedPayment,
-        address: addresses.find((a) => a._id === selectedAddress)
-      });
+      // console.log("Placing order with:", {
+      //   addressId: selectedAddress,
+      //   paymentMethod: selectedPayment,
+      //   address: addresses.find((a) => a._id === selectedAddress)
+      // });
 
       const result = await placeOrder(formData);
 

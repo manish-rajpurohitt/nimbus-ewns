@@ -13,7 +13,7 @@ export async function getDeliveryCharges(addressId: string) {
       headers: { Authorization: `Bearer ${token?.value}` }
     });
 
-    console.log("Delivery charges response:", res);
+    // console.log("Delivery charges response:", res);
 
     // Return delivery charges in correct format
     if (res.isSuccess && res.data) {
@@ -39,11 +39,11 @@ export async function getPaymentMethods() {
       }
     });
 
-    console.log("Raw payment methods response:", res);
+    // console.log("Raw payment methods response:", res);
 
     // Match reference error handling
     if (!res.isSuccess) {
-      console.log("Payment methods API failed, using defaults");
+      // console.log("Payment methods API failed, using defaults");
       return ["COD", "Razor Pay"];
     }
 
@@ -79,7 +79,7 @@ export async function placeOrder(formData: FormData) {
       }
     );
 
-    console.log("Order creation response:", res);
+    // console.log("Order creation response:", res);
 
     if (!res.isSuccess) {
       return { success: false, error: res.message || "Failed to place order" };

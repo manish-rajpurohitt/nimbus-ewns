@@ -29,13 +29,13 @@ export default function CheckoutSummary({
   // Final total calculation matching reference
   const totalAmount = (basePrice + tax - discount + delivery).toFixed(2);
 
-  console.log("Price details:", {
-    basePrice,
-    tax,
-    discount,
-    delivery,
-    total: totalAmount
-  });
+  // console.log("Price details:", {
+  //   basePrice,
+  //   tax,
+  //   discount,
+  //   delivery,
+  //   total: totalAmount
+  // });
 
   return (
     <div className="bg-white p-6 rounded-lg shadow-lg h-fit sticky top-24">

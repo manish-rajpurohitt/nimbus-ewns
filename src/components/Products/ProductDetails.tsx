@@ -10,7 +10,7 @@ interface ProductProps {
 }
 
 export default function ProductDetails({ product }: any) {
-  console.log("Rendering product:", JSON.stringify(product, null, 2));
+  // console.log("Rendering product:", JSON.stringify(product, null, 2));
 
   // Handle price calculations safely
   const sellingPrice = Number(

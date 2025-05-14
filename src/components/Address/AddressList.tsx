@@ -11,16 +11,16 @@ export default function AddressList({ addresses }: { addresses: any[] }) {
   const router = useRouter();
   const [isDeleting, setIsDeleting] = useState<string | null>(null);
 
-  console.log("Rendering addresses:", addresses);
+  // console.log("Rendering addresses:", addresses);
 
   const handleDelete = async (addressId: string) => {
     if (!confirm("Are you sure you want to delete this address?")) return;
 
     setIsDeleting(addressId);
     try {
-      console.log("Deleting address:", addressId);
+      // console.log("Deleting address:", addressId);
       const result : any = await deleteAddress(addressId);
-      console.log("Delete result:", result);
+      // console.log("Delete result:", result);
 
       if (result.success) {
         toast.success("Address deleted successfully");

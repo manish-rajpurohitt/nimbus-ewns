@@ -13,7 +13,7 @@ export default async function AddressPage() {
   }
 
   const addresses : any = await getAddresses();
-  console.log("Fetched addresses:", addresses);
+  // console.log("Fetched addresses:", addresses);
 
   return (
     <div className="container mx-auto px-4 py-8">

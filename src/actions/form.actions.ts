@@ -11,11 +11,11 @@ export async function submitContactForm(data: {
   isNewsletterSubscribed: boolean;
   businessId: string;
 }) {
-  console.log("Server Action - Submitting form:", data); // Debug log
+  // console.log("Server Action - Submitting form:", data); // Debug log
 
   try {
     const response = await api.business.sendContactMessage(data);
-    console.log("Server Action - API response:", response); // Debug log
+    // console.log("Server Action - API response:", response); // Debug log
 
     return {
       isSuccess: Boolean(response?.isSuccess),

@@ -53,7 +53,7 @@ export default async function ServicePage({
 
 
 export async function generateMetadata({ params, id }: { params: any; id: string; }): Promise<Metadata> {
-  console.log("🚀 Running generateMetadata for:", params);
+  // console.log("🚀 Running generateMetadata for:", params);
 
   try {
 
@@ -61,7 +61,7 @@ export async function generateMetadata({ params, id }: { params: any; id: string
     const protocol = headerList.get("x-forwarded-proto") || "https";
     const host = headerList.get("host") || "example.com";
     const fullUrl = `${protocol}://${host}/service/${params.id}`;
-    console.log(params)
+    // console.log(params)
     // const fullUrl = `https://icontechpro.com/service/${params.id}`;
 
     return await getPageMEtadata(fullUrl);

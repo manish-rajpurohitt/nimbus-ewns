@@ -449,6 +449,7 @@ export async function getMetaTagsOfPage(path: any) {
 export async function fetchWithCache(path: string, cacheTime: number = 3600) {
   try {
     const apiClient = await createApiClient();
+    console.log(path);
     const response = await apiClient.get(
       `/website/getMetaTagsOfPage?pageUrl=${path}`
     );

@@ -38,7 +38,7 @@ export default async function BlogPage({
 }
 
 export async function generateMetadata({ params, sku }: { params: any; sku: string; }): Promise<Metadata> {
-  console.log("🚀 Running generateMetadata for:", params);
+  // console.log("🚀 Running generateMetadata for:", params);
 
   try {
 
@@ -46,7 +46,7 @@ export async function generateMetadata({ params, sku }: { params: any; sku: stri
     const protocol = headerList.get("x-forwarded-proto") || "https";
     const host = headerList.get("host") || "example.com";
     const fullUrl = `${protocol}://${host}/blog/${sku}`;
-    console.log(params)
+    // console.log(params)
     // const fullUrl = `https://icontechpro.com/blog/${sku}`;
 
     return await getPageMEtadata(fullUrl);

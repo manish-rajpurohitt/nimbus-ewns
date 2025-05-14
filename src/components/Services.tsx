@@ -30,13 +30,6 @@ export default function Services({
 
   if (!services) return <Loader />;
 
-  console.log("Services Component Debug:", {
-    currentPage,
-    totalPages,
-    servicesCount: services?.length,
-    isHomepage
-  });
-
   return (
     <section className="py-16 px-4 md:px-8">
       <div className="departments">

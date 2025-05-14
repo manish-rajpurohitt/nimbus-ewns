@@ -38,12 +38,12 @@ export default async function BlogsPage({
       api.business.getBlogs(page, limit)
     ]);
 
-    console.log("Blog Data:", {
-      totalBlogsAvailable: totalBlogs,
-      currentPageBlogs: blogsRes?.data?.blogs?.length,
-      currentPage: page,
-      itemsPerPage: limit
-    });
+    // console.log("Blog Data:", {
+    //   totalBlogsAvailable: totalBlogs,
+    //   currentPageBlogs: blogsRes?.data?.blogs?.length,
+    //   currentPage: page,
+    //   itemsPerPage: limit
+    // });
 
     if (!businessRes?.isSuccess) {
       throw new Error("Failed to fetch business data");
@@ -113,7 +113,7 @@ export default async function BlogsPage({
 
 
 export async function generateMetadata({ params}: { params: any; }): Promise<Metadata> {
-  console.log("🚀 Running generateMetadata for:", params);
+  // console.log("🚀 Running generateMetadata for:", params);
 
   try {
 
@@ -121,7 +121,7 @@ export async function generateMetadata({ params}: { params: any; }): Promise<Met
     const protocol = headerList.get("x-forwarded-proto") || "https";
     const host = headerList.get("host") || "example.com";
     const fullUrl = `${protocol}://${host}/blogs`;
-    console.log(params)
+    // console.log(params)
     // const fullUrl = `https://icontechpro.com/blogs`;
 
     return await getPageMEtadata(fullUrl);

@@ -41,7 +41,7 @@ export default async function AboutPage() {
 }
 
 export async function generateMetadata({ params }: { params: any; }): Promise<Metadata> {
-  console.log("🚀 Running generateMetadata for:", params);
+  // console.log("🚀 Running generateMetadata for:", params);
 
   try {
 

@@ -27,7 +27,7 @@ export default function ContactForm({
       if (isSubmitting) return;
       setIsSubmitting(true);
 
-      console.log("Form submission started"); // Debug log
+      // console.log("Form submission started"); // Debug log
 
       const data = {
         name: formData.get("name") as string,
@@ -59,9 +59,9 @@ export default function ContactForm({
         return;
       }
 
-      console.log("Submitting form data:", data); // Debug log
+      // console.log("Submitting form data:", data); // Debug log
       const response = await submitContactForm(data);
-      console.log("Form submission response:", response); // Debug log
+      // console.log("Form submission response:", response); // Debug log
 
       if (response?.isSuccess) {
         toast.success("Thank you! Your message has been sent successfully.", {

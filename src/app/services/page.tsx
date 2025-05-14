@@ -11,7 +11,7 @@ export async function generateMetadata({
 }: {
   params: any;
 }): Promise<Metadata> {
-  console.log("🚀 Running generateMetadata for:", params);
+  // console.log("🚀 Running generateMetadata for:", params);
 
   try {
     const headerList = await headers();

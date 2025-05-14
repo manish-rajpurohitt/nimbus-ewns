@@ -17,7 +17,7 @@ export default function PaymentMethodList({
   const availableMethods =
     Array.isArray(methods) && methods.length > 0 ? methods : ["COD"];
 
-  console.log("Available payment methods:", availableMethods);
+  // console.log("Available payment methods:", availableMethods);
 
   // Match reference error handling
   if (!methods || methods.length === 0) {
