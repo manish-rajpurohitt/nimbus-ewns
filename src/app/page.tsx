@@ -23,7 +23,6 @@ export default async function Page() {
       api.business.getBlogs(1, 3),
       getRedirectUrl()
     ]);
-    console.log(isRedirect);
 
     if (
       isRedirect?.isSuccess &&
@@ -35,7 +34,6 @@ export default async function Page() {
         ? isRedirect.data.redirectDomain
         : `https://${isRedirect.data.redirectDomain}`;
     
-      console.log("🔁 Redirecting to:", target);
       redirect(target);
       }
       catch(Er){
@@ -64,10 +62,8 @@ export default async function Page() {
         }
       }
     };
-    console.log("Transformed business data", transformedData);
 
     debugLog("HomePage", "Transformed business data", transformedData);
-    console.log("Scheeeeeeeeeeeeeeeeeeeeeeeema", businessRes.data.business.category);
     const schema = {
       "@context": "https://schema.org",
       "@type": businessRes.data.business.category,

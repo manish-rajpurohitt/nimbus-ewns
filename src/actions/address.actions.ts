@@ -13,7 +13,6 @@ export async function getAddresses() {
       headers: { Authorization: `Bearer ${token?.value}` }
     });
 
-    console.log("Raw address response:", res);
 
     // Return raw data instead of wrapping it
     if (!res.isSuccess) {
@@ -118,7 +117,6 @@ export async function deleteAddress(addressId: string) {
       }
     });
 
-    console.log("Delete address response:", res);
 
     revalidatePath("/address");
     return { success: true };
@@ -131,7 +129,6 @@ export async function deleteAddress(addressId: string) {
 export async function getPincodeDetails(pincode: string) {
   try {
     const res = await get(`/website/address/getPincode?pincode=${pincode}`);
-    console.log("Pincode lookup response:", res);
     return res.isSuccess
       ? { success: true, data: res.data }
       : { success: false, error: res.message };

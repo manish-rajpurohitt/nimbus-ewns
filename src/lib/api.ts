@@ -54,7 +54,6 @@ async function getVisitorToken(domainName: any, retryCount = 0) {
 const getServerHostname = async () => {
   const headersList = await headers();
   const host = headersList.get("host"); // This returns hostname with optional port
-  console.log("--------------------------------------", host);
   return host;
   // return "icontechpro.ewns.in";
 };
@@ -574,13 +573,6 @@ export const api = {
         const client = await createApiClient();
         const skip = (pageNumber - 1) * limit;
 
-        console.log("Fetching services with:", {
-          pageNumber,
-          limit,
-          skip,
-          sortBy
-        });
-
         const response = await client.get<ServiceResponse>(
           `/website/getServices?pageNumber=${pageNumber}&limit=${limit}&skip=${skip}&sortBy=${sortBy}`
         );
@@ -833,10 +825,8 @@ export const api = {
       businessId: string;
     }) {
       try {
-        console.log("Sending contact message:", data); // Debug log
         const client = await createApiClient();
         const response = await client.post("/website/contact", data);
-        console.log("Contact API response:", response.data); // Debug log
 
         return {
           isSuccess: response?.data?.isSuccess ?? false,
@@ -854,8 +844,6 @@ export const api = {
     async getAllServices() {
       try {
         const client = await createApiClient();
-
-        console.log("Fetching all services");
 
         const response = await client.get<ServiceResponse>(
           `/website/getServices?getAll=true`

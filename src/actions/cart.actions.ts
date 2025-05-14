@@ -57,7 +57,6 @@ export async function addToCart(formData: FormData): Promise<any> {
 
     const user = await validateAuth();
     if (!user) {
-      console.log("Add to cart failed: User not authenticated");
       return { success: false, error: "Please login to add items to cart" };
     }
 
@@ -99,7 +98,6 @@ export async function removeFromCart(formData: FormData) {
   try {
     const user = await validateAuth();
     if (!user) {
-      console.log("Remove from cart failed: User not authenticated");
       return { success: false, error: "Please login first" };
     }
 
@@ -107,14 +105,12 @@ export async function removeFromCart(formData: FormData) {
     const token = cookieStore.get("_et");
 
     if (!token?.value) {
-      console.log("Remove from cart failed: No auth token");
       return { success: false, error: "Authentication required" };
     }
 
     const productId = formData.get("productId");
     const quantity = Number(formData.get("quantity"));
 
-    console.log("Removing from cart:", { productId, quantity });
 
     // Changed to PUT method to match reference implementation
     const res = await put(
