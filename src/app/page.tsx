@@ -12,7 +12,6 @@ import { headers } from "next/headers";
 import { Metadata } from "next";
 import { getPageMEtadata } from "@/utils/common.util";
 import { convert } from "html-to-text";
-import Head from "next/head";
 import JsonLd from "@/components/common/JsonLd";
 
 
@@ -155,9 +154,9 @@ export default async function Page() {
 
 export async function generateMetadata(): Promise<Metadata> {
   const headerList = await headers();
-    const protocol = headerList.get("x-forwarded-proto") || "https";
-    const host = headerList.get("host") || "example.com";
-    const fullUrl = `${protocol}://${host}/`;
+  const protocol = headerList.get("x-forwarded-proto") || "https";
+  const host = headerList.get("host") || "example.com";
+  const fullUrl = `${protocol}://${host}/services`;
     
   const businessRes = await fetchBusinessData();
   const metaData = await getMetaTagsOfPage(fullUrl);
@@ -181,8 +180,6 @@ export async function generateMetadata(): Promise<Metadata> {
   const keywords =
     metaData.keywords || `${business.businessName}, services, business`;
     
-    
-
   return {
     title: {
       default: metaData.title,
