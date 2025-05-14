@@ -178,7 +178,7 @@ export async function generateMetadata(): Promise<Metadata> {
       template: `%s | ${business.businessName}`
     },
     description: businessRes.data.business.shortBio,
-    keywords: keywords.map((keyword: string) => keyword.trim()).join(", "),
+    keywords: keywords?.map((keyword: any) => keyword?.keyword?.trim()).join(", "),
     metadataBase: businessRes.data.business.websiteUrl,
     openGraph: {
       type: "website",
