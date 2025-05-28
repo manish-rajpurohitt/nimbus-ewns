@@ -10,7 +10,6 @@ import Testimonials from "@/components/Testimonials";
 import BlogList from "@/components/Blog/BlogList";
 import { headers } from "next/headers";
 import { Metadata } from "next";
-import { getPageMEtadata } from "@/utils/common.util";
 import { convert } from "html-to-text";
 import JsonLd from "@/components/common/JsonLd";
 

@@ -1,5 +1,13 @@
+"use client";
 import Image from "next/image";
 import Link from "next/link";
+import { useState, useEffect } from "react";
+import {
+  ChevronLeft,
+  ChevronRight,
+  ChevronUp,
+  ChevronDown,
+} from "lucide-react";
 import { debugLog } from "@/utils/debug.util";
 
 interface BannerProps {
@@ -7,13 +15,13 @@ interface BannerProps {
     business: {
       bannerUrl?: string;
       businessName?: string;
-    };
-    staticData?: {
-      home?: {
-        banner?: {
-          title?: string;
-          subtitle?: string;
-          buttonText?: string;
+      staticData?: {
+        home?: {
+          banner?: {
+            title?: string;
+            subtitle?: string;
+            buttonText?: string;
+          };
         };
       };
     };
@@ -26,27 +34,163 @@ export default function Banner({ businessData }: BannerProps) {
   const bannerData = businessData?.business?.staticData?.home?.banner;
   const businessInfo = businessData?.business;
 
-  const defaultBannerUrl =
-    "https://images.pexels.com/photos/1427107/pexels-photo-1427107.jpeg";
-  const bannerUrl = businessInfo?.bannerUrl || defaultBannerUrl;
+  // Default banner images array
+  const defaultBannerImages = [
+    "https://ewnsalbums.s3.ap-south-1.amazonaws.com/images/67d3d105442a391486ff1669/1748337642852-343773668.JPG",
+    "https://ewnsalbums.s3.ap-south-1.amazonaws.com/images/67d3d105442a391486ff1669/1748337642758-189642621.JPG",
+    "https://ewnsalbums.s3.ap-south-1.amazonaws.com/images/67d3d105442a391486ff1669/1748337754926-165064896.jpg",
+    "https://ewnsalbums.s3.ap-south-1.amazonaws.com/images/67d3d105442a391486ff1669/1748334010534-520295154.jpg",
+    "https://ewnsalbums.s3.ap-south-1.amazonaws.com/images/67d3d105442a391486ff1669/1748337754795-620894404.jpg",
+  ];
+
+  // Use provided banner URL or default images
+  const bannerImages = businessInfo?.bannerUrl
+    ? [businessInfo.bannerUrl, ...defaultBannerImages.slice(1)]
+    : defaultBannerImages;
+
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [isAutoPlaying, setIsAutoPlaying] = useState(true);
+  // Track window width for responsive behavior
+  const [windowWidth, setWindowWidth] = useState(0);
+  const [showContent, setShowContent] = useState(false);
+
+  // Update window width on resize and initial load
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+
+    // Set initial width
+    handleResize();
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  // Automatically show content on desktop
+  const isDesktop = windowWidth >= 768;
+  const contentVisible = isDesktop || showContent;
+
+  // Auto-slide functionality
+  useEffect(() => {
+    if (!isAutoPlaying) return;
+
+    const interval = setInterval(() => {
+      setCurrentImageIndex(
+        (prevIndex) => (prevIndex + 1) % bannerImages.length
+      );
+    }, 5000); // Change image every 5 seconds
+
+    return () => clearInterval(interval);
+  }, [isAutoPlaying, bannerImages.length]);
+
+  const goToPrevious = () => {
+    setIsAutoPlaying(false);
+    setCurrentImageIndex((prevIndex) =>
+      prevIndex === 0 ? bannerImages.length - 1 : prevIndex - 1
+    );
+    // Resume auto-play after 10 seconds
+    setTimeout(() => setIsAutoPlaying(true), 10000);
+  };
+
+  const goToNext = () => {
+    setIsAutoPlaying(false);
+    setCurrentImageIndex((prevIndex) => (prevIndex + 1) % bannerImages.length);
+    // Resume auto-play after 10 seconds
+    setTimeout(() => setIsAutoPlaying(true), 10000);
+  };
+
+  const goToSlide = (index: number) => {
+    setIsAutoPlaying(false);
+    setCurrentImageIndex(index);
+    // Resume auto-play after 10 seconds
+    setTimeout(() => setIsAutoPlaying(true), 10000);
+  };
 
   return (
-    <div className="banner">
+    <div className="banner relative">
+      {/* Image Container */}
       <div className="absolute inset-0 w-full h-full">
-        <Image
-          src={bannerUrl}
-          key={bannerUrl}
-          alt={businessInfo?.businessName || "Business Banner"}
-          fill
-          priority
-          className="object-cover"
-          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 100vw, 100vw"
-          quality={85}
-        />
+        {bannerImages.map((imageUrl, index) => (
+          <div
+            key={index}
+            className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${
+              index === currentImageIndex ? "opacity-100" : "opacity-0"
+            }`}
+          >
+            <Image
+              src={imageUrl}
+              alt={`${businessInfo?.businessName || "Business"} Banner ${
+                index + 1
+              }`}
+              fill
+              priority={index === 0}
+              className="object-cover"
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 100vw, 100vw"
+              quality={90} // Increased from 85 to 90
+            />
+          </div>
+        ))}
       </div>
 
+      {/* Navigation Buttons */}
+      <button
+        onClick={goToPrevious}
+        className="absolute left-2 sm:left-4 top-1/2 transform -translate-y-1/2 
+                   bg-black/50 hover:bg-black/70 text-white p-2 sm:p-3 
+                   rounded-full transition-all duration-300 hover:scale-110 
+                   focus:outline-none focus:ring-2 focus:ring-white/50 z-20"
+        aria-label="Previous image"
+      >
+        <ChevronLeft className="w-4 h-4 sm:w-6 sm:h-6" />
+      </button>
+
+      <button
+        onClick={goToNext}
+        className="absolute right-2 sm:right-4 top-1/2 transform -translate-y-1/2 
+                   bg-black/50 hover:bg-black/70 text-white p-2 sm:p-3 
+                   rounded-full transition-all duration-300 hover:scale-110 
+                   focus:outline-none focus:ring-2 focus:ring-white/50 z-20"
+        aria-label="Next image"
+      >
+        <ChevronRight className="w-4 h-4 sm:w-6 sm:h-6" />
+      </button>
+
+      {/* Dots Indicator */}
+      <div
+        className="absolute bottom-4 left-1/2 transform -translate-x-1/2 
+                      flex space-x-2 z-20"
+      >
+        {bannerImages.map((_, index) => (
+          <button
+            key={index}
+            onClick={() => goToSlide(index)}
+            className={`w-2 h-2 sm:w-3 sm:h-3 rounded-full transition-all duration-300 
+                       focus:outline-none focus:ring-2 focus:ring-white/50 ${
+                         index === currentImageIndex
+                           ? "bg-white scale-125"
+                           : "bg-white/50 hover:bg-white/80"
+                       }`}
+            aria-label={`Go to slide ${index + 1}`}
+          />
+        ))}
+      </div>
+
+      {/* Image Counter */}
+      <div
+        className="absolute top-4 right-4 bg-black/50 text-white 
+                      px-2 py-1 sm:px-3 sm:py-1.5 rounded-full text-xs sm:text-sm z-20"
+      >
+        {currentImageIndex + 1} / {bannerImages.length}
+      </div>
+
+      {/* Content Overlay - Always visible on desktop, toggle on mobile */}
       <div className="banner-overlay">
-        <div className="banner-content">
+        <div
+          className={`banner-content ${
+            contentVisible ? "opacity-100" : "opacity-0 pointer-events-none"
+          }`}
+        >
           <div className="banner-header">{businessInfo?.businessName}</div>
 
           <h1 className="banner-title">
@@ -61,6 +205,37 @@ export default function Banner({ businessData }: BannerProps) {
             {bannerData?.buttonText || "Get Started"}
           </Link>
         </div>
+
+        {/* Toggle button - ONLY visible on mobile */}
+        {!isDesktop && (
+          <button
+            onClick={() => setShowContent(!showContent)}
+            className="content-toggle-button"
+            aria-label={showContent ? "Hide content" : "Show content"}
+          >
+            {showContent ? (
+              <>
+                <ChevronDown className="toggle-icon" />
+                <span className="toggle-text">Hide Info</span>
+              </>
+            ) : (
+              <>
+                <ChevronUp className="toggle-icon" />
+                <span className="toggle-text">View Business Info</span>
+              </>
+            )}
+          </button>
+        )}
+      </div>
+
+      {/* Auto-play indicator */}
+      <div className="absolute top-4 left-4 z-20">
+        <div
+          className={`w-2 h-2 rounded-full transition-colors duration-300 ${
+            isAutoPlaying ? "bg-green-500" : "bg-red-500"
+          }`}
+          title={isAutoPlaying ? "Auto-play enabled" : "Auto-play paused"}
+        />
       </div>
     </div>
   );
