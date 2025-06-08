@@ -60,7 +60,7 @@ export default async function RootLayout({
 
   const pathname = headersList.get("x-pathname") || "/";
   const hideHeaderFooter = pathname.includes("/media/");
-  const data = await getInitialData();
+  const data = businessRes;
   const cart = await getCart();
   const cartCount = cart?.items?.length || 0;
   const schema = businessRes?.business ? {
