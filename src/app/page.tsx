@@ -1,45 +1,51 @@
-import Banner from "@/components/Banner";
-import AboutUs from "@/components/AboutUs";
+export const revalidate = 60;
+
+const Banner = dynamic(() => import('@/components/Banner'), { ssr: true });
+const AboutUs = dynamic(() => import('@/components/AboutUs'), { ssr: true });
+const Services = dynamic(() => import('@/components/Services'), { ssr: true });
 import { redirect } from "next/navigation";
-import Services from "@/components/Services";
 import { fetchBusinessData, getRedirectUrl } from "@/utils/api.utils";
 import { api, getMetaTagsOfPage } from "@/lib/api";
 import { debugLog } from "@/utils/debug.util";
 import Appointment from "@/components/Appointment";
-import Testimonials from "@/components/Testimonials";
-import BlogList from "@/components/Blog/BlogList";
+const Testimonials = dynamic(() => import('@/components/Testimonials'), { ssr: true });
+const BlogList = dynamic(() => import('@/components/Blog/BlogList'), { ssr: true });
 import { headers } from "next/headers";
 import { Metadata } from "next";
 import { convert } from "html-to-text";
 import JsonLd from "@/components/common/JsonLd";
+import dynamic from "next/dynamic";
 
 
 export default async function Page() {
   try {
-    const [businessRes, servicesRes, blogsRes, isRedirect] = await Promise.all([
+
+    console.time("fetchBusinessData");
+    // call
+    console.timeEnd("fetchBusinessData");
+    const [businessRes, servicesRes, blogsRes] = await Promise.all([
       fetchBusinessData(),
       api.business.getServices(1, 6), // Fetch first 6 services for homepage
-      api.business.getBlogs(1, 3),
-      getRedirectUrl()
+      api.business.getBlogs(1, 3)
     ]);
 
-    if (
-      isRedirect?.isSuccess &&
-      isRedirect?.data?.isRedirect &&
-      isRedirect?.data?.redirectDomain
-    ) {
-      try{
-        const target = isRedirect.data.redirectDomain.startsWith("http")
-        ? isRedirect.data.redirectDomain
-        : `https://${isRedirect.data.redirectDomain}`;
-    
-      redirect(target);
-      }
-      catch(Er){
-        // console.log(Er);
-      }
-      
-    }
+    // if (
+    //   isRedirect?.isSuccess &&
+    //   isRedirect?.data?.isRedirect &&
+    //   isRedirect?.data?.redirectDomain
+    // ) {
+    //   try {
+    //     const target = isRedirect.data.redirectDomain.startsWith("http")
+    //       ? isRedirect.data.redirectDomain
+    //       : `https://${isRedirect.data.redirectDomain}`;
+
+    //     redirect(target);
+    //   }
+    //   catch (Er) {
+    //     // console.log(Er);
+    //   }
+
+    // }
 
     if (!businessRes?.isSuccess) {
       throw new Error("Failed to fetch business data");
@@ -86,7 +92,7 @@ export default async function Page() {
     const protocol = headerList.get("x-forwarded-proto") || "https";
     const host = headerList.get("host") || "example.com";
     const fullUrl = `${protocol}://${host}/`;
-    
+
     return (
       <>
         <JsonLd data={schema} />
@@ -166,8 +172,8 @@ export async function generateMetadata(): Promise<Metadata> {
   const description = convert(business.description, {
     wordwrap: false, // optional
     selectors: [{ selector: 'a', options: { ignoreHref: true } }] // optional
-  })  || `Welcome to ${business.businessName}`;
-  
+  }) || `Welcome to ${business.businessName}`;
+
   const keywords =
     metaData.keywords || [];
 

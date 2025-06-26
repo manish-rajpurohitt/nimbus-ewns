@@ -21,9 +21,11 @@ interface BannerProps {
             title?: string;
             subtitle?: string;
             buttonText?: string;
+            bannerUrls?: any;
           };
         };
       };
+      featuredImageUrl?: string;
     };
   };
 }
@@ -36,17 +38,13 @@ export default function Banner({ businessData }: BannerProps) {
 
   // Default banner images array
   const defaultBannerImages = [
-    "https://ewnsalbums.s3.ap-south-1.amazonaws.com/images/67d3d105442a391486ff1669/1748337642852-343773668.JPG",
-    "https://ewnsalbums.s3.ap-south-1.amazonaws.com/images/67d3d105442a391486ff1669/1748337642758-189642621.JPG",
-    "https://ewnsalbums.s3.ap-south-1.amazonaws.com/images/67d3d105442a391486ff1669/1748337754926-165064896.jpg",
-    "https://ewnsalbums.s3.ap-south-1.amazonaws.com/images/67d3d105442a391486ff1669/1748334010534-520295154.jpg",
-    "https://ewnsalbums.s3.ap-south-1.amazonaws.com/images/67d3d105442a391486ff1669/1748337754795-620894404.jpg",
+    ""
   ];
 
   // Use provided banner URL or default images
-  const bannerImages = businessInfo?.bannerUrl
-    ? [businessInfo.bannerUrl, ...defaultBannerImages.slice(1)]
-    : defaultBannerImages;
+  const bannerImages = businessInfo?.staticData?.home?.banner?.bannerUrls?.length > 0 ?
+    businessInfo?.staticData?.home?.banner?.bannerUrls
+    : [businessInfo?.featuredImageUrl];
 
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
@@ -114,15 +112,13 @@ export default function Banner({ businessData }: BannerProps) {
         {bannerImages.map((imageUrl, index) => (
           <div
             key={index}
-            className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${
-              index === currentImageIndex ? "opacity-100" : "opacity-0"
-            }`}
+            className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${index === currentImageIndex ? "opacity-100" : "opacity-0"
+              }`}
           >
             <Image
               src={imageUrl}
-              alt={`${businessInfo?.businessName || "Business"} Banner ${
-                index + 1
-              }`}
+              alt={`${businessInfo?.businessName || "Business"} Banner ${index + 1
+                }`}
               fill
               priority={index === 0}
               className="object-cover"
@@ -166,11 +162,10 @@ export default function Banner({ businessData }: BannerProps) {
             key={index}
             onClick={() => goToSlide(index)}
             className={`w-2 h-2 sm:w-3 sm:h-3 rounded-full transition-all duration-300 
-                       focus:outline-none focus:ring-2 focus:ring-white/50 ${
-                         index === currentImageIndex
-                           ? "bg-white scale-125"
-                           : "bg-white/50 hover:bg-white/80"
-                       }`}
+                       focus:outline-none focus:ring-2 focus:ring-white/50 ${index === currentImageIndex
+                ? "bg-white scale-125"
+                : "bg-white/50 hover:bg-white/80"
+              }`}
             aria-label={`Go to slide ${index + 1}`}
           />
         ))}
@@ -187,9 +182,8 @@ export default function Banner({ businessData }: BannerProps) {
       {/* Content Overlay - Always visible on desktop, toggle on mobile */}
       <div className="banner-overlay">
         <div
-          className={`banner-content ${
-            contentVisible ? "opacity-100" : "opacity-0 pointer-events-none"
-          }`}
+          className={`banner-content ${contentVisible ? "opacity-100" : "opacity-0 pointer-events-none"
+            }`}
         >
           <div className="banner-header">{businessInfo?.businessName}</div>
 
@@ -231,9 +225,8 @@ export default function Banner({ businessData }: BannerProps) {
       {/* Auto-play indicator */}
       <div className="absolute top-4 left-4 z-20">
         <div
-          className={`w-2 h-2 rounded-full transition-colors duration-300 ${
-            isAutoPlaying ? "bg-green-500" : "bg-red-500"
-          }`}
+          className={`w-2 h-2 rounded-full transition-colors duration-300 ${isAutoPlaying ? "bg-green-500" : "bg-red-500"
+            }`}
           title={isAutoPlaying ? "Auto-play enabled" : "Auto-play paused"}
         />
       </div>
