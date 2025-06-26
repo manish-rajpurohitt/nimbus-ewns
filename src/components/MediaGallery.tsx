@@ -2,7 +2,9 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import Slider from "react-slick";
+import dynamic from "next/dynamic";
+
+const Slider = dynamic(() => import("react-slick"), { ssr: false });
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 interface MediaItem {
