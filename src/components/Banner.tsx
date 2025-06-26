@@ -116,7 +116,7 @@ export default function Banner({ businessData }: BannerProps) {
               }`}
           >
             <Image
-              src={imageUrl}
+              src={imageUrl || "https://placehold.co/600x400"}
               alt={`${businessInfo?.businessName || "Business"} Banner ${index + 1
                 }`}
               fill

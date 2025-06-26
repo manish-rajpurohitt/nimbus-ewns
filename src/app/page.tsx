@@ -175,7 +175,9 @@ export async function generateMetadata(): Promise<Metadata> {
   }) || `Welcome to ${business.businessName}`;
 
   const keywords =
-    metaData.keywords || [];
+    metaData?.keywords || [];
+
+  if (!metaData) return {};
 
   return {
     title: {

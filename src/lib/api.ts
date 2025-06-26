@@ -10,7 +10,7 @@ async function getVisitorToken(domainName: any, retryCount = 0) {
   try {
     if (!domainName || domainName.includes("localhost")) {
       const defaultDomain =
-        process.env.NEXT_PUBLIC_DEFAULT_DOMAIN || "kjsdental.co.in";
+        process.env.NEXT_PUBLIC_DEFAULT_DOMAIN || "anandbaghdental.com";
       domainName = defaultDomain;
     }
 
@@ -443,7 +443,7 @@ interface CategoriesResponse {
 
 export async function getMetaTagsOfPage(path: any) {
   let response = await fetchWithCache(path);
-  return response.data;
+  return response?.data;
 }
 
 // Update fetchWithCache with better error handling
