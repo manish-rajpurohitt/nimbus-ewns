@@ -237,7 +237,7 @@ export const getPageMEtadata = async (
         icons: {
           icon: [
             {
-              url: businessLogo || "/favicon.ico",
+              url: businessLogo || "",
               type: "image/x-icon"
             }
           ]
@@ -277,7 +277,7 @@ export const getPageMEtadata = async (
       icons: {
         icon: [
           {
-            url: businessLogo || "/favicon.ico",
+            url: businessLogo || "",
             type: "image/x-icon"
           }
         ]
@@ -291,7 +291,7 @@ export const getPageMEtadata = async (
       title: businessName || "Business Website",
       description: "Welcome to our website",
       icons: {
-        icon: [{ url: "/favicon.ico", type: "image/x-icon" }]
+        icon: []
       }
     };
   }

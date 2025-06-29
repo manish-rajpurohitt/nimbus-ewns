@@ -165,7 +165,7 @@ export async function generateMetadata(): Promise<Metadata> {
     return {
       title: "Loading...",
       icons: {
-        icon: [{ url: "/favicon.ico", type: "image/x-icon" }]
+        icon: []
       }
     };
   }
@@ -195,7 +195,7 @@ export async function generateMetadata(): Promise<Metadata> {
       siteName: business.businessName,
       images: [
         {
-          url: business.logoURl || "/favicon.ico",
+          url: business.logoURl,
           width: 1200,
           height: 630,
           alt: business.businessName
@@ -206,7 +206,7 @@ export async function generateMetadata(): Promise<Metadata> {
       card: "summary_large_image",
       title: metaData.title,
       description: businessRes.data.business.shortBio,
-      images: [business.logoURl || "/favicon.ico"],
+      images: [business.logoURl],
       creator: "@" + business.businessName
     },
     robots: {
@@ -227,7 +227,7 @@ export async function generateMetadata(): Promise<Metadata> {
           type: "image/x-icon"
         }
       ],
-      shortcut: business.logoURl ? [business.logoURl] : ["/favicon.ico"],
+      shortcut: business.logoURl ? [business.logoURl] : [],
       apple: [{ url: "/apple-icon.png", sizes: "180x180", type: "image/png" }]
     },
     verification: {
