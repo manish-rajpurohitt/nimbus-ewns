@@ -1,15 +1,15 @@
 export const revalidate = 60;
 
-const Banner = dynamic(() => import('@/components/Banner'), { ssr: true });
-const AboutUs = dynamic(() => import('@/components/AboutUs'), { ssr: true });
-const Services = dynamic(() => import('@/components/Services'), { ssr: true });
+const Banner = dynamic(() => import('@/components/Banner'));
+const AboutUs = dynamic(() => import('@/components/AboutUs'));
+const Services = dynamic(() => import('@/components/Services'));
 import { redirect } from "next/navigation";
 import { fetchBusinessData, getRedirectUrl } from "@/utils/api.utils";
 import { api, getMetaTagsOfPage } from "@/lib/api";
 import { debugLog } from "@/utils/debug.util";
 import Appointment from "@/components/Appointment";
-const Testimonials = dynamic(() => import('@/components/Testimonials'), { ssr: true });
-const BlogList = dynamic(() => import('@/components/Blog/BlogList'), { ssr: true });
+const Testimonials = dynamic(() => import('@/components/Testimonials'));
+const BlogList = dynamic(() => import('@/components/Blog/BlogList'));
 import { headers } from "next/headers";
 import { Metadata } from "next";
 import { convert } from "html-to-text";

@@ -1,5 +1,10 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {
+
+const withBundleAnalyzer = require('@next/bundle-analyzer')({
+  enabled: process.env.ANALYZE === 'true',
+});
+
+module.exports = withBundleAnalyzer({
   eslint: {
     ignoreDuringBuilds: true,
   },
@@ -19,7 +24,7 @@ const nextConfig = {
       }
     ],
     unoptimized: true,
-   },
+  },
   typescript: {
     ignoreBuildErrors: true,
   },
@@ -32,6 +37,4 @@ const nextConfig = {
       }
     ];
   }
-};
-
-module.exports = nextConfig;
+});
