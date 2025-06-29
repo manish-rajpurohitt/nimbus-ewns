@@ -10,7 +10,7 @@ async function getVisitorToken(domainName: any, retryCount = 0) {
   try {
     if (!domainName || domainName.includes("localhost")) {
       const defaultDomain =
-        process.env.NEXT_PUBLIC_DEFAULT_DOMAIN || "anandbaghdental.com";
+        process.env.NEXT_PUBLIC_DEFAULT_DOMAIN || "kjsdental.co.in";
       domainName = defaultDomain;
     }
 
@@ -18,7 +18,6 @@ async function getVisitorToken(domainName: any, retryCount = 0) {
     const retryDelay = 1000;
 
     try {
-      if (domainName === "172.31.38.139") return null;
       const res = await axios.get(
         `${API_BASE_URL}/website/getVisitorToken?domainName=${domainName}`,
         {

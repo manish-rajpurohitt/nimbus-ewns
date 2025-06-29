@@ -3,34 +3,35 @@ import type { NextRequest } from 'next/server';
 
 export function middleware(request: NextRequest) {
   const url = request.nextUrl;
-  const rawPath = url.pathname;
+  const rawPath = url.pathname.toLowerCase().replace(/\/{2,}/g, '/').replace(/\/$/, '') || '/';
 
-  // ✅ Hostname
-  const hostname = request.headers.get('host') || '';
+  // Early exit for static assets
+  if (/\.(ico|png|jpg|jpeg|webp|svg|css|js|woff2?)$/i.test(rawPath)) {
+    return NextResponse.next();
+  }
 
-  // ✅ Normalize the path
-  const normalizedPath =
-    rawPath.toLowerCase().split('?')[0].split('#')[0].replace(/\/+/g, '/').replace(/\/$/, '') || '/';
-
-  // ✅ Redirect www. to non-www (excluding localhost, custom internal domains etc.)
+  // Redirect www to non-www
+  const hostname = url.hostname;
   if (hostname.startsWith('www.') && !hostname.includes('localhost')) {
     const nonWwwHost = hostname.replace(/^www\./, '');
-    const redirectUrl = `https://${nonWwwHost}${normalizedPath}${url.search}`;
+    const redirectUrl = `https://${nonWwwHost}${rawPath}${url.search}`;
     return NextResponse.redirect(redirectUrl, 301);
   }
 
-  // ✅ Add normalized path to request headers
+  // Add x-route-path header
   const requestHeaders = new Headers(request.headers);
-  requestHeaders.set('x-route-path', normalizedPath);
+  requestHeaders.set('x-route-path', rawPath);
 
   const response = NextResponse.next({ request: { headers: requestHeaders } });
 
-  // ✅ Set cookie for use in client if needed
-  response.cookies.set('current-path', normalizedPath, {
-    path: '/',
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'lax'
-  });
+  // Only set cookie if value changed
+  if (request.cookies.get('current-path')?.value !== rawPath) {
+    response.cookies.set('current-path', rawPath, {
+      path: '/',
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+    });
+  }
 
   return response;
 }
