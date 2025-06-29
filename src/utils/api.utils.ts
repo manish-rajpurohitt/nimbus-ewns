@@ -23,7 +23,6 @@ export async function fetchBusinessData() {
     const response: any = await get<BusinessResponse>(
       "/website/getBusinessDetails?getJson=true"
     );
-    // console.log(response.data);
 
     // console.log("Raw Business Response:", response);
 

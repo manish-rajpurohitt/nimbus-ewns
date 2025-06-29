@@ -1,5 +1,5 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
-import { headers } from "next/headers";
+import { cookies, headers } from "next/headers";
 // Base URL from environment variables
 const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_URL || "https://api.ewns.in/api";
@@ -149,39 +149,29 @@ async function fetchApi<T>(
   }
 }
 
-// Update createApiClient to handle token more robustly
-async function createApiClient(): Promise<AxiosInstance> {
+export async function createApiClient(): Promise<AxiosInstance> {
   const client = axios.create({
     baseURL: API_BASE_URL,
-    timeout: 30000
+    timeout: 30000,
   });
 
-  let token: string | null = null;
+  // ✅ Properly await the cookies() function
+  const cookieStore = await cookies(); // Add await here
+  let token = cookieStore.get("access_token")?.value;
 
-  // Try to get token from localStorage first
-  if (typeof window !== "undefined") {
-    token = localStorage.getItem("_t");
-  }
-
-  // If no token in localStorage, try to get visitor token
-  if (!token) {
-    const hostname =
-      typeof window !== "undefined"
-        ? window.location.hostname
-        : await getServerHostname();
-    token = await getVisitorToken(hostname);
-
-    if (token && typeof window !== "undefined") {
-      localStorage.setItem("_t", token);
-    }
-  }
+  // if (!token) {
+  //   const hostname = getServerHostname();
+  //   token = await getVisitorToken(hostname);
+  // }
 
   if (token) {
-    client.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+    client.defaults.headers["Authorization"] = `Bearer ${token}`;
   }
 
   return client;
 }
+
+
 
 // Add common API response interface
 interface ApiResponse<T = any> {

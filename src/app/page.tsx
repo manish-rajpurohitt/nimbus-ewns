@@ -19,10 +19,6 @@ import dynamic from "next/dynamic";
 
 export default async function Page() {
   try {
-
-    console.time("fetchBusinessData");
-    // call
-    console.timeEnd("fetchBusinessData");
     const [businessRes, servicesRes, blogsRes] = await Promise.all([
       fetchBusinessData(),
       api.business.getServices(1, 6), // Fetch first 6 services for homepage
@@ -155,8 +151,13 @@ export default async function Page() {
 
 
 export async function generateMetadata(): Promise<Metadata> {
+  console.time("fetchBusinessData");
   const businessRes = await fetchBusinessData();
+  console.timeEnd("fetchBusinessData");
+  console.time("getMetaTagsOfPage");
   const metaData = await getMetaTagsOfPage(`${businessRes?.data?.business?.websiteUrl}/`);
+  console.timeEnd("getMetaTagsOfPage");
+
   const business = businessRes?.data?.business;
 
   if (!business) {
