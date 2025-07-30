@@ -155,3 +155,14 @@ export async function getBusinessMetadata() {
     return null;
   }
 }
+
+export async function getSitemapDetails() {
+  try {
+    const response = await get(`/sitemap.xml`);
+    console.log("Sitemap Details Response:", response);
+    return response;
+  } catch (error) {
+    // console.error("Error fetching business metadata:", error);
+    return null;
+  }
+}
