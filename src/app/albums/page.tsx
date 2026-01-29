@@ -7,6 +7,8 @@ import { headers } from "next/headers";
 import { getPageMEtadata } from "@/utils/common.util";
 import { Metadata } from "next";
 
+export const revalidate = 300; // Revalidate every 5 minutes
+
 export default async function AlbumsPage({
   searchParams
 }:any) {

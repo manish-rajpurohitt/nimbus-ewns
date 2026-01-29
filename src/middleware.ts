@@ -9,11 +9,19 @@ export const config = {
 };
 
 export async function middleware(request: NextRequest) {
-  console.log("-----------------------------------------------------------------")
-
-
   const url = request.nextUrl;
   const rawPath = url.pathname.toLowerCase().replace(/\/{2,}/g, '/').replace(/\/$/, '') || '/';
+  
+  // Early exit for static assets - don't run middleware logic
+  if (/\.(ico|png|jpg|jpeg|webp|svg|css|js|woff2?|json|xml|txt)$/i.test(rawPath)) {
+    return NextResponse.next();
+  }
+
+  // Skip middleware for Next.js internals
+  if (rawPath.startsWith('/_next/') || rawPath.startsWith('/api/')) {
+    return NextResponse.next();
+  }
+
   // Add x-route-path header
   const requestHeaders = new Headers(request.headers);
   requestHeaders.set('x-route-path', rawPath);
@@ -21,18 +29,28 @@ export async function middleware(request: NextRequest) {
 
   let token = request.cookies.get('access_token')?.value;
 
+  // Only fetch token if missing, with timeout and error handling
   if (!token) {
     try {
-      const domain = request.headers.get('host') || 'kjsdental.co.in'; // fallback domain
+      const domain = request.headers.get('host') || 'kjsdental.co.in';
       const apiUrl = `https://api.ewns.in/api/website/getVisitorToken?domainName=${domain}`;
 
-      const apiRes = await fetch(apiUrl, { method: 'GET' });
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 3000); // 3s timeout
+
+      const apiRes = await fetch(apiUrl, { 
+        method: 'GET',
+        signal: controller.signal,
+        headers: {
+          'Accept': 'application/json',
+        },
+        cache: 'no-store'
+      });
+
+      clearTimeout(timeoutId);
 
       if (apiRes.ok) {
-
         const data = await apiRes.json();
-        console.log(typeof data, data);
-
         token = data?.data?.token;
 
         if (token) {
@@ -41,20 +59,14 @@ export async function middleware(request: NextRequest) {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
             sameSite: 'lax',
-            maxAge: 60 * 60, // 1 hour
+            maxAge: 3600, // 1 hour
           });
         }
-      } else {
-        console.error('Failed to fetch token from backend:', apiRes.status);
       }
     } catch (error) {
+      // Silently fail - allow request to continue without token
       console.error('Token fetch error:', error);
     }
-  }
-
-  // Early exit for static assets
-  if (/\.(ico|png|jpg|jpeg|webp|svg|css|js|woff2?)$/i.test(rawPath)) {
-    return NextResponse.next();
   }
 
   // Redirect www to non-www
