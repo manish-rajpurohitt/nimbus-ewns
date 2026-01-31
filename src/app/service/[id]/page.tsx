@@ -23,9 +23,10 @@ export default async function ServicePage({
   params
 }:any) {
   try {
+    const { id } = await params;
     const [businessRes, serviceData] :any = await Promise.all([
       fetchBusinessData(),
-      getServiceDetails(params.id)
+      getServiceDetails(id)
     ]);
 
     if (!serviceData || !businessRes?.data) {
@@ -45,15 +46,15 @@ export default async function ServicePage({
 }
 
 
-export async function generateMetadata({ params, id }: { params: any; id: string; }): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: any }): Promise<Metadata> {
   // console.log("🚀 Running generateMetadata for:", params);
 
   try {
-
+    const { id } = await params;
     const headerList = await headers();
     const protocol = headerList.get("x-forwarded-proto") || "https";
     const host = headerList.get("host") || "example.com";
-    const fullUrl = `${protocol}://${host}/service/${params.id}`;
+    const fullUrl = `${protocol}://${host}/service/${id}`;
     // console.log(params)
     // const fullUrl = `https://icontechpro.com/service/${params.id}`;
 

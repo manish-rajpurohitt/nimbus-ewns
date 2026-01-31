@@ -8,8 +8,9 @@ import { getPageMEtadata } from "@/utils/common.util";
 
 export default async function ProductPage({ params }: any) {
   try {
+    const { sku } = await params;
     const res: any = await get(
-      `/website/fetchProductDetails?productId=${params.sku}`
+      `/website/fetchProductDetails?productId=${sku}`
     );
 
     if (!res.isSuccess || !res.data?.product) {

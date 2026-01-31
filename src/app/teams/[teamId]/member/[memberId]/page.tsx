@@ -8,8 +8,7 @@ interface MemberPageProps {
 }
 
 export default async function MemberPage({ params }: MemberPageProps) {
-  const teamId = await Promise.resolve(params.teamId);
-  const memberId = await Promise.resolve(params.memberId);
+  const { teamId, memberId } = await params;
 
   try {
     const [businessRes, memberRes] = await Promise.all([

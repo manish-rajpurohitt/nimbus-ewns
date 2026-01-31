@@ -9,7 +9,8 @@ import { getPageMEtadata } from "@/utils/common.util";
 
 export default async function TeamsPage({ searchParams }: any) {
   try {
-    const page = Number(searchParams.page) || 1;
+    const resolvedSearchParams = await searchParams;
+    const page = Number(resolvedSearchParams?.page) || 1;
     const TEAMS_PER_PAGE = 3; // Show 3 teams per page
 
     const [businessRes, teamsRes] = await Promise.all([

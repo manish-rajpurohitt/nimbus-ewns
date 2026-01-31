@@ -1,6 +1,7 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
 import { cookies, headers } from "next/headers";
 import { getOrFetchToken } from "./token-cache";
+import { cacheByDomain, cacheByDomainShort, cacheByDomainLong } from "./cache";
 
 // Base URL from environment variables
 const API_BASE_URL =
@@ -561,13 +562,16 @@ export const api = {
       limit: number = 10,
       sortBy: string = "createdAt_desc"
     ) {
-      try {
-        const client = await createApiClient();
-        const skip = (pageNumber - 1) * limit;
+      // Cache services list per domain with 5-minute revalidation
+      return cacheByDomain(
+        async () => {
+          try {
+            const client = await createApiClient();
+            const skip = (pageNumber - 1) * limit;
 
-        const response = await client.get<ServiceResponse>(
-          `/website/getServices?pageNumber=${pageNumber}&limit=${limit}&skip=${skip}&sortBy=${sortBy}`
-        );
+            const response = await client.get<ServiceResponse>(
+              `/website/getServices?pageNumber=${pageNumber}&limit=${limit}&skip=${skip}&sortBy=${sortBy}`
+            );
 
         if (!response.data.isSuccess) {
           throw new Error("Failed to fetch services");
@@ -617,6 +621,10 @@ export const api = {
           }
         };
       }
+        },
+        [`services-${pageNumber}-${limit}-${sortBy}`],
+        { revalidate: 300, tags: ['services'] }
+      );
     },
 
     async getServiceDetails(sku: string) {

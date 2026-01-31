@@ -12,8 +12,9 @@ export default async function TeamPage({
   params,
   searchParams
 }: TeamPageProps) {
-  const teamId = await Promise.resolve(params.teamId);
-  const page = await Promise.resolve(searchParams.page);
+  const { teamId } = await params;
+  const resolvedSearchParams = await searchParams;
+  const page = resolvedSearchParams.page;
   const currentPage = Number(page) || 1;
 
   try {

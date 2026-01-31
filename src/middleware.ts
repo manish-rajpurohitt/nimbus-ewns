@@ -84,8 +84,6 @@ export async function middleware(request: NextRequest) {
   
   // Check if token exists in cookies
   let token: string | null | undefined = request.cookies.get('access_token')?.value;
-  console.log(`[Token Cache] Attempting to retrieve token for domain: ${token}`);
-
 
   // If no token in cookies, use getOrFetchToken for deduplication
   if (!token) {

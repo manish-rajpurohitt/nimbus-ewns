@@ -8,13 +8,14 @@ import LoadingSpinner from "@/app/loading";
 export default async function OrderDetailPage({
   params
 }: any) {
+  const { id } = await params;
   const user = await validateAuth();
 
   if (!user) {
-    redirect("/login?redirect=/order/" + params.id);
+    redirect("/login?redirect=/order/" + id);
   }
 
-  const order :any = await getOrderDetails(params.id);
+  const order :any = await getOrderDetails(id);
 
   if (!order) {
     redirect("/orders");

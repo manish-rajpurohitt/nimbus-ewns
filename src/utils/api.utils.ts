@@ -1,5 +1,6 @@
 import { get, post } from "@/lib/api";
 import { cookies } from "next/headers";
+import { cacheByDomain, cacheByDomainShort, cacheByDomainLong } from "@/lib/cache";
 
 export interface BusinessResponse {
   isSuccess: boolean;
@@ -18,27 +19,44 @@ export interface AddressResponse {
 }
 
 export async function fetchBusinessData() {
-  try {
-    // console.log("Fetching business data...");
-    const response: any = await get<BusinessResponse>(
-      "/website/getBusinessDetails?getJson=true"
-    );
+  // Use domain-aware caching with 5-minute revalidation
+  return cacheByDomain(
+    async () => {
+      try {
+        console.log("[fetchBusinessData] Fetching fresh business data...");
+        const response: any = await get<BusinessResponse>(
+          "/website/getBusinessDetails?getJson=true"
+        );
 
-    // Transform and validate data
-    const transformedResponse = {
-      isSuccess: Boolean(response?.isSuccess),
-      data: {
-        business: response?.data?.business || response?.data || null,
-        staticData: response?.data?.staticData || response?.data?.navbar || null
+        console.log("[fetchBusinessData] Response received:", {
+          isSuccess: response?.isSuccess,
+          hasData: !!response?.data
+        });
+
+        // Transform and validate data
+        const transformedResponse = {
+          isSuccess: Boolean(response?.isSuccess),
+          data: {
+            business: response?.data?.business || response?.data || null,
+            staticData: response?.data?.staticData || response?.data?.navbar || null
+          }
+        };
+
+        console.log("[fetchBusinessData] Transformed response:", {
+          isSuccess: transformedResponse.isSuccess,
+          hasBusiness: !!transformedResponse.data.business,
+          hasStaticData: !!transformedResponse.data.staticData
+        });
+
+        return transformedResponse;
+      } catch (error) {
+        console.error("[fetchBusinessData] Error:", error);
+        return { isSuccess: false, data: { business: null, staticData: null } };
       }
-    };
-
-    // console.log("Transformed Business Data:", transformedResponse);
-    return transformedResponse;
-  } catch (error) {
-    // console.error("Business Data Error:", error);
-    return { isSuccess: false, data: { business: null, staticData: null } };
-  }
+    },
+    ['business-data'],
+    { revalidate: 300, tags: ['business'] }
+  );
 }
 
 export async function getRedirectUrl() {
@@ -67,18 +85,24 @@ export async function getRedirectUrl() {
 }
 
 export async function fetchBusinessAddress() {
-  try {
-    // console.log("Fetching business address...");
-    const response = await get<AddressResponse>("/website/getBusinessAddress");
-    // console.log("Business Address Response:", {
-    //   isSuccess: response?.isSuccess,
-    //   address: response?.data?.address
-    // });
-    return response;
-  } catch (error) {
-    // console.error("Error fetching business address:", error);
-    return { isSuccess: false, data: null };
-  }
+  // Use domain-aware caching with 10-minute revalidation (addresses change rarely)
+  return cacheByDomainLong(
+    async () => {
+      try {
+        // console.log("Fetching business address...");
+        const response = await get<AddressResponse>("/website/getBusinessAddress");
+        // console.log("Business Address Response:", {
+        //   isSuccess: response?.isSuccess,
+        //   address: response?.data?.address
+        // });
+        return response;
+      } catch (error) {
+        // console.error("Error fetching business address:", error);
+        return { isSuccess: false, data: null };
+      }
+    },
+    ['business-address']
+  );
 }
 
 export async function validateAuth() {

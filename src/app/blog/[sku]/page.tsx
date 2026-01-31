@@ -10,9 +10,10 @@ export default async function BlogPage({
   params
 }:any) {
   try {
+    const { sku } = await params;
     const [businessRes, blogRes] :any = await Promise.all([
       fetchBusinessData(),
-      api.business.getBlogDetails(params.sku)
+      api.business.getBlogDetails(sku)
     ]);
 
     if (!blogRes?.isSuccess || !blogRes.data) {
@@ -37,11 +38,11 @@ export default async function BlogPage({
   }
 }
 
-export async function generateMetadata({ params, sku }: { params: any; sku: string; }): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: any }): Promise<Metadata> {
   // console.log("🚀 Running generateMetadata for:", params);
 
   try {
-
+    const { sku } = await params;
     const headerList = await headers();
     const protocol = headerList.get("x-forwarded-proto") || "https";
     const host = headerList.get("host") || "example.com";
