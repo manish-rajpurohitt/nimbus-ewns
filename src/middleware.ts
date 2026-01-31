@@ -17,10 +17,10 @@ async function fetchVisitorTokenFromAPI(domain: string): Promise<string | null> 
   
   console.log(`[Middleware] 🌐 Fetching token from API for domain: ${domain}`);
   
-  try {
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 5000); // 5s timeout
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 5000); // 5s timeout
 
+  try {
     const apiRes = await fetch(
       `${API_BASE_URL}/website/getVisitorToken?domainName=${domain}`,
       {
@@ -32,7 +32,7 @@ async function fetchVisitorTokenFromAPI(domain: string): Promise<string | null> 
       }
     );
 
-    clearTimeout(timeoutId);
+    clearTimeout(timeoutId); // Clear timeout on success
 
     if (apiRes.ok) {
       const data = await apiRes.json();
@@ -47,6 +47,7 @@ async function fetchVisitorTokenFromAPI(domain: string): Promise<string | null> 
     console.log(`[Middleware] ❌ Failed to fetch token for domain: ${domain}`);
     return null;
   } catch (error) {
+    clearTimeout(timeoutId); // CRITICAL: Clear timeout on error to prevent zombie timer
     console.error(`[Middleware] 🔥 Token fetch error for ${domain}:`, error);
     return null;
   }

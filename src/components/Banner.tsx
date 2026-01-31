@@ -51,6 +51,8 @@ export default function Banner({ businessData }: BannerProps) {
   // Track window width for responsive behavior
   const [windowWidth, setWindowWidth] = useState(0);
   const [showContent, setShowContent] = useState(false);
+  // Track auto-play resume timeout to clean it up
+  const [autoPlayTimeout, setAutoPlayTimeout] = useState<NodeJS.Timeout | null>(null);
 
   // Update window width on resize and initial load
   useEffect(() => {
@@ -87,23 +89,39 @@ export default function Banner({ businessData }: BannerProps) {
     setCurrentImageIndex((prevIndex) =>
       prevIndex === 0 ? bannerImages.length - 1 : prevIndex - 1
     );
+    // Clear existing timeout before setting new one
+    if (autoPlayTimeout) clearTimeout(autoPlayTimeout);
     // Resume auto-play after 10 seconds
-    setTimeout(() => setIsAutoPlaying(true), 10000);
+    const timeout = setTimeout(() => setIsAutoPlaying(true), 10000);
+    setAutoPlayTimeout(timeout);
   };
 
   const goToNext = () => {
     setIsAutoPlaying(false);
     setCurrentImageIndex((prevIndex) => (prevIndex + 1) % bannerImages.length);
+    // Clear existing timeout before setting new one
+    if (autoPlayTimeout) clearTimeout(autoPlayTimeout);
     // Resume auto-play after 10 seconds
-    setTimeout(() => setIsAutoPlaying(true), 10000);
+    const timeout = setTimeout(() => setIsAutoPlaying(true), 10000);
+    setAutoPlayTimeout(timeout);
   };
 
   const goToSlide = (index: number) => {
     setIsAutoPlaying(false);
     setCurrentImageIndex(index);
+    // Clear existing timeout before setting new one
+    if (autoPlayTimeout) clearTimeout(autoPlayTimeout);
     // Resume auto-play after 10 seconds
-    setTimeout(() => setIsAutoPlaying(true), 10000);
+    const timeout = setTimeout(() => setIsAutoPlaying(true), 10000);
+    setAutoPlayTimeout(timeout);
   };
+
+  // Cleanup timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (autoPlayTimeout) clearTimeout(autoPlayTimeout);
+    };
+  }, [autoPlayTimeout]);
 
   return (
     <div className="banner relative">

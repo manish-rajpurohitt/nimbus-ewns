@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { ShoppingCart, Loader2, Check } from "lucide-react";
 import { addToCart } from "@/actions/cart.actions";
@@ -10,6 +10,16 @@ export default function AddToCartForm({ productId }: { productId: string }) {
   const [isLoading, setIsLoading] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
   const router = useRouter();
+  const successTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Cleanup timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (successTimeoutRef.current) {
+        clearTimeout(successTimeoutRef.current);
+      }
+    };
+  }, []);
 
   async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -27,8 +37,12 @@ export default function AddToCartForm({ productId }: { productId: string }) {
         toast.success("Added to cart!");
         router.refresh();
 
+        // Clear any existing timeout
+        if (successTimeoutRef.current) {
+          clearTimeout(successTimeoutRef.current);
+        }
         // Reset success state after 2 seconds
-        setTimeout(() => setShowSuccess(false), 2000);
+        successTimeoutRef.current = setTimeout(() => setShowSuccess(false), 2000);
       } else {
         if (result.error === "Please login to add items to cart") {
           toast.error("Please login to continue", {

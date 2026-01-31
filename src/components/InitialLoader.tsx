@@ -12,10 +12,18 @@ export default function InitialLoader() {
       loaderDiv.innerHTML = '<div class="loader-spinner"></div>';
       document.body.appendChild(loaderDiv);
 
-      setTimeout(() => {
+      let removeTimer: NodeJS.Timeout;
+      const hideTimer = setTimeout(() => {
         loaderDiv.classList.add("hide");
-        setTimeout(() => loaderDiv.remove(), 300);
+        removeTimer = setTimeout(() => loaderDiv.remove(), 300);
       }, 800);
+
+      // Cleanup function - clear both timers
+      return () => {
+        clearTimeout(hideTimer);
+        if (removeTimer) clearTimeout(removeTimer);
+        loaderDiv?.remove();
+      };
     }
   }, []);
 

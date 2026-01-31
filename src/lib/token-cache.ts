@@ -192,6 +192,12 @@ export async function getOrFetchToken(
   domain: string,
   fetchFn: (domain: string) => Promise<string | null>
 ): Promise<string | null> {
+  // Return null early if domain is undefined/null/empty - no API call needed
+  if (!domain) {
+    console.log(`[Token Cache] ⚠️ Domain is undefined/null/empty - skipping API call`);
+    return null;
+  }
+  
   const normalizedDomain = normalizeDomain(domain);
   
   // Check cache first
@@ -243,14 +249,20 @@ export function cleanupExpiredEntries(): number {
   return cleaned;
 }
 
+// Global flag to prevent multiple cleanup intervals
+let cleanupIntervalStarted = false;
+
 // Run cleanup every 10 minutes in production
-if (process.env.NODE_ENV === 'production') {
+// IMPORTANT: Only start ONE interval across all module loads
+if (process.env.NODE_ENV === 'production' && !cleanupIntervalStarted) {
+  cleanupIntervalStarted = true;
   setInterval(() => {
     const cleaned = cleanupExpiredEntries();
     if (cleaned > 0) {
       console.log(`[Token Cache] Cleaned up ${cleaned} expired entries`);
     }
   }, 600000); // 10 minutes
+  console.log('[Token Cache] Cleanup interval started (once)');
 }
 
 export default {
