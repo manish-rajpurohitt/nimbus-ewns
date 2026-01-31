@@ -5,6 +5,10 @@ import PageBanner from "@/components/PageBanner";
 import { getPageMEtadata } from "@/utils/common.util";
 import { Metadata } from "next";
 import { headers } from "next/headers";
+import { notFound } from "next/navigation";
+
+// Use ISR with shorter revalidation for multi-tenant architecture
+export const revalidate = 300; // Revalidate every 5 minutes (good for multi-domain)
 
 export async function generateMetadata({
   params
@@ -31,7 +35,8 @@ export async function generateMetadata({
 
 export default async function ServicesPage({ searchParams }: any) {
   try {
-    const pageNumber = searchParams?.page ?? "1";
+    const resolvedSearchParams = await searchParams;
+    const pageNumber = resolvedSearchParams?.page ?? "1";
     const page = Math.max(1, parseInt(pageNumber));
     const limit = 6;
 
@@ -78,6 +83,6 @@ export default async function ServicesPage({ searchParams }: any) {
     );
   } catch (error) {
     console.error("ServicesPage", error);
-    return <div>Error loading services</div>;
+    notFound();
   }
 }

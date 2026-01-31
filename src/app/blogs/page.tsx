@@ -5,10 +5,10 @@ import PageBanner from "@/components/PageBanner";
 import { Metadata } from "next";
 import { getPageMEtadata } from "@/utils/common.util";
 import { headers } from "next/headers";
+import { notFound } from "next/navigation";
 
-// Make page dynamic
-export const dynamic = "force-dynamic";
-export const revalidate = 300; // Revalidate every 5 minutes
+// Use ISR with shorter revalidation for multi-tenant architecture
+export const revalidate = 300; // Revalidate every 5 minutes (good for multi-domain)
 
 interface BlogItem {
   _id: string;
@@ -24,15 +24,12 @@ export default async function BlogsPage({
   searchParams
 }:any) {
   try {
-    const pageNumber = searchParams?.page ?? "1";
+    const resolvedSearchParams = await searchParams;
+    const pageNumber = resolvedSearchParams?.page ?? "1";
     const page = Math.max(1, parseInt(pageNumber));
     const limit = 3; // Changed to 6 items per page
 
-    // First get all blogs to get total count
-    const allBlogsRes = await api.business.getBlogs(1, 0);
-    const totalBlogs = allBlogsRes?.data?.pagination?.totalItems || 0;
-
-    // Fetch data for current page
+    // Fetch data for current page and get total count from same response
     const [businessRes, blogsRes] = await Promise.all([
       fetchBusinessData(),
       api.business.getBlogs(page, limit)
@@ -53,10 +50,9 @@ export default async function BlogsPage({
       throw new Error("Failed to fetch blogs");
     }
 
-    // Calculate total pages
-    const totalItems =
-      blogsRes.data.pagination?.totalItems || blogsRes.data.blogs.length;
-    const totalPages = Math.max(Math.ceil(totalItems / limit), 1);
+    // Get total blogs from pagination data
+    const totalBlogs = blogsRes.data.pagination?.totalItems || blogsRes.data.blogs.length;
+    const totalPages = Math.max(Math.ceil(totalBlogs / limit), 1);
 
     // Transform blog data to match expected format
     const transformedBlogs = blogsRes.data.blogs.map((blog: any) => ({
@@ -101,13 +97,7 @@ export default async function BlogsPage({
     );
   } catch (error) {
     console.error("Error in BlogsPage:", error);
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <p className="text-gray-600">
-          Failed to load blogs. Please try again later.
-        </p>
-      </div>
-    );
+    notFound();
   }
 }
 

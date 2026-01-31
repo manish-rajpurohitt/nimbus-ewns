@@ -14,25 +14,29 @@ import "@/assets/css/index";
 import "@/assets/ecom-css/index";
 import "@/assets/css/albums.css";
 import { headers } from "next/headers";
-import { convert } from 'html-to-text';
-import { getMetaTagsOfPage } from "@/lib/api";
+import { generateSchemaMarkup } from "@/lib/metadata";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
-  subsets: ["latin"]
+  subsets: ["latin"],
+  display: "swap",
+  preload: true
 });
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
-  subsets: ["latin"]
+  subsets: ["latin"],
+  display: "swap",
+  preload: false
 });
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
-
-
-
+/**
+ * Get initial data with parallel fetching
+ * This runs on every request but is optimized with API caching
+ */
 async function getInitialData() {
   try {
+    // Fetch business data and address in parallel for better performance
     const [businessRes, addressRes]: any = await Promise.all([
       fetchBusinessData(),
       fetchBusinessAddress()
@@ -44,8 +48,8 @@ async function getInitialData() {
       address: addressRes?.isSuccess ? addressRes.data?.address : null
     };
   } catch (error) {
-    // console.error("Error in getInitialData:", error);
-    return { business: null, static: null, address: null, user: null };
+    console.error("[Layout] Error fetching initial data:", error);
+    return { business: null, static: null, address: null };
   }
 }
 
@@ -54,33 +58,22 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const headersList = await headers();
-  const cookieStore = await cookies();
-  const businessRes = await getInitialData();
+  // Fetch all data in parallel
+  const [headersList, cookieStore, businessRes, cart] = await Promise.all([
+    headers(),
+    cookies(),
+    getInitialData(),
+    getCart()
+  ]);
 
   const pathname = headersList.get("x-pathname") || "/";
   const hideHeaderFooter = pathname.includes("/media/");
-  const data = businessRes;
-  const cart = await getCart();
   const cartCount = cart?.items?.length || 0;
-  const schema = businessRes?.business ? {
-    "@context": "https://schema.org",
-    "@type": businessRes?.business?.category,
-    "name": businessRes?.business?.businessName,
-    "image": businessRes?.business?.logoURl,
-    "url": businessRes?.business?.websiteUrl,
-    "description": convert(businessRes?.business?.shortBio, { wordwrap: false }),
-    "address": {
-      "@type": "PostalAddress",
-      "streetAddress": businessRes.business?.address?.addressLine1 || "",
-      "addressLocality": businessRes.business?.address?.city || "",
-      "addressRegion": businessRes.business?.address?.state || "",
-      "postalCode": businessRes.business?.address?.pincode || "",
-      "addressCountry": "IN"
-    },
-    "telephone": businessRes.business?.phone || "+91-0000000000",
-    "sameAs": businessRes.business?.externalLinks.map(link => link.url) || []
-  } : null;
+  
+  // Generate schema markup if business data exists
+  const schema = businessRes?.business 
+    ? generateSchemaMarkup(businessRes.business, "LocalBusiness")
+    : null;
   return (
     <html lang="en">
       <head>
@@ -115,14 +108,16 @@ export default async function RootLayout({
             `
           }}
         />
-        {schema && <script
+        {schema && (
+          <script
             type="application/ld+json"
             dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
-          />}
+          />
+        )}
         <script
           dangerouslySetInnerHTML={{
             __html: `
-              // Improved Page loader
+              // Page loader with better performance
               document.addEventListener('DOMContentLoaded', function() {
                 if (!window.initialLoadComplete) {
                   window.initialLoadComplete = true;
@@ -131,7 +126,6 @@ export default async function RootLayout({
                   loaderDiv.setAttribute('data-testid', 'loader');
                   loaderDiv.innerHTML = '<div class="loader-spinner"></div>';
                   
-                  // Append to main content instead of body
                   const mainContent = document.querySelector('main');
                   if (mainContent) {
                     mainContent.appendChild(loaderDiv);
@@ -144,7 +138,7 @@ export default async function RootLayout({
                 }
               });
 
-              // Improved Scroll to top functionality
+              // Optimized scroll to top with requestAnimationFrame
               document.addEventListener('DOMContentLoaded', function() {
                 const scrollBtn = document.getElementById('scroll-top');
                 if (!scrollBtn) return;
@@ -184,10 +178,10 @@ export default async function RootLayout({
         <div className="min-h-screen flex flex-col">
           {!hideHeaderFooter && (
             <>
-              <Header businessData={data.business} staticData={data.static} />
+              <Header businessData={businessRes.business} staticData={businessRes.static} />
               <Navbar
-                businessData={data.business}
-                staticData={data.static}
+                businessData={businessRes.business}
+                staticData={businessRes.static}
                 pathname={pathname}
                 key={pathname}
                 cartCount={cartCount}
@@ -197,9 +191,9 @@ export default async function RootLayout({
           <main className="flex-1">{children}</main>
           {!hideHeaderFooter && (
             <Footer
-              businessData={data.business}
-              businessAddress={data.address}
-              staticData={data.static}
+              businessData={businessRes.business}
+              businessAddress={businessRes.address}
+              staticData={businessRes.static}
             />
           )}
         </div>

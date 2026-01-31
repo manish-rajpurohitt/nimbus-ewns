@@ -4,6 +4,7 @@ import { api } from "@/lib/api";
 import { getPageMEtadata } from "@/utils/common.util";
 import { Metadata } from "next";
 import { headers } from "next/headers";
+import { notFound } from "next/navigation";
 
 async function getServiceDetails(id: string) {
   try {
@@ -28,11 +29,7 @@ export default async function ServicePage({
     ]);
 
     if (!serviceData || !businessRes?.data) {
-      return (
-        <div className="details__loading">
-          <p className="text-gray-600">Service not found</p>
-        </div>
-      );
+      notFound();
     }
 
     return (
@@ -43,11 +40,7 @@ export default async function ServicePage({
     );
   } catch (error) {
     console.error("Error loading service:", error);
-    return (
-      <div className="details__error">
-        <p>Failed to load service details. Please try again later.</p>
-      </div>
-    );
+    notFound();
   }
 }
 

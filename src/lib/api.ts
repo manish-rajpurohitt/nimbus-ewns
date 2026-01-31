@@ -1,61 +1,74 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
 import { cookies, headers } from "next/headers";
+import { getOrFetchToken } from "./token-cache";
+
 // Base URL from environment variables
 const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_URL || "https://api.ewns.in/api";
-// "http://localhost:9000/api";
 
-// Visitor token handling
-async function getVisitorToken(domainName: any, retryCount = 0) {
+/**
+ * Actual token fetch function (used by getOrFetchToken for deduplication)
+ */
+async function fetchTokenFromAPI(domainName: string, retryCount = 0): Promise<string | null> {
+  const maxRetries = 2;
+  const retryDelay = 1000;
+
   try {
-    if (!domainName || domainName.includes("localhost")) {
-      const defaultDomain =
-        process.env.NEXT_PUBLIC_DEFAULT_DOMAIN || "kjsdental.co.in";
-      domainName = defaultDomain;
-    }
-
-    const maxRetries = 2;
-    const retryDelay = 1000;
-
-    try {
-      const res = await axios.get(
-        `${API_BASE_URL}/website/getVisitorToken?domainName=${domainName}`,
-        {
-          timeout: 5000,
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json"
-          }
+    console.log(`[API] 🌐 Fetching token from API for: ${domainName} (attempt ${retryCount + 1})`);
+    
+    const res = await axios.get(
+      `${API_BASE_URL}/website/getVisitorToken?domainName=${domainName}`,
+      {
+        timeout: 5000,
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json"
         }
-      );
-
-      if (res.data?.isSuccess && res.data?.data?.token) {
-        return res.data.data.token;
       }
+    );
 
-      throw new Error("Invalid token response");
-    } catch (error: any) {
-      if (retryCount < maxRetries) {
-        await new Promise((resolve) => setTimeout(resolve, retryDelay));
-        return getVisitorToken(domainName, retryCount + 1);
-      }
-      throw error;
+    if (res.data?.isSuccess && res.data?.data?.token) {
+      console.log(`[API] ✅ Token fetched successfully for: ${domainName}`);
+      return res.data.data.token;
     }
+
+    throw new Error("Invalid token response");
   } catch (error: any) {
+    if (retryCount < maxRetries) {
+      console.log(`[API] 🔄 Retrying token fetch for: ${domainName}`);
+      await new Promise((resolve) => setTimeout(resolve, retryDelay));
+      return fetchTokenFromAPI(domainName, retryCount + 1);
+    }
+    
     const errorMessage = error?.response?.data?.message || error.message;
-    // console.error(`Visitor token error (attempt ${retryCount + 1}):`, {
-    //   domain: domainName,
-    //   error: errorMessage
-    // });
+    console.error(`[API] ❌ Token fetch failed for ${domainName}:`, errorMessage);
     return null;
   }
 }
 
-const getServerHostname = async () => {
+/**
+ * Get visitor token with caching and deduplication
+ * Prevents multiple simultaneous API calls for the same domain
+ */
+async function getVisitorToken(domainName: string): Promise<string | null> {
+  try {
+    // Normalize domain
+    if (!domainName || domainName.includes("localhost")) {
+      domainName = process.env.NEXT_PUBLIC_DEFAULT_DOMAIN || process.env.DEFAULT_DOMAIN;
+    }
+
+    // Use getOrFetchToken which handles caching and deduplication
+    return await getOrFetchToken(domainName, fetchTokenFromAPI);
+  } catch (error: any) {
+    console.error(`[API] Unexpected error getting token:`, error);
+    return null;
+  }
+}
+
+const getServerHostname = async (): Promise<string> => {
   const headersList = await headers();
-  const host = headersList.get("host"); // This returns hostname with optional port
-  return host;
-  // return "icontechpro.ewns.in";
+  const host = headersList.get("host");
+  return host || process.env.NEXT_PUBLIC_DEFAULT_DOMAIN || process.env.DEFAULT_DOMAIN;
 };
 
 // Add custom error type
@@ -155,15 +168,16 @@ export async function createApiClient(): Promise<AxiosInstance> {
     timeout: 30000,
   });
 
-  // ✅ Properly await the cookies() function
-  const cookieStore = await cookies(); // Add await here
+  // Get token from cookies first
+  const cookieStore = await cookies();
   let token = cookieStore.get("access_token")?.value;
 
-  // if (!token) {
-  //   const hostname = getServerHostname();
-  //   token = await getVisitorToken(hostname);
-  // }
-
+  // If no token in cookies, try to get from cache or fetch
+  if (!token) {
+    const hostname = await getServerHostname();
+    token = await getVisitorToken(hostname);
+  }
+ 
   if (token) {
     client.defaults.headers["Authorization"] = `Bearer ${token}`;
   }

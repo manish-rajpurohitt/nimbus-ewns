@@ -26,7 +26,7 @@ export const getBusinessAdd = (businessAddress: BusinessAddress): string => {
 
 // Add a utility function to get the default domain
 export const getDefaultDomain = (): string => {
-  return process.env.NEXT_PUBLIC_DEFAULT_DOMAIN || "kjsdental.co.in";
+  return process.env.NEXT_PUBLIC_DEFAULT_DOMAIN || process.env.DEFAULT_DOMAIN;
 };
 
 // Get hostname (safely works on both client and server)

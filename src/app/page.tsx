@@ -1,53 +1,47 @@
-export const revalidate = 60;
+// SSR with ISR - Revalidate every 3 minutes (balances freshness with performance)
+// Content is cached and regenerated in background for better multi-domain performance
+export const revalidate = 180;
 
+import { fetchBusinessData } from "@/utils/api.utils";
+import { api } from "@/lib/api";
+import { generateHomeMetadata } from "@/lib/metadata";
+import { debugLog } from "@/utils/debug.util";
+import Appointment from "@/components/Appointment";
+import JsonLd from "@/components/common/JsonLd";
+import dynamic from "next/dynamic";
+import type { Metadata } from "next";
+import { notFound } from "next/navigation";
+
+// Dynamic imports for better code splitting
 const Banner = dynamic(() => import('@/components/Banner'));
 const AboutUs = dynamic(() => import('@/components/AboutUs'));
 const Services = dynamic(() => import('@/components/Services'));
-import { redirect } from "next/navigation";
-import { fetchBusinessData, getRedirectUrl } from "@/utils/api.utils";
-import { api, getMetaTagsOfPage } from "@/lib/api";
-import { debugLog } from "@/utils/debug.util";
-import Appointment from "@/components/Appointment";
 const Testimonials = dynamic(() => import('@/components/Testimonials'));
 const BlogList = dynamic(() => import('@/components/Blog/BlogList'));
-import { headers } from "next/headers";
-import { Metadata } from "next";
-import { convert } from "html-to-text";
-import JsonLd from "@/components/common/JsonLd";
-import dynamic from "next/dynamic";
+
+/**
+ * Generate metadata for homepage with proper SEO
+ * This runs on every request but uses cached data
+ */
+export async function generateMetadata(): Promise<Metadata> {
+  return generateHomeMetadata();
+}
 
 
 export default async function Page() {
   try {
+    // Fetch all data in parallel for better performance
     const [businessRes, servicesRes, blogsRes] = await Promise.all([
       fetchBusinessData(),
-      api.business.getServices(1, 6), // Fetch first 6 services for homepage
-      api.business.getBlogs(1, 3)
+      api.business.getServices(1, 6), // First 6 services for homepage
+      api.business.getBlogs(1, 3) // First 3 blogs for homepage
     ]);
-
-    // if (
-    //   isRedirect?.isSuccess &&
-    //   isRedirect?.data?.isRedirect &&
-    //   isRedirect?.data?.redirectDomain
-    // ) {
-    //   try {
-    //     const target = isRedirect.data.redirectDomain.startsWith("http")
-    //       ? isRedirect.data.redirectDomain
-    //       : `https://${isRedirect.data.redirectDomain}`;
-
-    //     redirect(target);
-    //   }
-    //   catch (Er) {
-    //     // console.log(Er);
-    //   }
-
-    // }
 
     if (!businessRes?.isSuccess) {
       throw new Error("Failed to fetch business data");
     }
 
-    // Transform the data to properly include all needed sections
+    // Transform data structure for components
     const transformedData = {
       business: {
         ...businessRes.data.business,
@@ -65,13 +59,15 @@ export default async function Page() {
     };
 
     debugLog("HomePage", "Transformed business data", transformedData);
+
+    // Generate schema for JSON-LD
     const schema = {
       "@context": "https://schema.org",
-      "@type": businessRes?.data?.business?.category,
+      "@type": businessRes?.data?.business?.category || "LocalBusiness",
       "name": businessRes?.data?.business?.businessName,
       "image": businessRes?.data?.business?.logoURl,
       "url": businessRes?.data?.business?.websiteUrl,
-      "description": convert(businessRes?.data?.business?.description, { wordwrap: false }),
+      "description": businessRes?.data?.business?.description,
       "address": {
         "@type": "PostalAddress",
         "streetAddress": businessRes?.data?.business?.address?.addressLine1 || "",
@@ -83,11 +79,6 @@ export default async function Page() {
       "telephone": businessRes?.data?.business?.phone || "+91-0000000000",
       "sameAs": businessRes?.data?.business?.socialLinks || []
     };
-
-    const headerList = await headers();
-    const protocol = headerList.get("x-forwarded-proto") || "https";
-    const host = headerList.get("host") || "example.com";
-    const fullUrl = `${protocol}://${host}/`;
 
     return (
       <>
@@ -119,12 +110,7 @@ export default async function Page() {
         </div>
         <div className="bg-gray-50">
           <BlogList
-            blogs={(blogsRes?.data?.blogs || []).map((blog) => ({
-              ...blog,
-              createdAt: (blog as any).createdAt || new Date().toISOString(),
-              sku: (blog as any).sku || "",
-              description: (blog as any).description || ""
-            }))}
+            blogs={(blogsRes?.data?.blogs || []) as any}
             businessData={{
               data: {
                 business: {
@@ -140,101 +126,7 @@ export default async function Page() {
       </>
     );
   } catch (error) {
-    // console.error("Error in HomePage:", error);
-    return (
-      <div className="min-h-[500px] flex items-center justify-center">
-        <p className="text-gray-600">Failed to load content</p>
-      </div>
-    );
+    console.error("Error in HomePage:", error);
+    notFound();
   }
-}
-
-
-export async function generateMetadata(): Promise<Metadata> {
-  console.time("fetchBusinessData");
-  const businessRes = await fetchBusinessData();
-  console.timeEnd("fetchBusinessData");
-  console.time("getMetaTagsOfPage");
-  const metaData = await getMetaTagsOfPage(`${businessRes?.data?.business?.websiteUrl}/`);
-  console.timeEnd("getMetaTagsOfPage");
-
-  const business = businessRes?.data?.business;
-
-  if (!business) {
-    // console.error("Failed to fetch business data for metadata");
-    return {
-      title: "Loading...",
-      icons: {
-        icon: []
-      }
-    };
-  }
-
-  const description = convert(business.description, {
-    wordwrap: false, // optional
-    selectors: [{ selector: 'a', options: { ignoreHref: true } }] // optional
-  }) || `Welcome to ${business.businessName}`;
-
-  const keywords =
-    metaData?.keywords || [];
-
-  if (!metaData) return {};
-
-  return {
-    title: {
-      default: metaData.title,
-      template: `%s | ${business.businessName}`
-    },
-    description: businessRes.data.business.shortBio,
-    keywords: keywords?.map((keyword: any) => keyword?.keyword?.trim()).join(", "),
-    metadataBase: businessRes.data.business.websiteUrl,
-    openGraph: {
-      type: "website",
-      title: metaData.title,
-      description: businessRes.data.business.shortBio,
-      siteName: business.businessName,
-      images: [
-        {
-          url: business.logoURl,
-          width: 1200,
-          height: 630,
-          alt: business.businessName
-        }
-      ]
-    },
-    twitter: {
-      card: "summary_large_image",
-      title: metaData.title,
-      description: businessRes.data.business.shortBio,
-      images: [business.logoURl],
-      creator: "@" + business.businessName
-    },
-    robots: {
-      index: true,
-      follow: true,
-      googleBot: {
-        index: true,
-        follow: true,
-        "max-video-preview": -1,
-        "max-image-preview": "large",
-        "max-snippet": -1
-      }
-    },
-    icons: {
-      icon: [
-        {
-          url: business.logoURl,
-          type: "image/x-icon"
-        }
-      ],
-      shortcut: business.logoURl ? [business.logoURl] : [],
-      apple: [{ url: "/apple-icon.png", sizes: "180x180", type: "image/png" }]
-    },
-    verification: {
-      google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION || undefined
-    },
-    alternates: {
-      canonical: `${business.websiteUrl}/`
-    }
-  };
 }

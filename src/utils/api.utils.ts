@@ -24,8 +24,6 @@ export async function fetchBusinessData() {
       "/website/getBusinessDetails?getJson=true"
     );
 
-    // console.log("Raw Business Response:", response);
-
     // Transform and validate data
     const transformedResponse = {
       isSuccess: Boolean(response?.isSuccess),

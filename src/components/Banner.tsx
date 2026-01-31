@@ -122,8 +122,8 @@ export default function Banner({ businessData }: BannerProps) {
               fill
               priority={index === 0}
               className="object-cover"
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 100vw, 100vw"
-              quality={90} // Increased from 85 to 90
+              sizes="100vw"
+              quality={85}
             />
           </div>
         ))}
