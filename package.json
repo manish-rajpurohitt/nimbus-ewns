@@ -16,7 +16,7 @@
     "html-to-text": "^9.0.5",
     "isomorphic-dompurify": "^2.22.0",
     "lucide-react": "^0.479.0",
-    "next": "^15.2.2",
+    "next": "15.2.8",
     "next-redux-wrapper": "^8.1.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
